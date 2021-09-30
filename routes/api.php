@@ -29,6 +29,7 @@ Route::group([
     Route::get('/tables', 'TableApiController@tablesByTenant');
 
     Route::get('/products/{identify}', 'ProductApiController@show');
+   // Route::get('/products/{identify}/teste', 'ProductApiController@productsByTenantId');
     Route::get('/products', 'ProductApiController@productsByTenant');
 
     Route::post('/orders', 'OrderApiController@store');
