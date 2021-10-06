@@ -3,8 +3,8 @@
 return [
 
     'admins' => [
-        'carlos@especializati.com.br',
-        'admin@especializati.com.br',
+        'admin@example.com',
+        'rgyr2010@hotmail.com',
     ],
 
 ];

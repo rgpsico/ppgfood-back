@@ -38,6 +38,7 @@ class OrderService
 
     public function createNewOrder(array $order)
     {
+      
         $productsOrder = $this->getProductsByOrder($order['products'] ?? []);
 
         $identify = $this->getIdentifyOrder();
@@ -86,17 +87,18 @@ class OrderService
 
     private function getProductsByOrder(array $productsOrder): array
     {
+      
         $products = [];
         foreach ($productsOrder as $productOrder) {
             $product = $this->productRepository->getProductByUuid($productOrder['identify']);
-
+    
             array_push($products, [
                 'id' => $product->id,
                 'qty' => $productOrder['qty'],
                 'price' => $product->price,
             ]);
         }
-
+      
         return $products;
     }
 
