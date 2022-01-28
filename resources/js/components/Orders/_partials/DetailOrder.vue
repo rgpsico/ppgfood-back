@@ -23,7 +23,7 @@
                             Atualizar Status
                         </button>
                     </form>
-                    <ul>
+                    <ul style="color:#000;">
                         <li>Número do pedido: {{ order.identify }}</li>
                         <li>Total: R$ {{ total }}</li>
                         <li>Status: {{ order.status_label }}</li>
