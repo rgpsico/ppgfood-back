@@ -24,7 +24,7 @@
                         </button>
                     </form>
                     <ul style="color:#000;">
-                        <li>Número do pedido: {{ order.identify }}</li>
+                        <li>Número do pedido: </li>
                         <li>Total: R$ {{ total }}</li>
                         <li>Status: {{ order.status_label }}</li>
                         <li>Data: {{ order.date_br }}</li>
@@ -35,10 +35,14 @@
                                 <!-- <li>image: {{ order.image }}</li> -->
                                 <!-- <li>uuid: {{ order.uuid }}</li> -->
                                 <li>Contato: {{ order.client.contact }}</li>
+                                <li>endereço: {{ order.client.contact }}</li>
+                                <li>apelido: {{ order.client.contact }}</li>
+                                <li>telefone: {{ order.client.contact }}</li>
                             </ul>
                         </li>
                         <li>Mesa: {{ order.table.name }}</li>
-                        <li>
+                         
+                        <li style="margin-top:10px;">
                             Produtos:
                             <ul>
                                 <li v-for="(product, index) in order.products" :key="index">
@@ -108,3 +112,4 @@ export default {
     },
 }
 </script>
+
