@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'title' => 'LaraFood',
+    'title' => 'PPGFood',
     'title_prefix' => '',
     'title_postfix' => '',
 
@@ -30,12 +30,12 @@ return [
     |
     */
 
-    'logo' => '<b>Lara</b>Food',
+    'logo' => '<b>PPG</b>Food',
     'logo_img' => 'imgs/larafood-icon.png',
     'logo_img_class' => 'brand-image-xl',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
-    'logo_img_alt' => 'LaraFood',
+    'logo_img_alt' => 'PPGFood',
 
     /*
     |--------------------------------------------------------------------------
