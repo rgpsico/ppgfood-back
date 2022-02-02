@@ -42,7 +42,7 @@ class TenantService
         $data = $this->data;
 
         return $this->plan->tenants()->create([
-            'cnpj' => $data['cnpj'],
+            'cnpj' => '0',
             'name' => $data['empresa'],
             'email' => $data['email'],
 
