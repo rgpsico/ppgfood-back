@@ -17,7 +17,7 @@ class CreateTenantsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('plan_id')->nullable();
             $table->uuid('uuid');
-            $table->string('cnpj')->unique();
+            $table->string('cnpj')->unique()->nullable();
             $table->string('name')->unique();
             $table->string('url')->unique();
             $table->string('email')->unique();
