@@ -36,9 +36,14 @@
                 {{ csrf_field() }}
 
                 <div class="input-group mb-3">
-                
+                    <input type="text" name="cnpj" class="form-control {{ $errors->has('cnpj') ? 'is-invalid' : '' }}" value="{{ old('cnpj') }}"
+                    placeholder="cnpj">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-user"></span>
+                        </div>
+                    </div>
                 </div>
-
                 <div class="input-group mb-3">
                     <input type="text" name="empresa" class="form-control {{ $errors->has('empresa') ? 'is-invalid' : '' }}" value="{{ old('empresa') }}"
                            placeholder="Empresa">
