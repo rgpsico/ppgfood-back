@@ -15,7 +15,7 @@ class AddFiledClientTable extends Migration
     {
         Schema::table('clients', function (Blueprint $table) {         
             $table->string('endereco');
-            $table->string('celular')->unique();
+            $table->string('telefone')->unique();
             $table->string('instagran')->unique();
         });
     }
