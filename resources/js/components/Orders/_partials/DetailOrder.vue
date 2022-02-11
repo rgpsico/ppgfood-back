@@ -27,7 +27,7 @@
                         <li>Número do pedido: </li>
                         <li>Total: R$ {{ total }}</li>
                         <li>Status: {{ order.status_label }}</li>
-                        <li>Data: {{ order.date_br }}</li>
+                        <li>Datass: {{ order.date_br }}</li>
                         <li>
                             Cliente:
                             <ul>
