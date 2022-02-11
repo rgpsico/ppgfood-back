@@ -24,7 +24,7 @@
                         </button>
                     </form>
                     <ul style="color:#000; text-decoration:none; list-style:none;" >
-                        <li>Número do pedido:{{identify}} </li>
+                        <li>Número do pedido: </li>
                         <li>Total: R$ {{ total }}</li>
                         <li>Status: {{ order.status_label }}</li>
                         <li>Data: {{ order.date_br }}</li>
