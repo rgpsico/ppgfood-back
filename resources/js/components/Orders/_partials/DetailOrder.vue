@@ -23,7 +23,7 @@
                             Atualizar Status
                         </button>
                     </form>
-                    <ul style="color:#000;">
+                    <ul style="color:#000; text-decoration:none; list-style:none;" >
                         <li>Número do pedido: </li>
                         <li>Total: R$ {{ total }}</li>
                         <li>Status: {{ order.status_label }}</li>
@@ -34,10 +34,10 @@
                                 <li>Nome: {{ order.client.name }}</li>
                                 <!-- <li>image: {{ order.image }}</li> -->
                                 <!-- <li>uuid: {{ order.uuid }}</li> -->
-                                <li>Contato: {{ order.client.contact }}</li>
-                                <li>endereço: {{ order.client.contact }}</li>
-                                <li>apelido: {{ order.client.contact }}</li>
-                                <li>telefone: {{ order.client.contact }}</li>
+                                <li>Contato: {{ order.client.telefone }}</li>
+                                <li>endereço: {{ order.client.endereco }}</li>
+                                <li>instagran: {{ order.client.instagran }}</li>
+                              
                             </ul>
                         </li>
                         <li>Mesa: {{ order.table.name }}</li>
