@@ -38,9 +38,9 @@ class AuthTest extends TestCase
         $response = $this->postJson('/api/auth/token', $payload);
 
         $response->assertStatus(404)
-                    ->assertExactJson([
-                        'message' => trans('messages.invalid_credentials')
-                    ]);
+            ->assertExactJson([
+                'message' => trans('messages.invalid_credentials')
+            ]);
     }
 
     /**
@@ -61,7 +61,7 @@ class AuthTest extends TestCase
         $response = $this->postJson('/api/auth/token', $payload);
 
         $response->assertStatus(200)
-                    ->assertJsonStructure(['token']);
+            ->assertJsonStructure(['token']);
     }
 
     /**
@@ -91,12 +91,12 @@ class AuthTest extends TestCase
         ]);
 
         $response->assertStatus(200)
-                    ->assertExactJson([
-                        'data' => [
-                            'name' => $client->name,
-                            'email' => $client->email,
-                        ]
-                    ]);
+            ->assertExactJson([
+                'data' => [
+                    'name' => $client->name,
+                    'email' => $client->email,
+                ]
+            ]);
     }
 
     /**

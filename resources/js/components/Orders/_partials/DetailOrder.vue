@@ -108,7 +108,7 @@ export default {
     watch: {
         order () {
             this.status = this.order.status
-            console.log(this.order);
+           
         }
     },
 }
