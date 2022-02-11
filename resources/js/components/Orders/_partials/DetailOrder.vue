@@ -27,7 +27,7 @@
                         <li>Número do pedido: </li>
                         <li>Total: R$ {{ total }}</li>
                         <li>Status: {{ order.status_label }}</li>
-                        <li>Datass: {{ order.date_br }}</li>
+                        <li>Data: {{ order.date_br }}</li>
                         <li>
                             Cliente:
                             <ul>
@@ -40,7 +40,7 @@
                               
                             </ul>
                         </li>
-                        <li>Mesa: {{ order.table.name }}</li>
+  
                          
                         <li style="margin-top:10px;">
                             Produtos:
@@ -108,6 +108,7 @@ export default {
     watch: {
         order () {
             this.status = this.order.status
+            console.log(this.order);
         }
     },
 }
