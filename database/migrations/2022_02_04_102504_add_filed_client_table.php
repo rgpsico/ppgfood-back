@@ -13,7 +13,7 @@ class AddFiledClientTable extends Migration
      */
     public function up()
     {
-        Schema::table('clients', function (Blueprint $table) {         
+        Schema::table('clients', function (Blueprint $table) {
             $table->string('endereco');
             $table->string('telefone')->unique();
             $table->string('instagran')->unique();
@@ -27,6 +27,14 @@ class AddFiledClientTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('clients');
+        Schema::table('clients', function (Blueprint $table) {
+
+            // 1. Drop foreign key constraints
+            $table->dropColumn(['endereco']);
+
+            // 2. Drop the column
+            $table->dropColumn('telefone');
+            $table->dropColumn('instagran');
+        });
     }
 }
