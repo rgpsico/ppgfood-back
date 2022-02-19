@@ -16,13 +16,13 @@ class TenantRepository implements TenantRepositoryInterface
 
     public function getAllTenants($per_page)
     {
-        return $this->entity->paginate($per_page);
+        return $this->entity::where('subscription_active', 1)->paginate($per_page);
     }
 
     public function getTenantByUuid(string $uuid)
     {
         return $this->entity
-                        ->where('uuid', $uuid)
-                        ->first();
+            ->where('uuid', $uuid)
+            ->first();
     }
 }
