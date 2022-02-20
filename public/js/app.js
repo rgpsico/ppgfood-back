@@ -2228,6 +2228,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     display: {
@@ -13079,6 +13085,7 @@ var render = function() {
               "h5",
               {
                 staticClass: "modal-title",
+                staticStyle: { color: "#fff" },
                 attrs: { id: "exampleModalLiveLabel" }
               },
               [_vm._v("Detalhes do Pedido " + _vm._s(_vm.order.identify))]
@@ -13186,80 +13193,168 @@ var render = function() {
               ]
             ),
             _vm._v(" "),
-            _c("ul", [
-              _c("li", [
-                _vm._v("Número do pedido: " + _vm._s(_vm.order.identify))
-              ]),
-              _vm._v(" "),
-              _c("li", [_vm._v("Total: R$ " + _vm._s(_vm.total))]),
-              _vm._v(" "),
-              _c("li", [_vm._v("Status: " + _vm._s(_vm.order.status_label))]),
-              _vm._v(" "),
-              _c("li", [_vm._v("Data: " + _vm._s(_vm.order.date_br))]),
-              _vm._v(" "),
-              _c("li", [
-                _vm._v(
-                  "\n                        Cliente:\n                        "
-                ),
-                _c("ul", [
-                  _c("li", [_vm._v("Nome: " + _vm._s(_vm.order.client.name))]),
+            _c(
+              "ul",
+              {
+                staticStyle: {
+                  color: "#000",
+                  "text-decoration": "none",
+                  "list-style": "none"
+                }
+              },
+              [
+                _c("li", [
+                  _c("b", [_vm._v("Número do pedido:")]),
                   _vm._v(" "),
-                  _c("li", [
-                    _vm._v("Contato: " + _vm._s(_vm.order.client.contact))
-                  ])
+                  _c(
+                    "span",
+                    { staticStyle: { color: "red", "font-weight": "bold" } },
+                    [_vm._v(_vm._s(_vm.order.identify))]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("li", [
+                  _c("b", [_vm._v("Total:")]),
+                  _vm._v(" R$ " + _vm._s(_vm.total))
+                ]),
+                _vm._v(" "),
+                _c("li", [
+                  _c("b", [_vm._v("Status:")]),
+                  _vm._v(" " + _vm._s(_vm.order.status_label))
+                ]),
+                _vm._v(" "),
+                _c("li", [
+                  _c("b", [_vm._v("Data:")]),
+                  _vm._v(" " + _vm._s(_vm.order.date_br) + " | "),
+                  _c("b", [_vm._v("Hora:")]),
+                  _vm._v(" " + _vm._s(_vm.order.hour))
+                ]),
+                _vm._v(" "),
+                _c("li", [
+                  _c("br"),
+                  _vm._v(" "),
+                  _c(
+                    "span",
+                    {
+                      staticStyle: {
+                        "margin-top": "10px",
+                        "font-weight": "bold"
+                      }
+                    },
+                    [_vm._v("Cliente:")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "ul",
+                    {
+                      staticStyle: {
+                        "list-style": "none",
+                        "text-transform": "capitalize"
+                      }
+                    },
+                    [
+                      _c("li", [
+                        _c("b", [_vm._v("Nome:")]),
+                        _vm._v(" " + _vm._s(_vm.order.client.name))
+                      ]),
+                      _vm._v(" "),
+                      _c("li", [
+                        _c("b", [_vm._v("Contato:")]),
+                        _vm._v(" " + _vm._s(_vm.order.client.telefone))
+                      ]),
+                      _vm._v(" "),
+                      _c("li", [
+                        _c("b", [_vm._v("endereço:")]),
+                        _vm._v(" " + _vm._s(_vm.order.client.endereco))
+                      ]),
+                      _vm._v(" "),
+                      _c("li", [
+                        _c("b", [_vm._v("instagran:")]),
+                        _vm._v(" " + _vm._s(_vm.order.client.instagran))
+                      ]),
+                      _vm._v(" "),
+                      _c("li", [
+                        _c("b", [_vm._v("Comentario:")]),
+                        _vm._v(_vm._s(_vm.order.comment) + " ")
+                      ])
+                    ]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("br"),
+                _vm._v(" "),
+                _c("br"),
+                _vm._v(" "),
+                _c("li", [
+                  _c("b", [_vm._v("Produtos:")]),
+                  _vm._v(" "),
+                  _c(
+                    "ul",
+                    {
+                      staticStyle: {
+                        "margin-top": "2px",
+                        padding: "20px",
+                        "list-style": "none"
+                      }
+                    },
+                    _vm._l(_vm.order.products, function(product, index) {
+                      return _c(
+                        "li",
+                        {
+                          key: index,
+                          staticStyle: { "margin-bottom": "10px" }
+                        },
+                        [
+                          _c("img", {
+                            staticStyle: { "max-width": "100px" },
+                            attrs: { src: product.image, alt: product.title }
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "span",
+                            {
+                              staticStyle: {
+                                "margin-left": "10px",
+                                "font-weight": "bold",
+                                "font-size": "20px",
+                                color: "red"
+                              }
+                            },
+                            [_vm._v(_vm._s(product.title))]
+                          )
+                        ]
+                      )
+                    }),
+                    0
+                  )
+                ]),
+                _vm._v(" "),
+                _c("li", [
+                  _c("b", [_vm._v("Avaliações:")]),
+                  _vm._v(" "),
+                  _c(
+                    "ul",
+                    { staticStyle: { "min-height": "300px" } },
+                    _vm._l(_vm.order.evaluations, function(evaluation, index) {
+                      return _c("li", { key: index }, [
+                        _vm._v(
+                          "\n                                Nota: " +
+                            _vm._s(evaluation.stars) +
+                            "/4\n                                "
+                        ),
+                        _c("br"),
+                        _vm._v(
+                          "Comentário: " +
+                            _vm._s(evaluation.comment) +
+                            "\n                            "
+                        )
+                      ])
+                    }),
+                    0
+                  )
                 ])
-              ]),
-              _vm._v(" "),
-              _c("li", [_vm._v("Mesa: " + _vm._s(_vm.order.table.name))]),
-              _vm._v(" "),
-              _c("li", [
-                _vm._v(
-                  "\n                        Produtos:\n                        "
-                ),
-                _c(
-                  "ul",
-                  _vm._l(_vm.order.products, function(product, index) {
-                    return _c("li", { key: index }, [
-                      _c("img", {
-                        staticStyle: { "max-width": "100px" },
-                        attrs: { src: product.image, alt: product.title }
-                      }),
-                      _vm._v(
-                        "\n                                " +
-                          _vm._s(product.title) +
-                          "\n                            "
-                      )
-                    ])
-                  }),
-                  0
-                )
-              ]),
-              _vm._v(" "),
-              _c("li", [
-                _vm._v(
-                  "\n                        Avaliações:\n                        "
-                ),
-                _c(
-                  "ul",
-                  _vm._l(_vm.order.evaluations, function(evaluation, index) {
-                    return _c("li", { key: index }, [
-                      _vm._v(
-                        "\n                                Nota: " +
-                          _vm._s(evaluation.stars) +
-                          "/4\n                                "
-                      ),
-                      _c("br"),
-                      _vm._v(
-                        "Comentário: " +
-                          _vm._s(evaluation.comment) +
-                          "\n                            "
-                      )
-                    ])
-                  }),
-                  0
-                )
-              ])
-            ])
+              ]
+            )
           ])
         ])
       ])
@@ -25751,9 +25846,9 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\laragon\www\larafood\resources\js\app.js */"./resources/js/app.js");
-__webpack_require__(/*! C:\laragon\www\larafood\resources\css\custom-dash.css */"./resources/css/custom-dash.css");
-module.exports = __webpack_require__(/*! C:\laragon\www\larafood\resources\css\site.css */"./resources/css/site.css");
+__webpack_require__(/*! C:\xampp3\htdocs\especializati\larafood\resources\js\app.js */"./resources/js/app.js");
+__webpack_require__(/*! C:\xampp3\htdocs\especializati\larafood\resources\css\custom-dash.css */"./resources/css/custom-dash.css");
+module.exports = __webpack_require__(/*! C:\xampp3\htdocs\especializati\larafood\resources\css\site.css */"./resources/css/site.css");
 
 
 /***/ }),
