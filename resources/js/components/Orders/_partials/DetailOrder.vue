@@ -3,7 +3,8 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLiveLabel" style="color:#fff;">Detalhes do Pedido {{ order.identify }}</h5>
+                    <h5 class="modal-title" id="exampleModalLiveLabel" style="color:#000;">Detalhes do Pedido: 
+                        <span style="color:red; font-weight:bold; color:red; font-size:25px; ">{{ order.identify }}</span></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="closeDetails">
                     <span aria-hidden="true">×</span>
                     </button>

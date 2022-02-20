@@ -2234,6 +2234,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     display: {
@@ -13085,10 +13086,23 @@ var render = function() {
               "h5",
               {
                 staticClass: "modal-title",
-                staticStyle: { color: "#fff" },
+                staticStyle: { color: "#000" },
                 attrs: { id: "exampleModalLiveLabel" }
               },
-              [_vm._v("Detalhes do Pedido " + _vm._s(_vm.order.identify))]
+              [
+                _vm._v("Detalhes do Pedido: \n                    "),
+                _c(
+                  "span",
+                  {
+                    staticStyle: {
+                      color: "red",
+                      "font-weight": "bold",
+                      "font-size": "25px"
+                    }
+                  },
+                  [_vm._v(_vm._s(_vm.order.identify))]
+                )
+              ]
             ),
             _vm._v(" "),
             _c(
