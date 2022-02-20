@@ -39,7 +39,9 @@
                                 <li><b>Contato:</b> {{ order.client.telefone }}</li>
                                 <li><b>endereço:</b> {{ order.client.endereco }}</li>
                                 <li><b>instagran:</b> {{ order.client.instagran }}</li>
-                                 <li><b>Comentario:</b>{{order.comment}} </li>
+                                <br/>
+                                <li><b>Comentario:</b><br>
+                                  <p style="background:#ddd; color:dark;  font-size:14px; ">{{order.comment}}</p> </li>
                             </ul>
                         </li>
                              

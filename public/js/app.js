@@ -2235,6 +2235,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     display: {
@@ -13179,7 +13181,7 @@ var render = function() {
                     ]),
                     _vm._v(" "),
                     _c("option", { attrs: { value: "working" } }, [
-                      _vm._v("Andamento")
+                      _vm._v("Andamentos")
                     ]),
                     _vm._v(" "),
                     _c("option", { attrs: { value: "canceled" } }, [
@@ -13287,9 +13289,23 @@ var render = function() {
                         _vm._v(" " + _vm._s(_vm.order.client.instagran))
                       ]),
                       _vm._v(" "),
+                      _c("br"),
+                      _vm._v(" "),
                       _c("li", [
                         _c("b", [_vm._v("Comentario:")]),
-                        _vm._v(_vm._s(_vm.order.comment) + " ")
+                        _c("br"),
+                        _vm._v(" "),
+                        _c(
+                          "p",
+                          {
+                            staticStyle: {
+                              background: "#ddd",
+                              color: "dark",
+                              "font-size": "14px"
+                            }
+                          },
+                          [_vm._v(_vm._s(_vm.order.comment))]
+                        )
                       ])
                     ]
                   )
