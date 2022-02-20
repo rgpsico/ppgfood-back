@@ -16,7 +16,7 @@
                             <option value="open">Aberto</option>
                             <option value="done">Completo</option>
                             <option value="rejected">Rejeitado</option>
-                            <option value="working">Andamento</option>
+                            <option value="working">Andamentos</option>
                             <option value="canceled">Cancelado</option>
                             <option value="delivering">Em transito</option>
                         </select> |
