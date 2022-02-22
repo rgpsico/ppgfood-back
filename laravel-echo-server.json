@@ -1,10 +1,10 @@
 {
-	"authHost": "http://larafood.test",
+	"authHost": "http://localhost",
 	"authEndpoint": "/broadcasting/auth",
 	"clients": [
 		{
-			"appId": "bcb571a63b8841ce",
-			"key": "7375789f1b80e8ce6cc6de011dea05b7"
+			"appId": "6e92ab2fb5efc15b",
+			"key": "d03a02e0f20c2aac93caec351e7dc54d"
 		}
 	],
 	"database": "redis",
@@ -16,7 +16,7 @@
 	},
 	"devMode": true,
 	"host": null,
-	"port": "6001",
+	"port": "6002",
 	"protocol": "http",
 	"socketio": {},
 	"secureOptions": 67108864,
@@ -30,7 +30,7 @@
 	},
 	"apiOriginAllow": {
 		"allowCors": true,
-		"allowOrigin": "http://larafood.test",
+		"allowOrigin": "http://localhost:80",
 		"allowMethods": "GET, POST",
 		"allowHeaders": "Origin, Content-Type, X-Auth-Token, X-Requested-With, Accept, Authorization, X-CSRF-TOKEN, X-Socket-Id"
 	}
