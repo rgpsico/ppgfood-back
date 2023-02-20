@@ -22,7 +22,7 @@ class OrderTenantController extends Controller
 
     public function index(Request $request)
     {
-        $tenant = Auth::guard('web')->user()->tenant;
+        $tenant = Auth::guard('web')->user();
 
         $date = $request->date ?? date('Y-m-d');
         $status = $request->status ?? 'all';

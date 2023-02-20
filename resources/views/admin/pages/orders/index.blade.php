@@ -18,7 +18,7 @@
 @stop
 
 @section('adminlte_js')
-<script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('js/app.js') }}"></script>
 @stop
 
 @push('scripts-header')
@@ -27,4 +27,6 @@
         'tenantId' => auth()->check() ? auth()->user()->tenant_id : ''
     ]) !!}
 </script>
+
+
 @endpush

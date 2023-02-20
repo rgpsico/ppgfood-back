@@ -20,8 +20,9 @@ class DashboardController extends Controller
 {
     public function home()
     {
-        $tenant = auth()->user()->tenant;
-
+      
+        $tenant = auth()->user();
+      
         $totalUsers = User::where('tenant_id', $tenant->id)->count();
         $totalTables = Table::count();
         $totalCategories = Category::count();

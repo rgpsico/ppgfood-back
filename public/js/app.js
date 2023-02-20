@@ -2040,6 +2040,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2097,7 +2099,7 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (response) {
         return _this2.orders = response.data;
       })["catch"](function (error) {
-        return alert('error');
+        return console.log(error);
       })["finally"](function () {
         return _this2.loadingOrders = false;
       });
@@ -2150,6 +2152,11 @@ __webpack_require__.r(__webpack_exports__);
   components: {
     DetailOrder: _partials_DetailOrder__WEBPACK_IMPORTED_MODULE_1__["default"]
   }
+});
+var tenantId = window.Laravel.tenantId;
+window.Echo.channel('order-created.' + tenantId).listen('OrderCreated', function (e) {
+  Vue.$vToastify.success("Novo pedido ".concat(e.order.identify), 'Novo Pedido');
+  _bus__WEBPACK_IMPORTED_MODULE_0__["default"].$emit('order.created', e.order);
 });
 
 /***/ }),
@@ -25656,9 +25663,10 @@ __webpack_require__.r(__webpack_exports__);
  // get id tenant
 
 var tenantId = window.Laravel.tenantId;
-window.Echo.channel("larafood_database_private-order-created.".concat(tenantId)).listen('OrderCreated', function (e) {
-  _bus__WEBPACK_IMPORTED_MODULE_1__["default"].$emit('order.created', e.order);
+window.Echo.channel("order-created").listen('OrderCreated', function (e) {
+  console.log(e);
   vue__WEBPACK_IMPORTED_MODULE_0___default.a.$vToastify.success("Novo pedido ".concat(e.order.identify), 'Novo Pedido');
+  _bus__WEBPACK_IMPORTED_MODULE_1__["default"].$emit('order.created', e.order);
 });
 
 /***/ }),
@@ -25876,9 +25884,9 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\xampp3\htdocs\especializati\larafood\resources\js\app.js */"./resources/js/app.js");
-__webpack_require__(/*! C:\xampp3\htdocs\especializati\larafood\resources\css\custom-dash.css */"./resources/css/custom-dash.css");
-module.exports = __webpack_require__(/*! C:\xampp3\htdocs\especializati\larafood\resources\css\site.css */"./resources/css/site.css");
+__webpack_require__(/*! C:\laragon\www\ppgfood-back\resources\js\app.js */"./resources/js/app.js");
+__webpack_require__(/*! C:\laragon\www\ppgfood-back\resources\css\custom-dash.css */"./resources/css/custom-dash.css");
+module.exports = __webpack_require__(/*! C:\laragon\www\ppgfood-back\resources\css\site.css */"./resources/css/site.css");
 
 
 /***/ }),
