@@ -1,5 +1,5 @@
 {
-	"authHost": "http://127.0.0.1:8000/",
+	"authHost": "api.ppgfood.com.br",
 	"authEndpoint": "broadcasting/auth",
 	"clients": [
 		{
@@ -17,11 +17,12 @@
 	"devMode": true,
 	"host": null,
 	"port": "6001",
-	"protocol": "http",
+	"protocol": "https",
 	"socketio": {},
 	"secureOptions": 67108864,
-	"sslCertPath": "",
-	"sslKeyPath": "",
+	"sslCertPath": "/etc/letsencrypt/live/www.ppgfood.com.br/fullchain.pem",
+
+	"sslKeyPath": " /etc/letsencrypt/live/www.ppgfood.com.br/privkey.pem",
 	"sslCertChainPath": "",
 	"sslPassphrase": "",
 	"subscribers": {
@@ -30,7 +31,7 @@
 	},
 	"apiOriginAllow": {
 		"allowCors": true,
-		"allowOrigin": "http://localhost",
+		"allowOrigin": "api.ppgfood.com.br",
 		"allowMethods": "GET, POST",
 		"allowHeaders": "Origin, Content-Type, X-Auth-Token, X-Requested-With, Accept, Authorization, X-CSRF-TOKEN, X-Socket-Id"
 	}
