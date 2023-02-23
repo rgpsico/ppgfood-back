@@ -6733,6 +6733,7 @@
                 "lib-pcre": ">=7.0",
                 "php": "^7.3 || ^8.0"
             },
+
             "conflict": {
                 "phpunit/phpunit": "<8.0"
             },
