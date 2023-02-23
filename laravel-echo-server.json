@@ -20,9 +20,9 @@
 	"protocol": "https",
 	"socketio": {},
 	"secureOptions": 67108864,
-	"sslCertPath": "/etc/letsencrypt/live/www.ppgfood.com.br/fullchain.pem",
+	"sslCertPath": "/etc/letsencrypt/live/api.ppgfood.com.br/fullchain.pem",
 
-	"sslKeyPath": " /etc/letsencrypt/live/www.ppgfood.com.br/privkey.pem",
+	"sslKeyPath": " /etc/letsencrypt/live/api.ppgfood.com.br/privkey.pem",
 	"sslCertChainPath": "",
 	"sslPassphrase": "",
 	"subscribers": {
