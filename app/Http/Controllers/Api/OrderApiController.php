@@ -22,9 +22,9 @@ class OrderApiController extends Controller
 
     public function store(StoreOrder $request)
     {
-       
+
         $order = $this->orderService->createNewOrder($request->all());
-       
+
         event(new OrderCreated($order));
 
         return new OrderResource($order);
