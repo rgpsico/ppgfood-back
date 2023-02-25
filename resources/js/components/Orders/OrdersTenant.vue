@@ -58,12 +58,11 @@ import Bus from '../../bus'
 import DetailOrder from './_partials/DetailOrder'
 
 export default {
-    mounted() {
-        this.getOrders()
-
+    mounted() {   
         Bus.$on('order.created', (order) => {
             this.orders.data.unshift(order)
         })
+        this.getOrders()
     },
     data() {
         return {
@@ -98,9 +97,8 @@ export default {
         }
     },
     methods: {
-        getOrders () {
-            this.reset()
-
+        getOrders () {       
+            console.log('aqui')
             this.loadingOrders = true
 
             axios.get('/api/v1/my-orders', {params: {
@@ -166,14 +164,14 @@ export default {
     }
 }
 
-// const tenantId = window.Laravel.tenantId;
+const tenantId = window.Laravel.tenantId;
 
-// window.Echo.channel('order-created.'+tenantId)
-//             .listen('OrderCreated', (e) => {
-//                 Vue.$vToastify.success(`Novo pedido ${e.order.identify}`, 'Novo Pedido')
-//                 Bus.$emit('order.created', e.order)
+window.Echo.channel('order-created.'+tenantId)
+            .listen('OrderCreated', (e) => {
+                Vue.$vToastify.success(`Novo pedido ${e.order.identify}`, 'Novo Pedido')
+                Bus.$emit('order.created', e.order)
 
 
-//             })
+            })
 
 </script>
