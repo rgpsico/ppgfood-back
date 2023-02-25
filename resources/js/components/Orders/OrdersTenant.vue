@@ -110,7 +110,7 @@ export default {
                     .then(response => this.orders = response.data)
                     .catch(error => console.log(error))
                     .finally(() => this.loadingOrders = false)
-                    console.log(response.data)
+                  
         },
 
         reset () {
