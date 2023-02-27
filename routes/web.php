@@ -1,5 +1,16 @@
 <?php
 
+
+   /**
+     * Product x Category
+     */
+    Route::get('products/{id}/category/{idCategory}/detach', 'CategoryProductController@detachCategoryProduct')->name('products.category.detach');
+    Route::post('products/{id}/categories', 'CategoryProductController@attachCategoriesProduct')->name('products.categories.attach');
+    Route::any('products/{id}/categories/create', 'CategoryProductController@categoriesAvailable')->name('products.categories.available');
+    Route::get('products/{id}/categories', 'CategoryProductController@categories')->name('products.categories');
+    Route::get('categories/{id}/products', 'CategoryProductController@products')->name('categories.products');
+
+
 Route::prefix('admin')
         ->namespace('Admin')
         ->middleware('auth')
@@ -45,14 +56,6 @@ Route::prefix('admin')
     Route::any('tables/search', 'TableController@search')->name('tables.search');
     Route::resource('tables', 'TableController');
 
-    /**
-     * Product x Category
-     */
-    Route::get('products/{id}/category/{idCategory}/detach', 'CategoryProductController@detachCategoryProduct')->name('products.category.detach');
-    Route::post('products/{id}/categories', 'CategoryProductController@attachCategoriesProduct')->name('products.categories.attach');
-    Route::any('products/{id}/categories/create', 'CategoryProductController@categoriesAvailable')->name('products.categories.available');
-    Route::get('products/{id}/categories', 'CategoryProductController@categories')->name('products.categories');
-    Route::get('categories/{id}/products', 'CategoryProductController@products')->name('categories.products');
 
     /**
      * Routes Products
