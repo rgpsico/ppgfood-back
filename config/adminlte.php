@@ -224,7 +224,7 @@ return [
             'text' => 'Produtos',
             'url'  => 'admin/products',
             'icon' => 'fas fa-hamburger',
-            'can'  =>  'products',
+            // 'can'  =>  'products',
         ],
         [
             'text' => 'Mesas',
