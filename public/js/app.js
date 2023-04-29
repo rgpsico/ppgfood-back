@@ -2048,6 +2048,7 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     var _this = this;
 
+    console.log('aaaa');
     this.getOrders();
     _bus__WEBPACK_IMPORTED_MODULE_0__["default"].$on('order.created', function (order) {
       _this.orders.data.unshift(order);
@@ -2089,7 +2090,6 @@ __webpack_require__.r(__webpack_exports__);
     getOrders: function getOrders() {
       var _this2 = this;
 
-      this.reset();
       this.loadingOrders = true;
       axios.get('/api/v1/my-orders', {
         params: {

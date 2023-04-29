@@ -59,6 +59,7 @@ import DetailOrder from './_partials/DetailOrder'
 
 export default {
     mounted() {
+      
         this.getOrders()
 
         Bus.$on('order.created', (order) => {               
@@ -98,11 +99,9 @@ export default {
         }
     },
     methods: {
-        getOrders () {
-            this.reset()
-
+        getOrders () {        
             this.loadingOrders = true
-            
+           
             axios.get('/api/v1/my-orders', {params: {
                 status: this.status,
                 date: this.dateFilter

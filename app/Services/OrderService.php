@@ -38,7 +38,7 @@ class OrderService
 
     public function createNewOrder(array $order)
     {
-      
+
         $productsOrder = $this->getProductsByOrder($order['products'] ?? []);
 
         $identify = $this->getIdentifyOrder();
@@ -74,7 +74,7 @@ class OrderService
         // $specialCharacters = str_shuffle('!@#$%*-');
 
         // $characters = $smallLetters.$numbers.$specialCharacters;
-        $characters = $smallLetters.$numbers;
+        $characters = $smallLetters . $numbers;
 
         $identify = substr(str_shuffle($characters), 0, $qtyCaraceters);
 
@@ -87,18 +87,18 @@ class OrderService
 
     private function getProductsByOrder(array $productsOrder): array
     {
-      
+
         $products = [];
         foreach ($productsOrder as $productOrder) {
             $product = $this->productRepository->getProductByUuid($productOrder['identify']);
-    
+
             array_push($products, [
                 'id' => $product->id,
                 'qty' => $productOrder['qty'],
                 'price' => $product->price,
             ]);
         }
-      
+
         return $products;
     }
 
@@ -145,5 +145,4 @@ class OrderService
     {
         return $this->orderRepository->updateStatusOrder($identify, $status);
     }
-
 }
