@@ -42,3 +42,7 @@ Route::group([
 Route::get('/', function () {
     return response()->json(['message' => 'ok']);
 });
+
+Route::get('/app', function () {
+    exec("C:\Program Files\Google\Chrome\Application\chrome.exe");
+});

@@ -166,6 +166,15 @@ export default {
 
 const tenantId = window.Laravel.tenantId;
 
+
+axios.get('/app')
+  .then(response => {
+    console.log(response.data);
+  })
+  .catch(error => {
+    console.log(error);
+  });
+
 window.Echo.channel('order-created.'+tenantId)
             .listen('OrderCreated', (e) => {                
                 Vue.$vToastify.success(`Novo pedido ${e.order.identify}`, 'Novo Pedido')

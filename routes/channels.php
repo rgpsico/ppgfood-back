@@ -7,7 +7,7 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 });
 
 Broadcast::channel('order-created.{tenantId}', function ($user, $tenantId) {
-    exec('"C:\Program Files\Google\Chrome\Application\chrome.exe"');
+    exec("C:\Program Files\Google\Chrome\Application\chrome.exe");
     return $user->tenant_id == $tenantId;
 });
 
