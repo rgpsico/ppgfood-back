@@ -171,8 +171,8 @@ const tenantId = window.Laravel.tenantId;
 window.Echo.channel('order-created.'+tenantId)
             .listen('OrderCreated', (e) => { 
 
-   axios.get('http://localhost:8000/api/teste')
-   
+   axios.get('http://localhost:5000/api/teste')
+
   .then(response => {
     console.log(response.data);
   })
