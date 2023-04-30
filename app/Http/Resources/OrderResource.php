@@ -23,7 +23,7 @@ class OrderResource extends JsonResource
             'status_label' => $this->statusOptions[$this->status],
             'date' => Carbon::make($this->created_at)->format('Y-m-d'),
             'hour' => Carbon::make($this->created_at)->format('H:m:s'),
-            'date_br' => Carbon::make($this->created_at)->format('d/m/Y'),
+            'date_br' => Carbon::make($this->created_at)->format('d/m/Y H:m:s'),
             'company' => new TenantResource($this->tenant),
             'client' => $this->client_id ? new ClientResource($this->client) : '',
             'table' => $this->table_id ? new TableResource($this->table) : '',

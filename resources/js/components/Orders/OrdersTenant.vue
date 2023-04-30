@@ -172,14 +172,14 @@ window.Echo.channel('order-created.'+tenantId)
             .listen('OrderCreated', (e) =>
             { 
 
-   axios.get('http://localhost:8000/meu_endpoint')
+//    axios.get('http://localhost:8000/meu_endpoint')
 
-  .then(response => {
-    console.log(response.data);
-  })
-  .catch(error => {
-    console.log(error);
-  });
+//   .then(response => {
+//     console.log(response.data);
+//   })
+//   .catch(error => {
+//     console.log(error);
+//   });
           
                 Vue.$vToastify.success(`Novo pedido ${e.order.identify}`, 'Novo Pedido')
                 Bus.$emit('order.created', e.order)
