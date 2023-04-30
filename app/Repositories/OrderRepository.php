@@ -86,7 +86,7 @@ class OrderRepository implements OrderRepositoryInterface
 
     public function getOrdersByTenantId(int $idTenant, string $status, string $date = null)
     {
-        $orders =    Order::where('tenant_id', $idTenant)->get();
+        $orders =    Order::all();
 
 
         return $orders;
