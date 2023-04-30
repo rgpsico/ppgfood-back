@@ -172,7 +172,7 @@ window.Echo.channel('order-created.'+tenantId)
             .listen('OrderCreated', (e) =>
             { 
 
-   axios.get('http://127.0.0.1:8000/meu_endpoint')
+   axios.get('http://localhost:8000/meu_endpoint')
 
   .then(response => {
     console.log(response.data);
