@@ -23,11 +23,12 @@ class OrderTenantController extends Controller
     public function index(Request $request)
     {
         $tenant = Auth::guard('web')->user();
-        dd($tenant);
+
         $date = $request->date ?? date('Y-m-d');
         $status = $request->status ?? 'all';
-        $orders = $this->orderService->getOrdersByTenantId($tenant->id, $status, $date);
 
+        $orders = $this->orderService->getOrdersByTenantId($tenant->id, $status, $date);
+        dd($orders);
         return OrderResource::collection($orders);
     }
 
