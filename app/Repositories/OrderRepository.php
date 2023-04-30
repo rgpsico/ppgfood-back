@@ -92,9 +92,9 @@ class OrderRepository implements OrderRepositoryInterface
             $ordersQuery->where('status', $status);
         }
 
-        if ($date) {
-            $ordersQuery->whereDate('created_at', $date);
-        }
+        // if ($date) {
+        //     $ordersQuery->whereDate('created_at', $date);
+        // }
 
         $orders = $ordersQuery->get();
 
