@@ -44,8 +44,8 @@ class OrderRepository implements OrderRepositoryInterface
     public function getOrderByIdentify(string $identify)
     {
         return $this->entity
-                        ->where('identify', $identify)
-                        ->first();
+            ->where('identify', $identify)
+            ->first();
     }
 
     public function registerProductsOrder(int $orderId, array $products)
@@ -78,8 +78,8 @@ class OrderRepository implements OrderRepositoryInterface
     public function getOrdersByClientId(int $idClient)
     {
         $orders = $this->entity
-                            ->where('client_id', $idClient)
-                            ->paginate();
+            ->where('client_id', $idClient)
+            ->paginate();
 
         return $orders;
     }
@@ -87,19 +87,19 @@ class OrderRepository implements OrderRepositoryInterface
     public function getOrdersByTenantId(int $idTenant, string $status, string $date = null)
     {
         $orders = $this->entity
-                        ->where('tenant_id', $idTenant)
-                        ->where(function ($query) use ($status) {
-                            if ($status != 'all') {
-                                return $query->where('status', $status);
-                            }
-                        })
-                        ->where(function ($query) use ($date) {
-                            if ($date) {
-                                return $query->whereDate('created_at', $date);
-                            }
-                        })
-                        ->get();
-
+            ->where('tenant_id', $idTenant)
+            ->where(function ($query) use ($status) {
+                if ($status != 'all') {
+                    return $query->where('status', $status);
+                }
+            })
+            ->where(function ($query) use ($date) {
+                if ($date) {
+                    return $query->whereDate('created_at', $date);
+                }
+            })
+            ->get();
+        dd($orders);
         return $orders;
     }
 
