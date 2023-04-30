@@ -86,6 +86,7 @@ class OrderRepository implements OrderRepositoryInterface
 
     public function getOrdersByTenantId(int $idTenant, string $status, string $date = null)
     {
+        dd($idTenant);
         $orders = $this->entity
             ->where('tenant_id', $idTenant)
             ->where(function ($query) use ($status) {
@@ -99,7 +100,7 @@ class OrderRepository implements OrderRepositoryInterface
                 }
             })
             ->get();
-        dd($orders);
+
         return $orders;
     }
 
