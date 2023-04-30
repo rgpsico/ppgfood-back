@@ -86,20 +86,11 @@ class OrderRepository implements OrderRepositoryInterface
 
     public function getOrdersByTenantId(int $idTenant, string $status, string $date = null)
     {
-        dd($idTenant);
+
         $orders = $this->entity
             ->where('tenant_id', $idTenant)
-            ->where(function ($query) use ($status) {
-                if ($status != 'all') {
-                    return $query->where('status', $status);
-                }
-            })
-            ->where(function ($query) use ($date) {
-                if ($date) {
-                    return $query->whereDate('created_at', $date);
-                }
-            })
             ->get();
+        dd($orders);
 
         return $orders;
     }
