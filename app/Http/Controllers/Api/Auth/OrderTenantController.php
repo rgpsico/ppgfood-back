@@ -26,9 +26,9 @@ class OrderTenantController extends Controller
 
         $date = $request->date ?? date('Y-m-d');
         $status = $request->status ?? 'all';
-
+        dd($tenant->id);
         $orders = $this->orderService->getOrdersByTenantId($tenant->id, $status, $date);
-        dd($orders);
+
         return OrderResource::collection($orders);
     }
 
