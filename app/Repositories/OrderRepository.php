@@ -88,9 +88,9 @@ class OrderRepository implements OrderRepositoryInterface
     {
         $ordersQuery = Order::where('tenant_id', $idTenant);
 
-        if ($status != 'all') {
-            $ordersQuery->where('status', $status);
-        }
+        // if ($status != 'all') {
+        //     $ordersQuery->where('status', $status);
+        // }
 
         // if ($date) {
         //     $ordersQuery->whereDate('created_at', $date);
