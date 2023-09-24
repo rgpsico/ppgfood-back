@@ -173,9 +173,10 @@ window.Echo.channel('order-created.'+tenantId)
 
      
        let notificationAudio = document.getElementById('notificationSound');
+      
        notificationAudio.play();
 
-      
+        console.log('aqui')
         Vue.$vToastify.success(`Novo pedido ${e.order.identify}`, 'Novo Pedido');
         Bus.$emit('order.created', e.order);
 
