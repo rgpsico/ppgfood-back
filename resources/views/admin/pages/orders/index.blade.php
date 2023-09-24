@@ -13,12 +13,15 @@
 
 @section('content')
     <div id="app" class="card">
+        
+        <audio id="notificationSound" src="{{asset('mp3/alert.wav')}}" preload="auto"></audio>
+
         <orders-tenant></orders-tenant>
     </div>
 @stop
 
 @section('adminlte_js')
-    <script src="{{ asset('js/app.js') }}"></script>
+<script src="{{ asset('js/app.js') }}"></script>
 @stop
 
 @push('scripts-header')
@@ -27,6 +30,4 @@
         'tenantId' => auth()->check() ? auth()->user()->tenant_id : ''
     ]) !!}
 </script>
-
-
 @endpush
