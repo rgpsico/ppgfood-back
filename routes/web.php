@@ -144,7 +144,7 @@ Route::prefix('admin')
  */
 Route::get('/plan/{url}', 'Site\SiteController@plan')->name('plan.subscription');
 Route::get('/', 'Site\SiteController@index')->name('site.home');
-
+Route::get('/teste', 'Site\SiteController@index')->name('site.teste');
 /**
  * Auth Routes
  */

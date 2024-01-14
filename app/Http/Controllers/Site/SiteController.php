@@ -15,6 +15,11 @@ class SiteController extends Controller
         return view('site.pages.home.index', compact('plans'));
     }
 
+    public function teste()
+    {
+        dd("aaa");
+    }
+
     public function plan($url)
     {
         if (!$plan = Plan::where('url', $url)->first()) {
