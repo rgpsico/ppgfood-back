@@ -39,7 +39,7 @@ Route::group([
 /**
  * Test API
  */
-Route::get('/', function () {
+Route::get('/teste', function () {
     return response()->json(['message' => 'ok']);
 });
 
