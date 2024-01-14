@@ -55,7 +55,6 @@ class AppServiceProvider extends ServiceProvider
          * Custom If Statements
          */
         Blade::if('admin', function () {
-            dd('aaa');
             $user = auth()->user();
 
             return $user->isAdmin();

@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\CategoryProductController;
+
 
 /**
  * Product x Category
