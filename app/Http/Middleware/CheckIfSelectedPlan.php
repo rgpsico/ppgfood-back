@@ -16,6 +16,7 @@ class CheckIfSelectedPlan
      */
     public function handle(Request $request, Closure $next)
     {
+        dd('aaa');
         if (!session()->has('plan')) {
             return redirect()->route('site.home');
         }
