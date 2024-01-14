@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 
 class CategoryProductController extends Controller
 {
+
     protected $product, $category;
 
     public function __construct(Product $product, Category $category)
@@ -65,8 +66,8 @@ class CategoryProductController extends Controller
 
         if (!$request->categories || count($request->categories) == 0) {
             return redirect()
-                        ->back()
-                        ->with('info', 'Precisa escolher pelo menos uma permissão');
+                ->back()
+                ->with('info', 'Precisa escolher pelo menos uma permissão');
         }
 
         $product->categories()->attach($request->categories);
