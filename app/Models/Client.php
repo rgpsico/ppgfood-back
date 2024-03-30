@@ -30,9 +30,4 @@ class Client extends Authenticatable
     {
         return $this->hasMany(Evaluation::class);
     }
-
-    public function posts()
-    {
-        return $this->hasMany(Post::class);
-    }
 }
