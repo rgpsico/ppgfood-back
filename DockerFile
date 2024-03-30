@@ -1,0 +1,27 @@
+FROM php:7.4-fpm
+
+# Instale as extensões do PHP necessárias
+RUN docker-php-ext-install pdo pdo_mysql mbstring zip exif pcntl
+
+# Instale o Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# Defina o diretório de trabalho
+WORKDIR /var/www
+
+# Remova o diretório html padrão do Nginx e crie um link simbólico para a pasta public do Laravel
+RUN rm -rf /var/www/html
+RUN ln -s public /var/www/html
+
+# Copie o aplicativo existente para o container
+COPY . /var/www
+
+# Instale as dependências do PHP
+RUN composer install
+
+# Mude a propriedade da pasta
+RUN chown -R www-data:www-data /var/www
+
+# Exponha a porta 9000 e inicie o php-fpm server
+EXPOSE 9000
+CMD ["php-fpm"]
