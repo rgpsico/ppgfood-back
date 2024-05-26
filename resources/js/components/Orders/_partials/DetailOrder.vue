@@ -37,7 +37,7 @@
                                     <b>Total:</b> R$ {{ total }}
                                 </li>
                                 <li style="margin-bottom: 10px;">
-                                    <b>Status:</b> <span :class="statusClass">{{ order.status_label }}</span>
+                                    <b>Status a:</b> <span :class="statusClass">{{ order.status_label }}</span>
                           
                                 </li>
                                 <li style="margin-bottom: 20px;">
