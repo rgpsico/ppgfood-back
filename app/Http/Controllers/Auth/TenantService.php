@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Http\Controllers\Auth;
 
 use App\Models\Plan;
 use App\Repositories\Contracts\TenantRepositoryInterface;
