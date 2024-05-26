@@ -86,7 +86,7 @@
 
 <style scoped>
 b{
-    color:#000:
+    color:#000;
 } 
 .modal-body {
     max-height: 70vh;
