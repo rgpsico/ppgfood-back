@@ -31,7 +31,7 @@
                 <tbody>
                     <tr v-for="(order, index) in orders.data" :key="index">
                         <td>{{ order.identify }}</td>
-                        <span :class="statusClass">{{ order.status_label }}</span>
+                        <td>{{ order.status_label }}</td>
                         <td>{{ order.date_br }}</td>
                         <td>
                             <!-- <detail-order :order="order" :display="'none'"></detail-order> -->
@@ -49,38 +49,7 @@
     </div>
 </template>
 
-<style scoped>
 
-.status-label {
-    padding: 5px 10px;
-    border-radius: 4px;
-    color: white;
-}
-
-.status-open {
-    background-color: blue;
-}
-
-.status-done {
-    background-color: green;
-}
-
-.status-rejected {
-    background-color: red;
-}
-
-.status-working {
-    background-color: orange;
-}
-
-.status-canceled {
-    background-color: gray;
-}
-
-.status-delivering {
-    background-color: purple;
-}
-</style>
 
 <script>
 
@@ -129,18 +98,7 @@ export default {
             displayOrder: 'none',
         }
     },
-    methods: {
-        getOrders () {        
-            this.loadingOrders = true
-           
-            axios.get('/api/v1/my-orders', {params: {
-                status: this.status,
-                date: this.dateFilter
-            }})
-                    .then(response => this.orders = response.data)
-                    .catch(error => console.log(error))
-                    .finally(() => this.loadingOrders = false)
-        },
+    computed:{
         statusClass() {
             switch (this.order.status) {
                 case 'open':
@@ -158,7 +116,22 @@ export default {
                 default:
                     return 'status-label';
             }
+        }
+
+    },
+    methods: {
+        getOrders () {        
+            this.loadingOrders = true
+           
+            axios.get('/api/v1/my-orders', {params: {
+                status: this.status,
+                date: this.dateFilter
+            }})
+                    .then(response => this.orders = response.data)
+                    .catch(error => console.log(error))
+                    .finally(() => this.loadingOrders = false)
         },
+
         reset () {
             this.orders = {data: []}
         },
