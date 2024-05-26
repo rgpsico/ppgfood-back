@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Plan;
 use App\Providers\RouteServiceProvider;
 use App\Services\TenantService;
 
@@ -68,12 +69,25 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \App\User
      */
+
     protected function create(array $data)
     {
-        // if (!$plan = session('plan')) {
-        //     // Se o plano não estiver definido na sessão, lance uma exceção ou retorne um erro apropriado
-        //     abort(404, 'Plan not found in session');
-        // }
+        $plan = session('plan');
+
+        if (!$plan) {
+            // Criar plano básico se não houver plano na sessão
+            $plan = Plan::firstOrCreate(
+                ['name' => 'Plano Básico'],
+                [
+                    'url' => 'plano-basico',
+                    'price' => 0,
+                    'description' => 'Plano básico padrão'
+                ]
+            );
+
+            // Opcional: Salvar o plano na sessão para futuras referências
+            session(['plan' => $plan]);
+        }
 
         $tenantService = app(TenantService::class);
         $user = $tenantService->make($plan, $data);
