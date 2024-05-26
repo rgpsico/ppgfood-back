@@ -99,28 +99,26 @@ export default {
             displayOrder: 'none',
         }
     },
-    computed:{
-        statusClass() {
-            switch (this.order.status) {
-                case 'open':
-                    return 'status-label status-open';
-                case 'done':
-                    return 'status-label status-done';
-                case 'rejected':
-                    return 'status-label status-rejected';
-                case 'working':
-                    return 'status-label status-working';
-                case 'canceled':
-                    return 'status-label status-canceled';
-                case 'delivering':
-                    return 'status-label status-delivering';
-                default:
-                    return 'status-label';
-            }
-        }
-
-    },
+    
     methods: {
+        getStatusClass(status) {
+        switch (status) {
+            case 'open':
+                return 'status-label status-open';
+            case 'done':
+                return 'status-label status-done';
+            case 'rejected':
+                return 'status-label status-rejected';
+            case 'working':
+                return 'status-label status-working';
+            case 'canceled':
+                return 'status-label status-canceled';
+            case 'delivering':
+                return 'status-label status-delivering';
+            default:
+                return 'status-label';
+        }
+    },
         getOrders () {        
             this.loadingOrders = true
            
@@ -208,33 +206,33 @@ window.Echo.channel('order-created.'+tenantId)
 
 
 <style scoped>
-.status-label {
-    padding: 5px 10px;
-    border-radius: 4px;
-    color: white;
-}
+    .status-label {
+        padding: 5px 10px;
+        border-radius: 4px;
+        color: white;
+    }
 
-.status-open {
-    background-color: blue;
-}
+    .status-open {
+        background-color: blue;
+    }
 
-.status-done {
-    background-color: green;
-}
+    .status-done {
+        background-color: green;
+    }
 
-.status-rejected {
-    background-color: red;
-}
+    .status-rejected {
+        background-color: red;
+    }
 
-.status-working {
-    background-color: orange;
-}
+    .status-working {
+        background-color: orange;
+    }
 
-.status-canceled {
-    background-color: gray;
-}
+    .status-canceled {
+        background-color: gray;
+    }
 
-.status-delivering {
-    background-color: purple;
-}
+    .status-delivering {
+        background-color: purple;
+    }
 </style>
