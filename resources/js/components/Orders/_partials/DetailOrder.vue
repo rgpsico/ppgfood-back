@@ -37,7 +37,8 @@
                                     <b>Total:</b> R$ {{ total }}
                                 </li>
                                 <li style="margin-bottom: 10px;">
-                                    <b>Status:</b> {{ order.status_label }}
+                                    <b>Status:</b> <span :class="statusClass">{{ order.status_label }}</span>
+                          
                                 </li>
                                 <li style="margin-bottom: 20px;">
                                     <b>Data:</b> {{ order.date_br }} | <b>Hora:</b> {{ order.hour }}
@@ -98,6 +99,36 @@ b{
     overflow-y: auto;
     padding-right: 15px;
 }
+
+.status-label {
+    padding: 5px 10px;
+    border-radius: 4px;
+    color: white;
+}
+
+.status-open {
+    background-color: blue;
+}
+
+.status-done {
+    background-color: green;
+}
+
+.status-rejected {
+    background-color: red;
+}
+
+.status-working {
+    background-color: orange;
+}
+
+.status-canceled {
+    background-color: gray;
+}
+
+.status-delivering {
+    background-color: purple;
+}
 </style>
 <script>
 export default {
@@ -124,6 +155,24 @@ export default {
     methods: {
         closeDetails () {
             this.$emit('closeDetails')
+        },
+        statusClass() {
+            switch (this.order.status) {
+                case 'open':
+                    return 'status-label status-open';
+                case 'done':
+                    return 'status-label status-done';
+                case 'rejected':
+                    return 'status-label status-rejected';
+                case 'working':
+                    return 'status-label status-working';
+                case 'canceled':
+                    return 'status-label status-canceled';
+                case 'delivering':
+                    return 'status-label status-delivering';
+                default:
+                    return 'status-label';
+            }
         },
         updateStatus() {
             this.loading = true
