@@ -40,7 +40,7 @@ class TenantService
     public function storeTenant()
     {
         $data = $this->data;
-    
+
 
         return $this->plan->tenants()->create([
             'cnpj' => $data['cnpj'],
