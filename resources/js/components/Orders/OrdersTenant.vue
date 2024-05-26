@@ -205,3 +205,36 @@ window.Echo.channel('order-created.'+tenantId)
     });
 
 </script>
+
+
+<style scoped>
+.status-label {
+    padding: 5px 10px;
+    border-radius: 4px;
+    color: white;
+}
+
+.status-open {
+    background-color: blue;
+}
+
+.status-done {
+    background-color: green;
+}
+
+.status-rejected {
+    background-color: red;
+}
+
+.status-working {
+    background-color: orange;
+}
+
+.status-canceled {
+    background-color: gray;
+}
+
+.status-delivering {
+    background-color: purple;
+}
+</style>
