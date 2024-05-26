@@ -24,6 +24,8 @@ trait UserACLTrait
     {
         // $tenant = $this->tenant;
         // $plan = $tenant->plan;
+
+        dd($this->tenant_id);
         $tenant = Tenant::with('plan.profiles.permissions')->where('id', $this->tenant_id)->first();
         $plan = $tenant->plan;
 
