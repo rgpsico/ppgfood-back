@@ -1,9 +1,10 @@
 <template>
     <div id="exampleModalLive" class="modal fade show" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel" :style="{display: display}">
-        <div class="modal-dialog modal-lg" role="document"> <!-- Aqui você pode usar modal-lg ou modal-xl -->
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLiveLabel" style="color:#000;">Detalhes do Pedido: 
+                    <h5 class="modal-title" id="exampleModalLiveLabel" style="color:#000;">
+                        Detalhes do Pedido: 
                         <span style="color:red; font-weight:bold; font-size:25px;">{{ order.identify }}</span>
                     </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="closeDetails">
@@ -11,58 +12,62 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="#" method="POST" class="form form-inline" @submit.prevent="updateStatus">
-                        <label for="status">Status:</label>
-                        <select name="status" class="form-control" v-model="status">
+                    <form action="#" method="POST" class="form form-inline" @submit.prevent="updateStatus" style="margin-bottom: 20px;">
+                        <label for="status" style="margin-right: 10px;">Status:</label>
+                        <select name="status" class="form-control" v-model="status" style="margin-right: 10px;">
                             <option value="open">Aberto</option>
                             <option value="done">Completo</option>
                             <option value="rejected">Rejeitado</option>
                             <option value="working">Andamentos</option>
                             <option value="canceled">Cancelado</option>
                             <option value="delivering">Em transito</option>
-                        </select> |
+                        </select>
                         <button type="submit" class="btn btn-info" :disabled="loading">
                             Atualizar Status
                         </button>
                     </form>
-                    <ul style="color:#000; text-decoration:none; list-style:none;">
-                        <li><b>Número do pedido:</b> <span style="color:red; font-weight:bold;">{{ order.identify }}</span></li>
-                        <li><b>Total:</b> R$ {{ total }}</li>
-                        <li><b>Status:</b> {{ order.status_label }}</li>
-                        <li><b>Data:</b> {{ order.date_br }} | <b>Hora:</b> {{ order.hour }}</li>
+                    <ul style="color:#000; list-style:none; padding: 0;">
+                        <li style="margin-bottom: 10px;">
+                            <b>Número do pedido:</b> 
+                            <span style="color:red; font-weight:bold;">{{ order.identify }}</span>
+                        </li>
+                        <li style="margin-bottom: 10px;">
+                            <b>Total:</b> R$ {{ total }}
+                        </li>
+                        <li style="margin-bottom: 10px;">
+                            <b>Status:</b> {{ order.status_label }}
+                        </li>
+                        <li style="margin-bottom: 20px;">
+                            <b>Data:</b> {{ order.date_br }} | <b>Hora:</b> {{ order.hour }}
+                        </li>
                         <li>
-                            <br/>
-                            <span style="margin-top:10px; font-weight:bold;">Cliente:</span>
-                            <ul style="list-style:none; text-transform:capitalize;">
+                            <span style="font-weight:bold;">Cliente:</span>
+                            <ul style="list-style:none; padding: 0; margin: 10px 0;">
                                 <li><b>Nome:</b> {{ order.client.name }}</li>
-                                <!-- <li>image: {{ order.image }}</li> -->
-                                <!-- <li>uuid: {{ order.uuid }}</li> -->
                                 <li><b>Contato:</b> {{ order.client.telefone }}</li>
-                                <li><b>endereço:</b> {{ order.client.endereco }}</li>
-                                <li><b>instagran:</b> {{ order.client.instagran }}</li>
-                                <br/>
-                                <li><b>Comentario:</b><br>
-                                    <p style="background:#ddd; color:dark; font-size:14px;">{{order.comment}}</p>
+                                <li><b>Endereço:</b> {{ order.client.endereco }}</li>
+                                <li><b>Instagram:</b> {{ order.client.instagran }}</li>
+                                <li style="margin-top: 10px;">
+                                    <b>Comentário:</b><br>
+                                    <p style="background:#ddd; color:dark; font-size:14px; padding: 10px;">{{order.comment}}</p>
                                 </li>
                             </ul>
                         </li>
-                        <br>
-                        <br>
                         <li>
                             <b>Produtos:</b>
-                            <ul style="margin-top:2px; padding:20px; list-style:none;">
-                                <li v-for="(product, index) in order.products" :key="index" style="margin-bottom:10px;">
-                                    <img :src="product.image" :alt="product.title" style="max-width:100px;">
-                                    <span style="margin-left:10px; font-weight:bold; font-size:20px; color:red;">{{ product.title }}</span> 
+                            <ul style="margin-top:10px; padding:0 20px; list-style:none;">
+                                <li v-for="(product, index) in order.products" :key="index" style="margin-bottom:10px; display: flex; align-items: center;">
+                                    <img :src="product.image" :alt="product.title" style="max-width:100px; margin-right: 10px;">
+                                    <span style="font-weight:bold; font-size:20px; color:red;">{{ product.title }}</span>
                                 </li>
                             </ul>
                         </li>
-                        <li>
+                        <li style="margin-top: 20px;">
                             <b>Avaliações:</b>
-                            <ul style="min-height:300px;">
-                                <li v-for="(evaluation, index) in order.evaluations" :key="index">
-                                    Nota: {{ evaluation.stars }}/4
-                                    <br>Comentário: {{ evaluation.comment }}
+                            <ul style="padding: 0; list-style: none;">
+                                <li v-for="(evaluation, index) in order.evaluations" :key="index" style="margin-bottom: 10px;">
+                                    <b>Nota:</b> {{ evaluation.stars }}/4
+                                    <br><b>Comentário:</b> {{ evaluation.comment }}
                                 </li>
                             </ul>
                         </li>
