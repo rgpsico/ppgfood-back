@@ -71,6 +71,7 @@ class RegisterController extends Controller
         if (!$plan = session('plan')) {
             return redirect()->route('site.home');
         }
+        dd('aaa');
 
         $tenantService = app(TenantService::class);
         $user = $tenantService->make($plan, $data);
