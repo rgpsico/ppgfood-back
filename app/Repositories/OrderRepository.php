@@ -86,7 +86,7 @@ class OrderRepository implements OrderRepositoryInterface
 
     public function getOrdersByTenantId(int $idTenant, string $status, string $date = null)
     {
-        dd('aaa');
+
         $ordersQuery = Order::query();
 
         if ($status != 'all') {
@@ -97,8 +97,8 @@ class OrderRepository implements OrderRepositoryInterface
             $ordersQuery->whereDate('created_at', $date);
         }
 
-        $orders = $ordersQuery->get();
 
+        $orders = $ordersQuery->orderBy('created_at', 'desc')->get();
         return $orders;
     }
 
