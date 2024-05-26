@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User as ModelsUser;
 use App\Providers\RouteServiceProvider;
 use App\Services\TenantService;
 use App\Tenant\Events\TenantCreated;
@@ -68,6 +69,12 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        return ModelsUser::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => bcrypt($data['password']),
+        ]);
+
         if (!$plan = session('plan')) {
             return redirect()->route('site.home');
         }
