@@ -26,35 +26,39 @@
                             Atualizar Status
                         </button>
                     </form>
-                    <div class="modal-body-content">
-                        <ul style="color:#000; list-style:none; padding: 0;">
-                            <li style="margin-bottom: 10px;">
-                                <b>Número do pedido:</b> 
-                                <span style="color:red; font-weight:bold;">{{ order.identify }}</span>
-                            </li>
-                            <li style="margin-bottom: 10px;">
-                                <b>Total:</b> R$ {{ total }}
-                            </li>
-                            <li style="margin-bottom: 10px;">
-                                <b>Status:</b> {{ order.status_label }}
-                            </li>
-                            <li style="margin-bottom: 20px;">
-                                <b>Data:</b> {{ order.date_br }} | <b>Hora:</b> {{ order.hour }}
-                            </li>
-                            <li>
-                                <span style="font-weight:bold;">Cliente:</span>
-                                <ul style="list-style:none; padding: 0; margin: 10px 0;">
-                                    <li><b>Nome:</b> {{ order.client.name }}</li>
-                                    <li><b>Contato:</b> {{ order.client.telefone }}</li>
-                                    <li><b>Endereço:</b> {{ order.client.endereco }}</li>
-                                    <li><b>Instagram:</b> {{ order.client.instagran }}</li>
-                                    <li style="margin-top: 10px;">
-                                        <b>Comentário:</b><br>
-                                        <p style="background:#ddd; color:dark; font-size:14px; padding: 10px;">{{order.comment}}</p>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul style="color:#000; list-style:none; padding: 0;">
+                                <li style="margin-bottom: 10px;">
+                                    <b>Número do pedido:</b> 
+                                    <span style="color:red; font-weight:bold;">{{ order.identify }}</span>
+                                </li>
+                                <li style="margin-bottom: 10px;">
+                                    <b>Total:</b> R$ {{ total }}
+                                </li>
+                                <li style="margin-bottom: 10px;">
+                                    <b>Status:</b> {{ order.status_label }}
+                                </li>
+                                <li style="margin-bottom: 20px;">
+                                    <b>Data:</b> {{ order.date_br }} | <b>Hora:</b> {{ order.hour }}
+                                </li>
+                                <li>
+                                    <span style="font-weight:bold;">Cliente:</span>
+                                    <ul style="list-style:none; padding: 0; margin: 10px 0;">
+                                        <li><b>Nome:</b> {{ order.client.name }}</li>
+                                        <li><b>Contato:</b> {{ order.client.telefone }}</li>
+                                        <li><b>Endereço:</b> {{ order.client.endereco }}</li>
+                                        <li><b>Instagram:</b> {{ order.client.instagran }}</li>
+                                        <li style="margin-top: 10px;">
+                                            <b>Comentário:</b><br>
+                                            <p style="background:#ddd; color:dark; font-size:14px; padding: 10px;">{{order.comment}}</p>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <div>
                                 <b>Produtos:</b>
                                 <ul style="margin-top:10px; padding:0 20px; list-style:none;">
                                     <li v-for="(product, index) in order.products" :key="index" style="margin-bottom:10px; display: flex; align-items: center;">
@@ -62,8 +66,8 @@
                                         <span style="font-weight:bold; font-size:20px; color:red;">{{ product.title }}</span>
                                     </li>
                                 </ul>
-                            </li>
-                            <li style="margin-top: 20px;">
+                            </div>
+                            <div style="margin-top: 20px;">
                                 <b>Avaliações:</b>
                                 <ul style="padding: 0; list-style: none;">
                                     <li v-for="(evaluation, index) in order.evaluations" :key="index" style="margin-bottom: 10px;">
@@ -71,14 +75,15 @@
                                         <br><b>Comentário:</b> {{ evaluation.comment }}
                                     </li>
                                 </ul>
-                            </li>
-                        </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </template>
+
 <style scoped>
 .modal-body {
     max-height: 70vh;
