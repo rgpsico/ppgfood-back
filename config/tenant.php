@@ -6,8 +6,8 @@ return [
      * Admins e-mails
      */
     'admins' => [
-        'carlos@especializati.com.br',
-        'admin@especializati.com.br',
+        'rgyr2010@hotmail.com',
+        'gerro121@hotmail.com',
     ],
 
 ];
