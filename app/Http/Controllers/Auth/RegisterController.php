@@ -70,10 +70,10 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        if (!$plan = session('plan')) {
-            // Se o plano não estiver definido na sessão, lance uma exceção ou retorne um erro apropriado
-            abort(404, 'Plan not found in session');
-        }
+        // if (!$plan = session('plan')) {
+        //     // Se o plano não estiver definido na sessão, lance uma exceção ou retorne um erro apropriado
+        //     abort(404, 'Plan not found in session');
+        // }
 
         $tenantService = app(TenantService::class);
         $user = $tenantService->make($plan, $data);

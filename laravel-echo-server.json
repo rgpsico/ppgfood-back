@@ -1,5 +1,5 @@
 {
-	"authHost": "api.ppgfood.com.br",
+	"authHost": "admin.rjpasseios.com.br",
 	"authEndpoint": "broadcasting/auth",
 	"clients": [
 		{
@@ -20,18 +20,18 @@
 	"protocol": "https",
 	"socketio": {},
 	"secureOptions": 67108864,
-	"sslCertPath": "/etc/letsencrypt/live/api.ppgfood.com.br/fullchain.pem",
+	"sslCertPath": "/etc/letsencrypt/live/admin.rjpasseios.com.br/fullchain.pem",
 
-	"sslKeyPath": " /etc/letsencrypt/live/api.ppgfood.com.br/privkey.pem",
+	"sslKeyPath": " /etc/letsencrypt/live/admin.rjpasseios.com.br/privkey.pem",
 	"sslCertChainPath": "",
 	"sslPassphrase": "",
 	"subscribers": {
 		"http": true,
 		"redis": true
 	},
-	"apiOriginAllow": {
+	"adminOriginAllow": {
 		"allowCors": true,
-		"allowOrigin": "api.ppgfood.com.br",
+		"allowOrigin": "admin.rjpasseios.com.br",
 		"allowMethods": "GET, POST",
 		"allowHeaders": "Origin, Content-Type, X-Auth-Token, X-Requested-With, Accept, Authorization, X-CSRF-TOKEN, X-Socket-Id"
 	}
