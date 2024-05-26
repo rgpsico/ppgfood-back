@@ -37,7 +37,7 @@
                                     <b>Total:</b> R$ {{ total }}
                                 </li>
                                 <li style="margin-bottom: 10px;">
-                                    <b>Status a:</b> <span :class="statusClass">{{ order.status_label }}</span>
+                                    <b>Status :</b> <span :class="statusClass">{{ order.status_label }}</span>
                           
                                 </li>
                                 <li style="margin-bottom: 20px;">
@@ -100,35 +100,6 @@ b{
     padding-right: 15px;
 }
 
-.status-label {
-    padding: 5px 10px;
-    border-radius: 4px;
-    color: white;
-}
-
-.status-open {
-    background-color: blue;
-}
-
-.status-done {
-    background-color: green;
-}
-
-.status-rejected {
-    background-color: red;
-}
-
-.status-working {
-    background-color: orange;
-}
-
-.status-canceled {
-    background-color: gray;
-}
-
-.status-delivering {
-    background-color: purple;
-}
 </style>
 <script>
 export default {

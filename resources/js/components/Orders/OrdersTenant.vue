@@ -31,7 +31,7 @@
                 <tbody>
                     <tr v-for="(order, index) in orders.data" :key="index">
                         <td>{{ order.identify }}</td>
-                        <td>{{ order.status_label }}</td>
+                        <span :class="statusClass">{{ order.status_label }}</span>
                         <td>{{ order.date_br }}</td>
                         <td>
                             <!-- <detail-order :order="order" :display="'none'"></detail-order> -->
@@ -49,7 +49,38 @@
     </div>
 </template>
 
+<style scoped>
 
+.status-label {
+    padding: 5px 10px;
+    border-radius: 4px;
+    color: white;
+}
+
+.status-open {
+    background-color: blue;
+}
+
+.status-done {
+    background-color: green;
+}
+
+.status-rejected {
+    background-color: red;
+}
+
+.status-working {
+    background-color: orange;
+}
+
+.status-canceled {
+    background-color: gray;
+}
+
+.status-delivering {
+    background-color: purple;
+}
+</style>
 
 <script>
 
