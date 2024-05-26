@@ -79,7 +79,18 @@
         </div>
     </div>
 </template>
+<style scoped>
+.modal-body {
+    max-height: 70vh;
+    overflow-y: auto;
+}
 
+.modal-body-content {
+    max-height: 60vh;
+    overflow-y: auto;
+    padding-right: 15px;
+}
+</style>
 <script>
 export default {
     props: {
