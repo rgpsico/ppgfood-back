@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\User as ModelsUser;
 use App\Providers\RouteServiceProvider;
 use App\Services\TenantService;
 use App\Tenant\Events\TenantCreated;
@@ -56,8 +55,8 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'min:3', 'max:255'],
             'email' => ['required', 'string', 'email', 'min:3', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:6', 'max:16', 'confirmed'],
-            'empresa' => ['required', 'string', 'min:3', 'max:255', 'unique:tenants,name']
-            //'cnpj' => ['required', 'numeric', 'digits:14', 'unique:tenants'],
+            'empresa' => ['required', 'string', 'min:3', 'max:255', 'unique:tenants,name'],
+            //   'cnpj' => ['required', 'numeric', 'digits:14', 'unique:tenants'],
         ]);
     }
 
@@ -69,16 +68,10 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return ModelsUser::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
-        ]);
-
         if (!$plan = session('plan')) {
-            return redirect()->route('site.home');
+            // Se o plano não estiver definido na sessão, lance uma exceção ou retorne um erro apropriado
+            abort(404, 'Plan not found in session');
         }
-
 
         $tenantService = app(TenantService::class);
         $user = $tenantService->make($plan, $data);
