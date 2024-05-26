@@ -31,8 +31,9 @@
                 <tbody>
                     <tr v-for="(order, index) in orders.data" :key="index">
                         <td>{{ order.identify }}</td>
-                        <td>{{ order.status_label }}</td>
-                        <td>{{ order.date_br }}</td>
+                        <td>       <span :class="statusClass">{{ order.status_label }}</span></td>
+                 
+                                            <td>{{ order.date_br }}</td>
                         <td>
                             <!-- <detail-order :order="order" :display="'none'"></detail-order> -->
                             <a href="#" @click.prevent="openDetails(order)" class="btn btn-info">Detalhes</a>
