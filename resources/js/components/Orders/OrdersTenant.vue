@@ -99,6 +99,24 @@ export default {
         }
     },
     methods: {
+    getStatusClass(status) {
+        switch (status) {
+            case 'open':
+                return 'status-label status-open';
+            case 'done':
+                return 'status-label status-done';
+            case 'rejected':
+                return 'status-label status-rejected';
+            case 'working':
+                return 'status-label status-working';
+            case 'canceled':
+                return 'status-label status-canceled';
+            case 'delivering':
+                return 'status-label status-delivering';
+            default:
+                return 'status-label';
+        }
+    },
         getOrders () {        
             this.loadingOrders = true
            
