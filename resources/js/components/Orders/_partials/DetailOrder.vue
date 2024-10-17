@@ -143,8 +143,9 @@
                                             style="font-weight:bold; font-size:20px; color:red;"
                                             >{{ product.title }}</span
                                         >
+                                        <br />
                                         <span
-                                            style="font-size:13px; color:#000;"
+                                            style="font-size:15px; color:#000;"
                                             >{{ product.quantity }}</span
                                         >
                                     </li>
