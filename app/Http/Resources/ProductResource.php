@@ -21,6 +21,9 @@ class ProductResource extends JsonResource
             'image' => url("storage/{$this->image}"),
             'price' => $this->price,
             'description' => $this->description,
+            'quantity' => $this->whenPivotLoaded('order_product', function () {
+                return $this->pivot->qty; // Quantidade de produtos da tabela order_product
+            }),
         ];
     }
 }
