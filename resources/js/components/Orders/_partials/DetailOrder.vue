@@ -112,7 +112,7 @@
                                         <span class="product-title">{{
                                             product.title
                                         }}</span>
-                                        <span class="product-quantity"
+                                        <span class="product-quantity m-2"
                                             >Quantidade:
                                             {{ product.quantity }}</span
                                         >
