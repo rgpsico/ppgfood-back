@@ -22,7 +22,10 @@ class ProductResource extends JsonResource
             'price' => $this->price,
             'description' => $this->description,
             'quantity' => $this->whenPivotLoaded('order_product', function () {
-                return $this->pivot->qty; // Quantidade de produtos da tabela order_product
+                if (isset($this->pivot->qty)) {
+                    return $this->pivot->qty;
+                }; // Quantidade de produtos da tabela order_product
+                return null;
             }),
         ];
     }
