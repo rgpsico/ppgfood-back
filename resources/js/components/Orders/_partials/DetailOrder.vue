@@ -1,59 +1,40 @@
 <template>
     <div
-        id="exampleModalLive"
+        id="orderDetailsModal"
         class="modal fade show"
         tabindex="-1"
         role="dialog"
-        aria-labelledby="exampleModalLiveLabel"
+        aria-labelledby="orderDetailsLabel"
         :style="{ display: display }"
     >
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5
-                        class="modal-title"
-                        id="exampleModalLiveLabel"
-                        style="color:#000;"
-                    >
+                    <h5 class="modal-title" id="orderDetailsLabel">
                         Detalhes do Pedido:
-                        <span
-                            style="color:red; font-weight:bold; font-size:25px;"
-                            >{{ order.identify }}</span
-                        >
+                        <span class="order-identify">{{ order.identify }}</span>
                     </h5>
-                    <button
-                        type="button"
-                        class="close"
-                        data-dismiss="modal"
-                        aria-label="Close"
-                        @click="closeDetails"
-                    >
-                        <span aria-hidden="true">×</span>
+                    <button type="button" class="close" @click="closeDetails">
+                        <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <form
-                        action="#"
-                        method="POST"
-                        class="form form-inline"
                         @submit.prevent="updateStatus"
-                        style="margin-bottom: 20px;"
+                        class="form-inline status-form"
                     >
-                        <label for="status" style="margin-right: 10px;"
-                            >Status:</label
-                        >
+                        <label for="status">Status:</label>
                         <select
-                            name="status"
-                            class="form-control"
                             v-model="status"
-                            style="margin-right: 10px;"
+                            class="form-control"
+                            name="status"
                         >
                             <option value="open">Aberto</option>
                             <option value="done">Completo</option>
                             <option value="rejected">Rejeitado</option>
-                            <option value="working">Andamentos</option>
+                            <option value="working">Andamento</option>
                             <option value="canceled">Cancelado</option>
-                            <option value="delivering">Em transito</option>
+                            <option value="delivering">Em trânsito</option>
                         </select>
                         <button
                             type="submit"
@@ -63,38 +44,30 @@
                             Atualizar Status
                         </button>
                     </form>
-                    <div class="row">
+
+                    <div class="row order-info">
                         <div class="col-md-6">
-                            <ul
-                                style="color:#000; list-style:none; padding: 0;"
-                            >
-                                <li style="margin-bottom: 10px;">
+                            <ul class="order-details-list">
+                                <li>
                                     <b>Número do pedido:</b>
-                                    <span
-                                        style="color:red; font-weight:bold;"
-                                        >{{ order.identify }}</span
-                                    >
+                                    <span class="order-identify">{{
+                                        order.identify
+                                    }}</span>
                                 </li>
-                                <li style="margin-bottom: 10px;">
-                                    <b>Total:</b> R$ {{ total }}
-                                </li>
-                                <li style="margin-bottom: 10px;">
-                                    <b>Status :</b>
+                                <li><b>Total:</b> R$ {{ total }}</li>
+                                <li>
+                                    <b>Status:</b>
                                     <span :class="statusClass">{{
                                         order.status_label
                                     }}</span>
                                 </li>
-                                <li style="margin-bottom: 20px;">
+                                <li>
                                     <b>Data:</b> {{ order.date_br }} |
                                     <b>Hora:</b> {{ order.hour }}
                                 </li>
-                                <li>
-                                    <span style="font-weight:bold;"
-                                        >Cliente:</span
-                                    >
-                                    <ul
-                                        style="list-style:none; padding: 0; margin: 10px 0;"
-                                    >
+                                <li v-if="order.client">
+                                    <b>Cliente:</b>
+                                    <ul class="client-details">
                                         <li>
                                             <b>Nome:</b> {{ order.client.name }}
                                         </li>
@@ -110,11 +83,9 @@
                                             <b>Instagram:</b>
                                             {{ order.client.instagran }}
                                         </li>
-                                        <li style="margin-top: 10px;">
-                                            <b>Comentário:</b><br />
-                                            <p
-                                                style="background:#ddd; color:dark; font-size:14px; padding: 10px;"
-                                            >
+                                        <li>
+                                            <b>Comentário:</b>
+                                            <p class="order-comment">
                                                 {{ order.comment }}
                                             </p>
                                         </li>
@@ -122,43 +93,41 @@
                                 </li>
                             </ul>
                         </div>
+
                         <div class="col-md-6">
                             <div>
                                 <b>Produtos:</b>
-                                <ul
-                                    style="margin-top:10px; padding:0 20px; list-style:none;"
-                                >
+                                <ul class="product-list">
                                     <li
                                         v-for="(product,
                                         index) in order.products"
                                         :key="index"
-                                        style="margin-bottom:10px; display: flex; align-items: center;"
+                                        class="product-item"
                                     >
                                         <img
                                             :src="product.image"
                                             :alt="product.title"
-                                            style="max-width:100px; margin-right: 10px;"
+                                            class="product-image"
                                         />
-                                        <span
-                                            style="font-weight:bold; font-size:20px; color:red;"
-                                            >{{ product.title }}</span
-                                        >
-                                        <br />
-                                        <span
-                                            style="font-size:15px; color:#000;"
-                                            >{{ product.quantity }}</span
+                                        <span class="product-title">{{
+                                            product.title
+                                        }}</span>
+                                        <span class="product-quantity"
+                                            >Quantidade:
+                                            {{ product.quantity }}</span
                                         >
                                     </li>
                                 </ul>
                             </div>
-                            <div style="margin-top: 20px;">
+
+                            <div class="evaluation-section">
                                 <b>Avaliações:</b>
-                                <ul style="padding: 0; list-style: none;">
+                                <ul class="evaluation-list">
                                     <li
                                         v-for="(evaluation,
                                         index) in order.evaluations"
                                         :key="index"
-                                        style="margin-bottom: 10px;"
+                                        class="evaluation-item"
                                     >
                                         <b>Nota:</b> {{ evaluation.stars }}/4
                                         <br /><b>Comentário:</b>
@@ -174,21 +143,6 @@
     </div>
 </template>
 
-<style scoped>
-b {
-    color: #000;
-}
-.modal-body {
-    max-height: 70vh;
-    overflow-y: auto;
-}
-
-.modal-body-content {
-    max-height: 60vh;
-    overflow-y: auto;
-    padding-right: 15px;
-}
-</style>
 <script>
 export default {
     props: {
@@ -209,7 +163,7 @@ export default {
     },
     data() {
         return {
-            status: "",
+            status: this.order.status,
             loading: false
         };
     },
@@ -218,41 +172,102 @@ export default {
             this.$emit("closeDetails");
         },
         statusClass() {
-            switch (this.order.status) {
-                case "open":
-                    return "status-label status-open";
-                case "done":
-                    return "status-label status-done";
-                case "rejected":
-                    return "status-label status-rejected";
-                case "working":
-                    return "status-label status-working";
-                case "canceled":
-                    return "status-label status-canceled";
-                case "delivering":
-                    return "status-label status-delivering";
-                default:
-                    return "status-label";
-            }
+            const statusClasses = {
+                open: "status-open",
+                done: "status-done",
+                rejected: "status-rejected",
+                working: "status-working",
+                canceled: "status-canceled",
+                delivering: "status-delivering"
+            };
+            return statusClasses[this.order.status] || "status-default";
         },
         updateStatus() {
             this.loading = true;
-
             axios
                 .patch("/api/v1/my-orders", {
                     status: this.status,
                     identify: this.order.identify
                 })
                 .then(response => this.$emit("statusUpdated"))
-
-                .catch(error => alert("error"))
+                .catch(error => alert("Erro ao atualizar o status"))
                 .finally(() => (this.loading = false));
         }
     },
     watch: {
-        order() {
-            this.status = this.order.status;
+        order(newOrder) {
+            this.status = newOrder.status;
         }
     }
 };
 </script>
+
+<style scoped>
+/* Variáveis para facilitar a customização */
+:root {
+    --primary-color: #007bff;
+    --secondary-color: #ff0000;
+    --font-color: #000;
+    --background-color: #f8f9fa;
+    --modal-max-height: 70vh;
+}
+
+/* Organizando o layout do modal */
+.modal-header {
+    background-color: var(--background-color);
+}
+
+.order-identify {
+    font-weight: bold;
+    color: var(--secondary-color);
+    font-size: 25px;
+}
+
+.status-form {
+    margin-bottom: 20px;
+}
+
+.order-info {
+    padding: 10px 0;
+}
+
+.order-details-list,
+.client-details,
+.product-list,
+.evaluation-list {
+    list-style: none;
+    padding: 0;
+}
+
+.product-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.product-image {
+    max-width: 100px;
+    margin-right: 10px;
+}
+
+.order-comment {
+    background: #ddd;
+    padding: 10px;
+    color: var(--font-color);
+}
+
+.evaluation-section {
+    margin-top: 20px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .modal-dialog {
+        width: 100%;
+        max-width: none;
+    }
+    .product-image {
+        max-width: 70px;
+    }
+}
+</style>
