@@ -207,7 +207,7 @@ export default {
 :root {
     --primary-color: #007bff;
     --secondary-color: #ff0000;
-    --font-color: #000;
+    --font-color: #333; /* Cor mais escura para melhor contraste */
     --background-color: #f8f9fa;
     --modal-max-height: 70vh;
 }
@@ -237,6 +237,10 @@ export default {
 .evaluation-list {
     list-style: none;
     padding: 0;
+}
+
+b {
+    color: var(--font-color); /* Fonte mais escura */
 }
 
 .product-item {
