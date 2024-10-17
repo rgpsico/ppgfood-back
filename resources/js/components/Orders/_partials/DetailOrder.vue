@@ -145,7 +145,7 @@
                                         >
                                         <span
                                             style="font-size:13px; color:#000;"
-                                            >{{ product.quantidade }}</span
+                                            >{{ product.quantity }}</span
                                         >
                                     </li>
                                 </ul>
