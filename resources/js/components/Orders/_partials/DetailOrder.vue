@@ -219,6 +219,9 @@ body {
 .modal-header {
     background-color: var(--background-color);
 }
+.modal-content {
+    color: #333;
+}
 
 .order-identify {
     font-weight: bold;
