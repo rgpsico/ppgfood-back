@@ -15,7 +15,7 @@ class OrderResource extends JsonResource
      */
     public function toArray($request)
     {
-        dd($this);
+
         return [
             'identify' => $this->identify,
             'total' => $this->total,
@@ -25,7 +25,7 @@ class OrderResource extends JsonResource
             'date' => Carbon::make($this->created_at)->format('Y-m-d'),
             'hour' => Carbon::make($this->created_at)->format('H:m:s'),
             'date_br' => Carbon::make($this->created_at)->format('d/m/Y H:i:s'),
-            'price' => $this->pivot->price,  // O campo price da tabela intermediária
+            //'price' => $this->pivot->price ?? ,  // O campo price da tabela intermediária
             'quantity' => $this->pivot->qty,
 
             'company' => new TenantResource($this->tenant),
