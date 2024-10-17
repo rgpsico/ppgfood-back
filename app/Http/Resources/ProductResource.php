@@ -21,8 +21,7 @@ class ProductResource extends JsonResource
             'image' => url("storage/{$this->image}"),
             'price' => $this->price,
             'description' => $this->description,
-            'quantity' => $this->pivot ? $this->pivot->qty : 0,
-
+            'quantity'    => optional($this->pivot)->qty ?? 0,
         ];
     }
 }
