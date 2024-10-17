@@ -41,7 +41,7 @@ class Order extends Model
     public function products()
     {
         return $this->belongsToMany(Product::class)
-            ->withPivot('qty', 'price'); // Inclui os campos qty e price da tabela order_product
+            ->withPivot('qty', 'price');
     }
 
     public function evaluations()

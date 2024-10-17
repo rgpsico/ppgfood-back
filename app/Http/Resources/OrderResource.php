@@ -15,6 +15,7 @@ class OrderResource extends JsonResource
      */
     public function toArray($request)
     {
+        dd($this);
         return [
             'identify' => $this->identify,
             'total' => $this->total,
