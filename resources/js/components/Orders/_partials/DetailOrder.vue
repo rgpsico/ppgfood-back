@@ -141,7 +141,7 @@
                                         />
                                         <span
                                             style="font-weight:bold; font-size:20px; color:red;"
-                                            >{{ product.qty }}</span
+                                            >{{ product.title }}</span
                                         >
                                     </li>
                                 </ul>
