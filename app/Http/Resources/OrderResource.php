@@ -25,8 +25,12 @@ class OrderResource extends JsonResource
             'date' => Carbon::make($this->created_at)->format('Y-m-d'),
             'hour' => Carbon::make($this->created_at)->format('H:m:s'),
             'date_br' => Carbon::make($this->created_at)->format('d/m/Y H:i:s'),
-            //'price' => $this->pivot->price ?? ,  // O campo price da tabela intermediária
-            'quantity' => $this->pivot->qty,
+            'price' => $this->whenPivotLoaded('order_product', function () {
+                return $this->pivot->price; // Acessa price quando o pivot está carregado
+            }),
+            'quantity' => $this->whenPivotLoaded('order_product', function () {
+                return $this->pivot->qty; // Acessa qty quando o pivot está carregado
+            }),
 
             'company' => new TenantResource($this->tenant),
             'client' => $this->client_id ? new ClientResource($this->client) : '',
