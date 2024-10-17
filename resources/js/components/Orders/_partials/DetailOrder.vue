@@ -203,6 +203,9 @@ export default {
 </script>
 
 <style scoped>
+body {
+    color: #333;
+}
 /* Variáveis para facilitar a customização */
 :root {
     --primary-color: #007bff;
