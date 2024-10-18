@@ -32,6 +32,8 @@ class OrderResource extends JsonResource
                 return $this->pivot->qty; // Acessa qty quando o pivot está carregado
             }),
 
+
+
             'company' => new TenantResource($this->tenant),
             'client' => $this->client_id ? new ClientResource($this->client) : '',
             'table' => $this->table_id ? new TableResource($this->table) : '',
