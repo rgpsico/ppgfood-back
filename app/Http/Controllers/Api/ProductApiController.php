@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\TenantFormRequest;
 use App\Http\Resources\ProductResource;
+use App\Http\Resources\ProductResourceFront;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
 
@@ -24,7 +25,7 @@ class ProductApiController extends Controller
             $request->get('categories', [])
         );
 
-        return ProductResource::collection($products);
+        return ProductResourceFront::collection($products);
     }
 
     public function show(TenantFormRequest $request, $identify)
