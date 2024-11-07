@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AsaasController;
+
 Route::post('/auth/register', 'Api\Auth\RegisterController@store');
 Route::post('/auth/token', 'Api\Auth\AuthClientController@auth');
 
@@ -40,8 +42,23 @@ Route::group([
  * Test API
  */
 Route::get('/teste', function () {
-    return response()->json(['message' => 'ok']);
+    return response()->json(['message' => 'ok gil']);
 });
+
+
+Route::get('/teste', function () {
+    return response()->json(['message' => 'ok gil']);
+});
+
+Route::post('/asaas/customer', [AsaasController::class, 'criarCliente']);
+
+Route::get('/asaas/recuperar-dados-comerciais', [AsaasController::class, 'recuperarDadosComerciais']);
+
+
+Route::post('/asaas/payment', [AsaasController::class, 'criarPagamento']);
+Route::post('/asaas/paymentcc', [AsaasController::class, 'criarPagamentoComCartao']);
+
+Route::get('/asaas/paymentlist', [AsaasController::class, 'listarPagamentos']);
 
 Route::get('/app', function () {
     exec("C:\Program Files\Google\Chrome\Application\chrome.exe");
