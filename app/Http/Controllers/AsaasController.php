@@ -3,17 +3,57 @@
 namespace App\Http\Controllers;
 
 use App\Services\AsaasService;
+use App\Services\ClientService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
 class AsaasController extends Controller
 {
-    protected $asaasService;
+    protected $asaasService, $clientService;
 
-    public function __construct(AsaasService $asaasService)
+    public function __construct(AsaasService $asaasService, ClientService $clientService)
     {
         $this->asaasService = $asaasService;
+        $this->clientService = $clientService;
     }
+
+    public function updateAsaasKey(Request $request, $id): JsonResponse
+    {
+        $request->validate([
+            'asaas_key' => 'required|string',
+        ]);
+
+        $asaasKey = $request->input('asaas_key');
+
+        $client = $this->clientService->updateAsaasKey($id, $asaasKey);
+
+        if (!$client) {
+            return response()->json(['error' => 'Cliente não encontrado.'], 404);
+        }
+
+        return response()->json(['message' => 'Asaas key atualizada com sucesso!', 'client' => $client], 200);
+    }
+
+    public function updateAsaasKeyByEmail(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|exists:clients,email',
+            'asaas_key' => 'required|string',
+        ]);
+
+        $client = Client::where('email', $request->email)->first();
+
+        if (!$client) {
+            return response()->json(['error' => 'Cliente não encontrado.'], 404);
+        }
+
+        $client->asaas_key = $request->asaas_key;
+        $client->save();
+
+        return response()->json(['message' => 'Asaas key atualizada com sucesso!'], 200);
+    }
+
 
     public function criarCliente(Request $request)
     {

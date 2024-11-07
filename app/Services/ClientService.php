@@ -19,4 +19,9 @@ class ClientService
     {
         return $this->clientRepository->createNewClient($data);
     }
+
+    public function updateAsaasKey(int $clientId, string $asaasKey)
+    {
+        return $this->clientRepository->updateAsaasKey($clientId, $asaasKey);
+    }
 }

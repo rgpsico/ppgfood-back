@@ -50,6 +50,7 @@ Route::get('/teste', function () {
     return response()->json(['message' => 'ok gil']);
 });
 
+Route::put('/asaas/update-asaas-key', [AsaasController::class, 'updateAsaasKeyByEmail']);
 Route::post('/asaas/customer', [AsaasController::class, 'criarCliente']);
 
 Route::get('/asaas/recuperar-dados-comerciais', [AsaasController::class, 'recuperarDadosComerciais']);

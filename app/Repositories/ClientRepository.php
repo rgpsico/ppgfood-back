@@ -21,8 +21,21 @@ class ClientRepository implements ClientRepositoryInterface
         return $this->entity->create($data);
     }
 
+    public function updateAsaasKey(int $id, string $asaasKey)
+    {
+        $entity = $this->getClient($id);
+
+        if ($entity) {
+            $entity->asaas_key = $asaasKey;
+            $entity->save();
+            return $entity;
+        }
+
+        return null;
+    }
+
     public function getClient(int $id)
     {
-
+        return $this->entity->find($id);
     }
 }
