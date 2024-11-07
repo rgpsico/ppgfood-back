@@ -28,7 +28,7 @@ class AsaasController extends Controller
             'address' => $request->input('address'),
             'province' => $request->input('province'),
             'postalCode' => $request->input('postalCode'),
-            'cpfCnpj' => $request->input('cpfCnpj'),
+            'cpf' => $request->input('cpf'),
         ];
 
         // Realizando a requisição POST
