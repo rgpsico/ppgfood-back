@@ -23,7 +23,8 @@ class Client extends Authenticatable
         'tenant_id',
         'endereco',
         'instagran',
-        'telefone'
+        'telefone',
+        'asaas_key'
     ];
 
 
