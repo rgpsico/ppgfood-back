@@ -5,18 +5,23 @@ namespace App\Http\Controllers;
 use App\Services\AsaasService;
 use App\Services\ClientService;
 use App\Models\Client;
+use App\Services\OrderService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
 class AsaasController extends Controller
 {
-    protected $asaasService, $clientService;
+    protected $asaasService, $clientService, $orderService;
 
-    public function __construct(AsaasService $asaasService, ClientService $clientService)
-    {
+    public function __construct(
+        AsaasService $asaasService,
+        ClientService $clientService,
+        OrderService $orderService
+    ) {
         $this->asaasService = $asaasService;
         $this->clientService = $clientService;
+        $this->orderService = $orderService;
     }
 
     public function updateAsaasKey(Request $request, $id): JsonResponse
@@ -58,26 +63,7 @@ class AsaasController extends Controller
 
     public function criarCliente(Request $request)
     {
-        // Pegando o token do arquivo .env
-        $accessToken = env('ASAAS_ACCESS_TOKEN');
-
-        // Definindo os dados do cliente
-        $clienteData = [
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'phone' => $request->input('phone'),
-            'address' => $request->input('address'),
-            'province' => $request->input('province'),
-            'postalCode' => $request->input('postalCode'),
-            'cpf' => $request->input('cpf'),
-        ];
-
-        // Realizando a requisição POST
-        $response = Http::withHeaders([
-            'accept' => 'application/json',
-            'access_token' => $accessToken,
-            'content-type' => 'application/json'
-        ])->post('https://sandbox.asaas.com/api/v3/customers', $clienteData);
+        $response = $this->asaasService->createCustomer($request);
 
         // Verificando se a requisição foi bem-sucedida
         if ($response->successful()) {
@@ -138,50 +124,115 @@ class AsaasController extends Controller
         }
     }
 
-    public function criarPagamentoComCartao(Request $request)
+    public function recuperarClienteAsaas($customerId)
     {
         $accessToken = env('ASAAS_ACCESS_TOKEN');
 
+        $response = Http::withHeaders([
+            'accept' => 'application/json',
+            'access_token' => $accessToken,
+        ])->get("https://sandbox.asaas.com/api/v3/customers/{$customerId}");
+
+        // Verificando se a requisição foi bem-sucedida
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            return null; // Cliente não encontrado ou houve um erro
+        }
+    }
+
+
+    public function criarPagamentoComCartao(Request $request)
+    {
+        $clienteAssas = $this->recuperarClienteAsaas($request->asaas_key);
+
+        if (!$clienteAssas) {
+            return response()->json(['error' => 'Não foi possível recuperar o cliente do Asaas'], 404);
+        }
+
+        $cliente = $this->clientService->getClientbyAsasToken($request->asaas_key);
+
+        if (!$cliente) {
+            return response()->json(['error' => 'Não foi possível recuperar o cliente do sistema'], 404);
+        }
+
+        // Validação dos dados recebidos no request
+        $validatedData = $request->validate([
+            'asaas_key' => 'required|string',
+            'value' => 'required|numeric|min:1',
+            'description' => 'nullable|string',
+            'creditCard.holderName' => 'required|string',
+            'creditCard.number' => 'required|string',
+            'creditCard.expiryMonth' => 'required|string',
+            'creditCard.expiryYear' => 'required|string',
+            'creditCard.ccv' => 'required|string',
+            'creditCardHolderInfo.name' => 'required|string',
+            'creditCardHolderInfo.postalCode' => 'nullable|string',
+            'creditCardHolderInfo.addressNumber' => 'nullable|string',
+            'creditCardHolderInfo.phone' => 'nullable|string',
+            'creditCardHolderInfo.mobilePhone' => 'nullable|string',
+        ]);
+
         // Dados do pagamento com cartão de crédito
         $paymentData = [
-            'customer' => $request->input('customer'), // ID do cliente
+            'customer' => $validatedData['asaas_key'],
             'billingType' => 'CREDIT_CARD',
-            'dueDate' => $request->input('dueDate'), // Data de vencimento
-            'value' => $request->input('value'), // Valor do pagamento
-            'description' => $request->input('description', 'Pagamento com cartão de crédito'),
+            'dueDate' => now()->format('Y-m-d'), // Definindo a data de vencimento para hoje (ou altere conforme necessário)
+            'value' => $validatedData['value'],
+            'description' => $validatedData['description'] ?? 'Pagamento com cartão de crédito',
             'creditCard' => [
-                'holderName' => $request->input('creditCard.holderName'),
-                'number' => $request->input('creditCard.number'),
-                'expiryMonth' => $request->input('creditCard.expiryMonth'),
-                'expiryYear' => $request->input('creditCard.expiryYear'),
-                'ccv' => $request->input('creditCard.ccv'),
+                'holderName' => $validatedData['creditCard']['holderName'],
+                'number' => $validatedData['creditCard']['number'],
+                'expiryMonth' => $validatedData['creditCard']['expiryMonth'],
+                'expiryYear' => $validatedData['creditCard']['expiryYear'],
+                'ccv' => $validatedData['creditCard']['ccv'],
             ],
             'creditCardHolderInfo' => [
-                'name' => $request->input('creditCardHolderInfo.name'),
-                'email' => $request->input('creditCardHolderInfo.email'),
-                'cpfCnpj' => $request->input('creditCardHolderInfo.cpfCnpj'),
-                'postalCode' => $request->input('creditCardHolderInfo.postalCode'),
-                'addressNumber' => $request->input('creditCardHolderInfo.addressNumber'),
-                'addressComplement' => $request->input('creditCardHolderInfo.addressComplement', ''),
-                'phone' => $request->input('creditCardHolderInfo.phone'),
-                'mobilePhone' => $request->input('creditCardHolderInfo.mobilePhone'),
-            ]
+                'name' => $cliente['name'],
+                'email' => $cliente['email'],
+                'cpfCnpj' => $cliente['cpfcnpj'],
+                'postalCode' => $clienteAssas['postalCode'] ?? '22071060',
+                'addressNumber' => $request->input('creditCard.addressNumber') ?? '200',
+                'addressComplement' => $request->input('creditCard.addressComplement', ''),
+                'phone' => $clienteAssas['phone'],
+                'mobilePhone' => $clienteAssas['mobilePhone'],
+            ],
         ];
 
         // Realizando a requisição POST para criar o pagamento
         $response = Http::withHeaders([
             'accept' => 'application/json',
-            'access_token' => $accessToken,
-            'content-type' => 'application/json'
+            'access_token' => env('ASAAS_ACCESS_TOKEN'),
+            'content-type' => 'application/json',
         ])->post('https://sandbox.asaas.com/api/v3/payments', $paymentData);
 
-        // Verificando se a requisição foi bem-sucedida
         if ($response->successful()) {
-            return response()->json($response->json());
+            // Recuperar o último pedido feito pelo cliente no banco de dados
+            $ultimaOrdem = $cliente->orders()->latest()->first();
+
+            if ($ultimaOrdem) {
+                return response()->json([
+                    'message' => 'Pagamento realizado com sucesso!',
+                    'identify' => $ultimaOrdem->identify
+                ]);
+            } else {
+                return response()->json([
+                    'message' => 'Pagamento realizado, mas a ordem não foi encontrada.',
+                    'order_identify' => null
+                ]);
+            }
         } else {
-            return response()->json(['error' => 'Não foi possível criar o pagamento com cartão de crédito'], 500);
+            return response()->json([
+                'error' => 'Não foi possível criar o pagamento com cartão de crédito',
+                'details' => $response->json()
+            ], 500);
         }
     }
+
+
+
+
+
 
     public function criarPagamento(Request $request)
     {

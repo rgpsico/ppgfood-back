@@ -28,6 +28,7 @@ class StoreClient extends FormRequest
             'email' => 'required|email|min:3|max:60|unique:clients',
             'cpf' => 'required',
             'password' => 'required|min:6|max:15',
+            'instagran' => 'required|min:5|max:60|unique:clients',
         ];
     }
 }

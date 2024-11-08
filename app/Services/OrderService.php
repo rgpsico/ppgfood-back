@@ -49,6 +49,7 @@ class OrderService
         $clientId = $this->getClientIdByOrder();
         $tableId = $this->getTableIdByOrder($order['table'] ?? '');
 
+
         $order = $this->orderRepository->createNewOrder(
             $identify,
             $total,

@@ -17,7 +17,7 @@ class ClientRepository implements ClientRepositoryInterface
     public function createNewClient(array $data)
     {
         $data['password'] = bcrypt($data['password']);
-
+        $data['cpfcnpj'] =  $data['cpf'];
         return $this->entity->create($data);
     }
 
@@ -37,5 +37,10 @@ class ClientRepository implements ClientRepositoryInterface
     public function getClient(int $id)
     {
         return $this->entity->find($id);
+    }
+
+    public function getClientbyAsasToken(string $token)
+    {
+        return $this->entity->where('asaas_key', $token)->first();
     }
 }

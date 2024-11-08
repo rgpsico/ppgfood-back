@@ -19,7 +19,8 @@ class ClientResource extends JsonResource
             'email' => $this->email,
             'telefone' => $this->telefone,
             'endereco' => $this->endereco,
-            'instagran' => $this->instagran
+            'instagran' => $this->instagran,
+            'asaas_key' => $this->asaas_key
         ];
     }
 }
