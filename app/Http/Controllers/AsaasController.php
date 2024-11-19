@@ -230,8 +230,73 @@ class AsaasController extends Controller
     }
 
 
+    public function asaasWebhook(Request $request)
+    {
+        // Capture o payload do webhook
+        $data = $request->all();
+
+        // Verifica se é uma notificação de pagamento Pix concluído
+        if ($data['event'] === 'PAYMENT_RECEIVED' && $data['payment']['billingType'] === 'PIX') {
+            // Atualiza o status do pedido no banco de dados
+            $paymentId = $data['payment']['id']; // ID do pagamento no Asaas
+            $status = $data['payment']['status'];
+
+            // Aqui você pode atualizar seu banco de dados para indicar que o pagamento foi recebido
+            Log::info("Pagamento Pix recebido: $paymentId com status: $status");
+
+            return response()->json(['message' => 'Pagamento recebido e processado.'], 200);
+        }
+
+        return response()->json(['message' => 'Evento não tratado.'], 400);
+    }
 
 
+    public function criarPixQrcodeEstatico()
+    {
+
+        $accessToken = env('ASAAS_ACCESS_TOKEN');
+        $response = Http::withHeaders([
+            'Content-Type' => 'application/json',
+            'access_token' => $accessToken,
+        ])->post("https://sandbox.asaas.com/api/v3/pix/qrCodes/static", []);
+
+        if ($response->successful()) {
+            $data = $response->json();
+            // Faça algo com os dados retornados, como salvar no banco ou retornar para a view
+            return response()->json($data);
+        } else {
+            // Tratamento de erro
+            $error = $response->json();
+            return response()->json($error, $response->status());
+        }
+    }
+    public function criarPagamentoPix(Request $request)
+    {
+        $accessToken = env('ASAAS_ACCESS_TOKEN');
+
+        // Dados do QR Code estático
+        $qrCodeData = [
+            'addressKey' => $request->input('addressKey'), // Chave de endereço Pix
+            'value' => $request->input('value'), // Valor do pagamento
+            'format' => $request->input('format', 'ALL'), // Formato (opcional)
+            'expirationDate' => $request->input('expirationDate'), // Data de expiração
+            'expirationSeconds' => $request->input('expirationSeconds', 10) // Expiração em segundos (opcional)
+        ];
+
+        // Realizando a requisição POST para criar o QR Code estático
+        $response = Http::withHeaders([
+            'accept' => 'application/json',
+            'access_token' => $accessToken,
+            'content-type' => 'application/json'
+        ])->post('https://sandbox.asaas.com/api/v3/pix/qrCodes/static', $qrCodeData);
+
+        // Verificando se a requisição foi bem-sucedida
+        if ($response->successful()) {
+            return response()->json($response->json());
+        } else {
+            return response()->json(['error' => 'Não foi possível gerar o QR Code Pix'], 500);
+        }
+    }
 
 
     public function criarPagamento(Request $request)

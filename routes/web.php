@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\CategoryProductController;
-
+use App\Http\Controllers\Auth\RegisterController;
 
 /**
  * Product x Category
@@ -12,6 +12,8 @@ Route::any('products/{id}/categories/create', 'CategoryProductController@categor
 Route::get('products/{id}/categories', 'CategoryProductController@categories')->name('products.categories');
 Route::get('categories/{id}/products', 'CategoryProductController@products')->name('categories.products');
 
+
+Route::post('/registrar-empresa', [RegisterController::class, 'createEmpresa'])->name('registrarEmpresa')->middleware('web');
 
 Route::prefix('admin')
     ->namespace('Admin')

@@ -9,6 +9,8 @@ class AsaasService
     protected $access_token;
     protected $baseUrl;
     protected $clientService;
+    protected $tenant;
+
 
     public function __construct(ClientService $clientService)
     {
@@ -30,6 +32,28 @@ class AsaasService
 
     public function createCustomer($request)
     {
+
+        $clienteData = [
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'phone' => $request->input('phone'),
+            'address' => $request->input('address'),
+            'province' => $request->input('province'),
+            'postalCode' => $request->input('postalCode'),
+            'cpf' => $request->input('cpfcnpj'),
+        ];
+
+
+        // Realizando a requisição POST
+        return  $response = Http::withHeaders([
+            'accept' => 'application/json',
+            'access_token' => $this->access_token,
+            'content-type' => 'application/json'
+        ])->post('https://sandbox.asaas.com/api/v3/customers', $clienteData);
+    }
+
+    public function createCustomerLoja($request)
+    {
         $clienteData = [
             'name' => $request->input('name'),
             'email' => $request->input('email'),
@@ -41,12 +65,21 @@ class AsaasService
         ];
 
         // Realizando a requisição POST
-        return  $response = Http::withHeaders([
+        $response = Http::withHeaders([
             'accept' => 'application/json',
             'access_token' => $this->access_token,
             'content-type' => 'application/json'
         ])->post('https://sandbox.asaas.com/api/v3/customers', $clienteData);
+
+        // Verifica se a requisição foi bem-sucedida
+        if ($response->successful()) {
+            return $response->json('id');
+        }
+
+        // Caso haja erro, lança uma exceção com a mensagem retornada pela API
+        throw new \Exception('Erro ao criar cliente: ' . $response->body());
     }
+
 
     public function recuperarClienteAsaas($customerId)
     {
@@ -64,6 +97,53 @@ class AsaasService
             return null; // Cliente não encontrado ou houve um erro
         }
     }
+
+
+
+    public function criarPagamentoComPix($request)
+    {
+        // Validação dos dados recebidos no request
+        $validatedData = $request->validate([
+            'asaas_key' => 'required|string',
+            'value' => 'required|numeric|min:1',
+            'description' => 'nullable|string',
+        ]);
+
+        // Dados do pagamento com Pix
+        $paymentData = [
+            'customer' => $validatedData['asaas_key'], // ID do cliente no Asaas
+            'billingType' => 'PIX',
+            'dueDate' => now()->format('Y-m-d'), // Definindo a data de vencimento para hoje (ou altere conforme necessário)
+            'value' => $validatedData['value'], // Valor do pagamento
+            'description' => $validatedData['description'] ?? 'Pagamento via Pix',
+        ];
+
+        // Realizando a requisição POST para criar o pagamento via Pix
+        $response = Http::withHeaders([
+            'accept' => 'application/json',
+            'access_token' => env('ASAAS_ACCESS_TOKEN'),
+            'content-type' => 'application/json',
+        ])->post('https://sandbox.asaas.com/api/v3/payments', $paymentData);
+
+        // Verificando se a requisição foi bem-sucedida
+        if ($response->successful()) {
+            $responseData = $response->json();
+
+            // Retornando o QR Code URL e outros detalhes necessários para o front-end
+            return response()->json([
+                'qrCode' => $responseData['bankSlipUrl'] ?? null, // QR Code gerado
+                'expirationDate' => $responseData['dueDate'],
+                'value' => $responseData['value'],
+                'transactionId' => $responseData['id'],
+            ], 200);
+        } else {
+            return response()->json([
+                'error' => 'Não foi possível criar o pagamento com Pix',
+                'details' => $response->json(),
+            ], 500);
+        }
+    }
+
 
     public function cartao_de_credito($request)
     {

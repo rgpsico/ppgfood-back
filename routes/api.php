@@ -53,9 +53,11 @@ Route::get('/teste', function () {
 Route::put('/asaas/update-asaas-key', [AsaasController::class, 'updateAsaasKeyByEmail']);
 Route::post('/asaas/customer', [AsaasController::class, 'criarCliente']);
 
+Route::post('/asaas/pix', [AsaasController::class, 'criarPixQrcodeEstatico']);
+
 Route::get('/asaas/recuperar-dados-comerciais', [AsaasController::class, 'recuperarDadosComerciais']);
 
-
+Route::post('/webhook/asaas', 'AsaasController@asaasWebhook');
 Route::post('/asaas/payment', [AsaasController::class, 'criarPagamento']);
 Route::post('/asaas/paymentcc', [AsaasController::class, 'criarPagamentoComCartao']);
 

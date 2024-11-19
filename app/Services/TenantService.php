@@ -48,7 +48,7 @@ class TenantService
             'cnpj' => $data['cnpj'],
             'name' => $data['empresa'],
             'email' => $data['email'],
-
+            'asaas_key' => $data['asaas_key'],
             'subscription' => now(),
             'expires_at' => now()->addDays(7),
         ]);

@@ -37,6 +37,10 @@ class OrderApiController extends Controller
             return $this->asaasService->cartao_de_credito($request);
         }
 
+        if ($request->payment_method == 'PIX') {
+            return $this->asaasService->criarPagamentoComPix($request);
+        }
+
 
         return new OrderResource($order);
     }
