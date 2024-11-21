@@ -39,7 +39,6 @@ class OrderService
     public function createNewOrder(array $order)
     {
 
-
         $productsOrder = $this->getProductsByOrder($order['products'] ?? []);
 
         $identify = $this->getIdentifyOrder();
@@ -48,6 +47,11 @@ class OrderService
         $tenantId = $this->getTenantIdByOrder($order['token_company']);
         $comment = isset($order['comment']) ? $order['comment'] : '';
         $clientId = $this->getClientIdByOrder();
+
+        if (!$clientId) {
+            $clientId = $order['client_id'];
+        }
+
         $tableId = $this->getTableIdByOrder($order['table'] ?? '');
 
 
