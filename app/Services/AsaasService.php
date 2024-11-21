@@ -80,6 +80,25 @@ class AsaasService
         throw new \Exception('Erro ao criar cliente: ' . $response->body());
     }
 
+    public function listarPagamentosLoja($asaasKey)
+    {
+        // Fazendo a requisição GET para o endpoint de listagem de pagamentos
+        $response = Http::withHeaders([
+            'accept' => 'application/json',
+            'access_token' => env('ASAAS_ACCESS_TOKEN'),
+        ])->get('https://sandbox.asaas.com/api/v3/payments', [
+            'customer' => $asaasKey, // Filtrando pelo cliente (loja)
+        ]);
+
+        if ($response->successful()) {
+            // Retorna a lista de pagamentos
+            return $response->json(); // Contém todos os pagamentos dessa loja
+        }
+
+        // Caso haja erro na requisição
+        throw new \Exception('Erro ao listar pagamentos: ' . $response->body());
+    }
+
 
     public function recuperarClienteAsaas($customerId)
     {

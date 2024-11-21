@@ -142,6 +142,8 @@ class AsaasController extends Controller
     }
 
 
+
+
     public function criarPagamentoComCartao(Request $request)
     {
         $clienteAssas = $this->recuperarClienteAsaas($request->asaas_key);
