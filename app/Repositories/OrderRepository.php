@@ -35,7 +35,7 @@ class OrderRepository implements OrderRepositoryInterface
         if ($clientId) $data['client_id'] = $clientId;
         if ($tableId) $data['table_id'] = $tableId;
 
-        dd($data);
+
         $order = $this->entity->create($data);
 
         return $order;
