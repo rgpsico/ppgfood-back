@@ -41,9 +41,10 @@ class OrderApiController extends Controller
             return $this->asaasService->criarPagamentoComPix($request);
         }
 
-        $this->enviarPedidoEntregador($order);
+        $result =  new OrderResource($order);
+        $this->enviarPedidoEntregador($result);
 
-        return new OrderResource($order);
+        return $result;
     }
 
     public function enviarPedidoEntregador($data)
