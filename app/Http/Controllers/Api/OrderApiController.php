@@ -12,6 +12,8 @@ use App\Services\ClientService;
 use App\Services\OrderService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 
 class OrderApiController extends Controller
 {
@@ -24,10 +26,8 @@ class OrderApiController extends Controller
     }
 
 
-
     public function store(StoreOrder $request)
     {
-
 
         $order = $this->orderService->createNewOrder($request->all());
 
@@ -41,8 +41,31 @@ class OrderApiController extends Controller
             return $this->asaasService->criarPagamentoComPix($request);
         }
 
+        $this->enviarPedidoEntregador($order);
 
         return new OrderResource($order);
+    }
+
+    public function enviarPedidoEntregador($data)
+    {
+        $url = 'http://www.comunidadeppg.com.br:3000/acesso';
+
+        $client = new Client();
+
+        try {
+            $response = $client->post($url, [
+                'json' => $data // Envia os dados no formato JSON
+            ]);
+
+            // Retorna a resposta como um objeto JSON
+            return json_decode($response->getBody()->getContents());
+        } catch (RequestException $e) {
+            // Em caso de erro, retorna a mensagem
+            return [
+                'error' => true,
+                'message' => $e->getMessage()
+            ];
+        }
     }
 
     public function show($identify)
