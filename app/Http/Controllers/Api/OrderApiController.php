@@ -48,7 +48,7 @@ class OrderApiController extends Controller
 
     public function enviarPedidoEntregador($data)
     {
-        $url = 'http://www.comunidadeppg.com.br:3000/acesso';
+        $url = 'http://www.comunidadeppg.com.br:3000/enviar-json';
 
         $client = new Client();
 
