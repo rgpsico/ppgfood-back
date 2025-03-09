@@ -16,28 +16,28 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function getproductsByTenantId(int $idTenant, array $categories)
     {
-           
+        dd('aaa');
         return DB::table($this->table)
-       ->where('products.tenant_id', $idTenant)
-        ->where(function ($query) use ($categories) {
-            if ($categories != [])
-                $query->whereIn('categories.uuid', $categories);
-        })
-        ->select('products.*')
-        ->get();
+            ->where('products.tenant_id', $idTenant)
+            ->where(function ($query) use ($categories) {
+                if ($categories != [])
+                    $query->whereIn('categories.uuid', $categories);
+            })
+            ->select('products.*')
+            ->get();
     }
 
     public function getProductByUuid(string $uuid)
     {
-         return DB::table($this->table)
-                    ->where('uuid', $uuid)
-                    ->first();
+        return DB::table($this->table)
+            ->where('uuid', $uuid)
+            ->first();
     }
 
     public function getProductByid(string $uuid)
     {
         return DB::table($this->table)
-                    ->where('uuid', $uuid)
-                    ->get();
+            ->where('uuid', $uuid)
+            ->get();
     }
 }
