@@ -42,7 +42,7 @@ class OrderApiController extends Controller
         }
 
         $result =  new OrderResource($order);
-        // $this->enviarPedidoEntregador($result);
+        $this->enviarPedidoEntregador($result);
 
         return $result;
     }
