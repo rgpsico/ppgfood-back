@@ -16,7 +16,7 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function getproductsByTenantId(int $idTenant, array $categories)
     {
-        dd('aaa');
+
         return DB::table($this->table)
             ->where('products.tenant_id', $idTenant)
             ->where(function ($query) use ($categories) {
