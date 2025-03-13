@@ -11,6 +11,6 @@ class EntregaController extends Controller
 {
     public function index()
     {
-        return "teste";
+        return view('admin.pages.entregadores.index');
     }
 }

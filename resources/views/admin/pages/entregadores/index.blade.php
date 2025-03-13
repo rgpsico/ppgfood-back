@@ -1,33 +1,14 @@
-@extends('adminlte::page')
-
-@section('title', 'Pedidos')
-
-@section('content_header')
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Dashboard</a></li>
-        <li class="breadcrumb-item active"><a href="{{ route('orders.index') }}" class="active">Pedidos</a></li>
-    </ol>
-
-    <h1>Pedidos</h1>
-@stop
-
-@section('content')
-    <div id="app" class="card">
-        
-        <audio id="notificationSound" src="{{asset('mp3/alert.wav')}}" preload="auto"></audio>
-
-        <orders-tenant></orders-tenant>
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Entregadores</title>
+    @vite(['resources/js/app.js'])
+</head>
+<body>
+    <div id="app">
+        <entregadores></entregadores>
     </div>
-@stop
-
-@section('adminlte_js')
-<script src="{{ asset('js/app.js') }}"></script>
-@stop
-
-@push('scripts-header')
-<script>
-    window.Laravel = {!! json_encode([
-        'tenantId' => auth()->check() ? auth()->user()->tenant_id : ''
-    ]) !!}
-</script>
-@endpush
+</body>
+</html>
