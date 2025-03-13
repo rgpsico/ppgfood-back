@@ -8,8 +8,8 @@ use App\Http\Controllers\Api\PedidoController;
 use App\Http\Controllers\Api\UsuarioController;
 
 use App\Http\Controllers\AsaasController;
-use Illuminate\Http\Client\Request;
-use Illuminate\Routing\Route;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 Route::post('/auth/register', 'Api\Auth\RegisterController@store');
 Route::post('/auth/token', 'Api\Auth\AuthClientController@auth');
