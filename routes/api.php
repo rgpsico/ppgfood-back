@@ -76,7 +76,9 @@ Route::get('/app', function () {
 
 
 
-
+Route::get('/entrega', function () {
+    return response()->json(['message' => 'ok entrega']);
+});
 
 Route::apiResource('pedidos', PedidoController::class);
 
