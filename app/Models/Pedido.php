@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Pedido extends Model
 {
     protected $table = 'pedidos';
-
+    protected $connection = 'entregadores';
     protected $fillable = [
         'cliente_nome',
         'cliente_foto',

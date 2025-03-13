@@ -143,6 +143,9 @@ Route::prefix('admin')
     });
 
 
+Route::get('/entregadores', 'EntregaController@index');
+
+
 /**
  * Site
  */
