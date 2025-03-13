@@ -9,6 +9,8 @@ class Entrega extends Model
 {
     protected $table = 'entregas';
 
+    protected $connection = 'entregadores';
+
     protected $fillable = [
         'usuario_id',
         'pedido_id',
