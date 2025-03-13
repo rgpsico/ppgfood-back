@@ -1,12 +1,12 @@
 <?php
 
-use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\BatePapoController;
-use App\Http\Controllers\Api\EntregaController;
-use App\Http\Controllers\Api\NotificacaoController;
-use App\Http\Controllers\Api\PedidoController;
-use App\Http\Controllers\Api\UsuarioController;
-use App\Http\Controllers\AsaasController;
+use \App\Http\Controllers\Api\AuthController;
+use \App\Http\Controllers\Api\BatePapoController;
+use \App\Http\Controllers\Api\EntregaController;
+use \App\Http\Controllers\Api\NotificacaoController;
+use \App\Http\Controllers\Api\PedidoController;
+use \App\Http\Controllers\Api\UsuarioController;
+use \App\Http\Controllers\AsaasController;
 use Illuminate\Http\Client\Request;
 
 Route::post('/auth/register', 'Api\Auth\RegisterController@store');
@@ -84,6 +84,7 @@ Route::apiResource('pedidos', PedidoController::class);
 
 
 Route::apiResource('usuarios', UsuarioController::class);
+
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
