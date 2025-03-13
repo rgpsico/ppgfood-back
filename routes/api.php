@@ -1,6 +1,13 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\BatePapoController;
+use App\Http\Controllers\Api\EntregaController;
+use App\Http\Controllers\Api\NotificacaoController;
+use App\Http\Controllers\Api\PedidoController;
+use App\Http\Controllers\Api\UsuarioController;
 use App\Http\Controllers\AsaasController;
+use Illuminate\Http\Client\Request;
 
 Route::post('/auth/register', 'Api\Auth\RegisterController@store');
 Route::post('/auth/token', 'Api\Auth\AuthClientController@auth');
@@ -65,4 +72,37 @@ Route::get('/asaas/paymentlist', [AsaasController::class, 'listarPagamentos']);
 
 Route::get('/app', function () {
     exec("C:\Program Files\Google\Chrome\Application\chrome.exe");
+});
+
+
+
+
+
+Route::apiResource('pedidos', PedidoController::class);
+
+
+Route::apiResource('usuarios', UsuarioController::class);
+Route::post('register', [AuthController::class, 'register']);
+Route::post('login', [AuthController::class, 'login']);
+Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+
+Route::apiResource('notificacoes', NotificacaoController::class);
+
+
+
+Route::post('enviarnotificacao', [NotificacaoController::class, 'enviarnotificacao']);
+
+
+Route::post('batepapo/enviarmensagem', [BatePapoController::class, 'enviarMensagem']);
+
+
+
+
+Route::apiResource('entregas', EntregaController::class)->middleware('auth:sanctum');;;
+
+
+Route::get('indicadores/dashboard', [EntregaController::class, 'dashboard'])->middleware('auth:sanctum');;
+
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
 });
