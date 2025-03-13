@@ -3,6 +3,9 @@
 use App\Http\Controllers\Admin\CategoryProductController;
 use App\Http\Controllers\Auth\RegisterController;
 
+Route::get('/entregadores', 'EntregaController@index');
+
+
 /**
  * Product x Category
  */
@@ -143,7 +146,6 @@ Route::prefix('admin')
     });
 
 
-Route::get('/entregadores', 'EntregaController@index');
 
 
 /**
