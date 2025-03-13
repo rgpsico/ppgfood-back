@@ -6,8 +6,10 @@ use App\Http\Controllers\Api\EntregaController;
 use App\Http\Controllers\Api\NotificacaoController;
 use App\Http\Controllers\Api\PedidoController;
 use App\Http\Controllers\Api\UsuarioController;
+
 use App\Http\Controllers\AsaasController;
 use Illuminate\Http\Client\Request;
+use Illuminate\Routing\Route;
 
 Route::post('/auth/register', 'Api\Auth\RegisterController@store');
 Route::post('/auth/token', 'Api\Auth\AuthClientController@auth');
@@ -51,12 +53,6 @@ Route::group([
 Route::get('/teste', function () {
     return response()->json(['message' => 'ok gil']);
 });
-
-
-//Route::apiResource('entregas', EntregaController::class)->middleware('auth:sanctum');;;
-Route::get('entregas', 'Api/EntregaController@index');
-
-Route::get('indicadores/dashboard', [EntregaController::class, 'dashboard'])->middleware('auth:sanctum');;
 
 
 Route::get('/teste', function () {
@@ -107,6 +103,10 @@ Route::post('batepapo/enviarmensagem', [BatePapoController::class, 'enviarMensag
 
 
 
+Route::apiResource('entregas', EntregaController::class)->middleware('auth:sanctum');;;
+
+
+Route::get('indicadores/dashboard', [EntregaController::class, 'dashboard'])->middleware('auth:sanctum');;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
