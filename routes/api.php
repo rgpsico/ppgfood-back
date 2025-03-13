@@ -54,7 +54,7 @@ Route::get('/teste', function () {
 
 
 //Route::apiResource('entregas', EntregaController::class)->middleware('auth:sanctum');;;
-Route::get('entregas', 'EntregaController@index');
+Route::get('entregas', 'Api/EntregaController@index');
 
 Route::get('indicadores/dashboard', [EntregaController::class, 'dashboard'])->middleware('auth:sanctum');;
 
