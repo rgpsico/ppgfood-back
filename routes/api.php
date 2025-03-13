@@ -78,37 +78,26 @@ Route::get('/app', function () {
 
 
 
-Route::get('/entrega', function () {
-    return response()->json(['message' => 'ok entrega']);
-});
+Route::get('usuarios', 'Api\UsuarioController@index'); // Listar todos
+Route::post('usuarios', 'Api\UsuarioController@store'); // Criar novo
+Route::get('usuarios/{id}', 'Api\UsuarioController@show'); // Mostrar um
+Route::put('usuarios/{id}', 'Api\UsuarioController@update'); // Atualizar
+Route::delete('usuarios/{id}', 'Api\UsuarioController@destroy'); // Deletar
 
-Route::apiResource('pedidos', PedidoController::class);
+Route::get('entregas', 'Api\EntregaController@index');
+Route::post('entregas', 'Api\EntregaController@store');
+Route::get('entregas/{id}', 'Api\EntregaController@show');
+Route::put('entregas/{id}', 'Api\EntregaController@update');
+Route::delete('entregas/{id}', 'Api\EntregaController@destroy');
 
+Route::get('pedidos', 'Api\PedidoController@index');
+Route::post('pedidos', 'Api\PedidoController@store');
+Route::get('pedidos/{id}', 'Api\PedidoController@show');
+Route::put('pedidos/{id}', 'Api\PedidoController@update');
+Route::delete('pedidos/{id}', 'Api\PedidoController@destroy');
 
-Route::apiResource('usuarios', UsuarioController::class);
-Route::get('usuarios', 'Api\UsuarioController@index');
-
-Route::post('register', [AuthController::class, 'register']);
-Route::post('login', [AuthController::class, 'login']);
-Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
-
-Route::apiResource('notificacoes', NotificacaoController::class);
-
-
-
-Route::post('enviarnotificacao', [NotificacaoController::class, 'enviarnotificacao']);
-
-
-Route::post('batepapo/enviarmensagem', [BatePapoController::class, 'enviarMensagem']);
-
-
-
-
-Route::apiResource('entregas', EntregaController::class)->middleware('auth:sanctum');;;
-
-
-Route::get('indicadores/dashboard', [EntregaController::class, 'dashboard'])->middleware('auth:sanctum');;
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::get('notificacoes', 'Api\NotificacaoController@index');
+Route::post('notificacoes', 'Api\NotificacaoController@store');
+Route::get('notificacoes/{id}', 'Api\NotificacaoController@show');
+Route::put('notificacoes/{id}', 'Api\NotificacaoController@update');
+Route::delete('notificacoes/{id}', 'Api\NotificacaoController@destroy');
