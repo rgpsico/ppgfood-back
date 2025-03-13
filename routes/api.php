@@ -86,6 +86,7 @@ Route::apiResource('pedidos', PedidoController::class);
 
 
 Route::apiResource('usuarios', UsuarioController::class);
+Route::get('usuarios', 'Api\UsuarioController@index');
 
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
