@@ -33,6 +33,21 @@ return [
     |
     */
 
+    'entregadores' => [
+        'driver' => 'mysql',
+        'host' => env('DB_ENTREGADORES_HOST', '127.0.0.1'),
+        'port' => env('DB_ENTREGADORES_PORT', '3306'),
+        'database' => env('DB_ENTREGADORES_DATABASE', 'entregadores'),
+        'username' => env('DB_ENTREGADORES_USERNAME', 'root'),
+        'password' => env('DB_ENTREGADORES_PASSWORD', ''),
+        'charset' => 'utf8mb4',
+        'collation' => 'utf8mb4_unicode_ci',
+        'prefix' => '',
+        'strict' => true,
+        'engine' => null,
+    ],
+
+
     'connections' => [
 
         'sqlite' => [
