@@ -121,7 +121,7 @@ class EntregaController extends Controller
             ? Carbon::parse($request->input('dataFim'))->endOfDay()
             : Carbon::today()->endOfDay();
 
-        $entregasDoDia = Entrega::where('usuario_id', $usuario->id)
+        $entregasDoDia = Entrega::where('usuario_id', $usuario)
             ->whereBetween('data_entrega', [$dataInicio, $dataFim]);
 
         $cancelamentos = (clone $entregasDoDia)->where('status', 'cancelada')->count();
