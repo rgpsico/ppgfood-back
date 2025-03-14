@@ -77,7 +77,7 @@ Route::get('/app', function () {
 });
 
 
-Route::get('indicadores', 'Api\EntregaController@dashboard');
+Route::get('indicadores', 'Api\EntregaController@dashboard')->middleware('auth:api');;
 
 
 
