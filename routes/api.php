@@ -77,6 +77,9 @@ Route::get('/app', function () {
 });
 
 
+Route::get('indicadores/dashboard', 'Api\EntregaController@dashboard')->middleware('auth:sanctum');;
+
+
 
 Route::get('usuarios', 'Api\UsuarioController@index'); // Listar todos
 Route::post('usuarios', 'Api\UsuarioController@store'); // Criar novo
