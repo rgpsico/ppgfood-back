@@ -105,7 +105,7 @@ class EntregaController extends Controller
 
     public function dashboard(Request $request)
     {
-        $usuario = $request->user();
+        $usuario = $request->user_id;
 
         if (!$usuario) {
             return response()->json(['message' => 'Não autenticado'], 401);
