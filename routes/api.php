@@ -77,7 +77,7 @@ Route::get('/app', function () {
 });
 
 
-Route::get('indicadores', 'Api\EntregaController@dashboard')->middleware('auth:sanctum');;
+Route::get('indicadores', 'Api\EntregaController@dashboard');
 
 
 

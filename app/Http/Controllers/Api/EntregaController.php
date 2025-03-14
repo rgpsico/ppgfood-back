@@ -105,19 +105,17 @@ class EntregaController extends Controller
 
     public function dashboard(Request $request)
     {
-        $usuario = auth()->user();
+        $usuario = $request->user();
 
         if (!$usuario) {
-            return response()->json(['message' => 'Usuário não autenticado'], 401);
+            return response()->json(['message' => 'Não autenticado'], 401);
         }
 
-        // Validação dos parâmetros de data
         $request->validate([
             'dataInicio' => 'nullable|date',
             'dataFim' => 'nullable|date',
         ]);
 
-        // Obtenha as datas do request ou defina o padrão para hoje
         $dataInicio = $request->input('dataInicio')
             ? Carbon::parse($request->input('dataInicio'))->startOfDay()
             : Carbon::today()->startOfDay();
@@ -126,24 +124,18 @@ class EntregaController extends Controller
             ? Carbon::parse($request->input('dataFim'))->endOfDay()
             : Carbon::today()->endOfDay();
 
-        // Filtrar entregas pelo usuário autenticado e no intervalo de datas
         $entregasDoDia = Entrega::where('usuario_id', $usuario->id)
-            ->whereBetween('data_entrega', [$dataInicio, $dataFim])
-            ->get();
+            ->whereBetween('data_entrega', [$dataInicio, $dataFim]);
 
-        // Contagem de cancelamentos e finalizações
-        $cancelamentos = $entregasDoDia->where('status', 'cancelada')->count();
-        $entregasFinalizadas = $entregasDoDia->where('status', 'finalizada');
-
-        // Cálculo dos ganhos considerando o campo valor_da_entrega
-        $ganhos = $entregasFinalizadas->sum('valor_da_entrega');
+        $cancelamentos = (clone $entregasDoDia)->where('status', 'cancelada')->count();
+        $ganhos = (clone $entregasDoDia)->where('status', 'finalizada')->sum('valor_da_entrega');
 
         return response()->json([
             'dataInicio' => $dataInicio->toDateString(),
             'dataFim' => $dataFim->toDateString(),
             'entregas_do_dia' => $entregasDoDia->count(),
             'cancelamentos' => $cancelamentos,
-            'ganhos' => $ganhos,
+            'ganhos' => number_format($ganhos, 2, '.', ''),
         ]);
     }
 }
