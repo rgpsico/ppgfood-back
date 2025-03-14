@@ -35,6 +35,7 @@ class EntregaController extends Controller
     public function show($id)
     {
         $entrega = Entrega::with(['usuario', 'pedido'])->find($id);
+        dd($entrega);
 
         if (!$entrega) {
             return response()->json(['message' => 'Entrega não encontradaaa'], 404);
