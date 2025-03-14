@@ -70,6 +70,10 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
+        'usuarios' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Usuario::class,  // Este já aponta para seu model que tem a conexão correta
+        ],
 
         // 'users' => [
         //     'driver' => 'database',

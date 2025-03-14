@@ -20,7 +20,7 @@ class EntregaController extends Controller
             'pedido_id' => 'required|exists:pedidos,id',
             'status' => 'required|in:pendente,finalizada,cancelada',
             'data_entrega' => 'nullable|date',
-            'valor_da_entrega' => 'nullable|numeric|min:0', // Validando o campo
+            'valor_da_entrega' => 'nullable|numeric|min:0',
         ]);
 
         $entrega = Entrega::create($validated);
