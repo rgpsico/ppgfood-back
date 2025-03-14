@@ -24,6 +24,7 @@ Route::group([
 
     Route::get('/auth/v1/my-orders', 'Api\OrderApiController@myOrders');
     Route::post('/auth/v1/orders', 'Api\OrderApiController@store');
+    Route::get('indicadores', 'Api\EntregaController@dashboard');
 });
 
 Route::group([
@@ -77,7 +78,7 @@ Route::get('/app', function () {
 });
 
 
-Route::get('indicadores', 'Api\EntregaController@dashboard');
+
 
 
 
