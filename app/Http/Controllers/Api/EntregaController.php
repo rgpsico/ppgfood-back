@@ -34,7 +34,7 @@ class EntregaController extends Controller
     // Mostrar uma entrega específica
     public function show($id)
     {
-        $entrega = Entrega::with(['usuario', 'pedido'])->find($id);
+        $entrega = Entrega::with(['usuario', 'pedido'])->where('id', $id)->get();
         dd($entrega);
 
         if (!$entrega) {
