@@ -10,9 +10,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class Usuario extends Authenticatable
 {
     use HasApiTokens, HasFactory;
-    protected $table = 'usuarios';
+
 
     protected $connection = 'entregadores';
+
+    protected $table = 'usuarios';
 
     protected $fillable = [
         'nome',
