@@ -107,10 +107,7 @@ class EntregaController extends Controller
     {
         $usuario = $request->user_id;
 
-        if (!$usuario) {
-            return response()->json(['message' => 'Não autenticado'], 401);
-        }
-
+        dd($usuario);
         $request->validate([
             'dataInicio' => 'nullable|date',
             'dataFim' => 'nullable|date',
