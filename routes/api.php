@@ -101,3 +101,9 @@ Route::post('notificacoes', 'Api\NotificacaoController@store');
 Route::get('notificacoes/{id}', 'Api\NotificacaoController@show');
 Route::put('notificacoes/{id}', 'Api\NotificacaoController@update');
 Route::delete('notificacoes/{id}', 'Api\NotificacaoController@destroy');
+
+
+Route::apiResource('usuarios', UsuarioController::class);
+Route::post('register', 'Api\AuthController@register');
+Route::post('login', 'Api\AuthController@login');
+Route::post('logout', 'Api\AuthController@logout')->middleware('auth:sanctum');
