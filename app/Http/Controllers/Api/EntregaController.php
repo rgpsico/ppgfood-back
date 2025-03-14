@@ -107,7 +107,7 @@ class EntregaController extends Controller
     {
         $usuario = $request->user_id;
 
-        dd($usuario);
+
         $request->validate([
             'dataInicio' => 'nullable|date',
             'dataFim' => 'nullable|date',
