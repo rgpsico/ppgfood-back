@@ -18,9 +18,10 @@ class EntregaController extends Controller
     {
         $validated = $request->validate([
             'usuario_id' => 'required|exists:entregadores.usuarios,id',
-            // 'pedido_id' => 'required|exists:entregadores.pedidos,id',
-            'status' => 'required|in:pendente,finalizada,cancelada'
-
+            'pedido_id' => 'required|exists:entregadores.pedidos,id',
+            'status' => 'required|in:pendente,finalizada,cancelada',
+            'data_entrega' => 'nullable|date',
+            'valor_da_entrega' => 'nullable|numeric|min:0',
         ]);
 
         $entrega = Entrega::create($validated);
