@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
 use App\Models\Pedido;
 use Illuminate\Http\Request;
 
@@ -13,6 +14,43 @@ class PedidoController extends Controller
     {
         $pedidos = Pedido::all();
         return response()->json($pedidos);
+    }
+
+    public function ConfirmarEntrega(Request $request, $identify)
+    {
+        // Busca pelo número do pedido (identify)
+        $pedido = Order::where('identify', $identify)->first();
+
+        if (!$pedido) {
+            return response()->json(['message' => 'Pedido não encontrado'], 404);
+        }
+
+        // Validação dos dados
+        $validated = $request->validate([
+            'status' => 'required|in:open,pendente,finalizada,cancelada',
+            'entregador_id' => 'nullable|exists:entregadores,id',
+            'data_entrega' => 'nullable|date',
+        ]);
+
+        // Atualização do status do pedido
+        $pedido->status = 'done';
+
+        // Caso exista entregador_id, atualiza
+        if (isset($validated['entregador_id'])) {
+            $pedido->entregador_id = $validated['entregador_id'];
+        }
+
+        // Caso exista data_entrega, atualiza
+        if (isset($validated['data_entrega'])) {
+            $pedido->data_entrega = $validated['data_entrega'];
+        }
+
+        $pedido->save();
+
+        return response()->json([
+            'message' => 'Pedido atualizado com sucesso!',
+            'pedido' => $pedido,
+        ]);
     }
 
     // Criar um novo pedido
