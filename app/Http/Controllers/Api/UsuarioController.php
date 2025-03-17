@@ -22,7 +22,7 @@ class UsuarioController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:usuarios,email',
+            'email' => 'required|email|unique:entregadores.usuarios,email',
             'password' => 'required|string|min:6|confirmed',
         ]);
 
