@@ -27,7 +27,7 @@ class PedidoController extends Controller
 
         // Validação dos dados
         $validated = $request->validate([
-            'entregador_id' => 'nullable|exists:entregadores,id'
+            'entregador_id' => 'nullable|exists:entregadores.usuarios,id'
 
         ]);
 
