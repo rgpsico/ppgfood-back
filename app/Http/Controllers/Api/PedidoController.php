@@ -16,10 +16,10 @@ class PedidoController extends Controller
         return response()->json($pedidos);
     }
 
-    public function ConfirmarEntrega(Request $request, $identify)
+    public function ConfirmarEntrega(Request $request, $codigo_entrega)
     {
         // Busca pelo número do pedido (identify)
-        $pedido = Order::where('identify', $identify)->first();
+        $pedido = Order::where('codigo_entrega', $codigo_entrega)->first();
 
         if (!$pedido) {
             return response()->json(['message' => 'Pedido não encontrado'], 404);
