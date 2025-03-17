@@ -11,7 +11,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="orderDetailsLabel">
-                        Detalhes do Pedidoss:
+                        Detalhes do Pedido:
                         <span class="order-identify">{{ order.identify }}</span>
                     </h5>
                     <button type="button" class="close" @click="closeDetails">
