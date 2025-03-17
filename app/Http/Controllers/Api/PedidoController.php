@@ -27,9 +27,8 @@ class PedidoController extends Controller
 
         // Validação dos dados
         $validated = $request->validate([
-            'status' => 'required|in:open,pendente,finalizada,cancelada',
-            'entregador_id' => 'nullable|exists:entregadores,id',
-            'data_entrega' => 'nullable|date',
+            'entregador_id' => 'nullable|exists:entregadores,id'
+
         ]);
 
         // Atualização do status do pedido
@@ -40,10 +39,8 @@ class PedidoController extends Controller
             $pedido->entregador_id = $validated['entregador_id'];
         }
 
-        // Caso exista data_entrega, atualiza
-        if (isset($validated['data_entrega'])) {
-            $pedido->data_entrega = $validated['data_entrega'];
-        }
+
+
 
         $pedido->save();
 
