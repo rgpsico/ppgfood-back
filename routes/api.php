@@ -99,7 +99,7 @@ Route::post('pedidos', 'Api\PedidoController@store');
 Route::get('pedidos/{id}', 'Api\PedidoController@show');
 Route::put('pedidos/{id}', 'Api\PedidoController@update');
 Route::delete('pedidos/{id}', 'Api\PedidoController@destroy');
-Route::put('confirmar_pedido', 'Api\PedidoController@confirmar_pedido');
+Route::put('ConfirmarEntrega', 'Api\PedidoController@ConfirmarEntrega');
 
 
 Route::get('notificacoes', 'Api\NotificacaoController@index');
