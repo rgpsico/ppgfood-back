@@ -83,6 +83,7 @@ Route::get('/app', function () {
 Route::get('indicadores', 'Api\EntregaController@dashboard');
 Route::get('usuarios', 'Api\UsuarioController@index'); // Listar todos
 Route::post('usuarios', 'Api\UsuarioController@store'); // Criar novo
+Route::post('register', 'Api\UsuarioController@register'); // Criar novo
 Route::get('usuarios/{id}', 'Api\UsuarioController@show'); // Mostrar um
 Route::put('usuarios/{id}', 'Api\UsuarioController@update'); // Atualizar
 Route::delete('usuarios/{id}', 'Api\UsuarioController@destroy'); // Deletar
