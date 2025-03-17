@@ -18,6 +18,7 @@ class OrderResource extends JsonResource
 
         return [
             'identify' => $this->identify,
+            'identify' => $this->numero_do_entregador,
             'total' => $this->total,
             'comment' => $this->comment,
             'status' => $this->status,
@@ -26,10 +27,10 @@ class OrderResource extends JsonResource
             'hour' => Carbon::make($this->created_at)->format('H:m:s'),
             'date_br' => Carbon::make($this->created_at)->format('d/m/Y H:i:s'),
             'price' => $this->whenPivotLoaded('order_product', function () {
-                return $this->pivot->price; // Acessa price quando o pivot está carregado
+                return $this->pivot->price;
             }),
             'quantity' => $this->whenPivotLoaded('order_product', function () {
-                return $this->pivot->qty; // Acessa qty quando o pivot está carregado
+                return $this->pivot->qty;
             }),
 
 
