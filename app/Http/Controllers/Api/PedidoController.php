@@ -36,7 +36,7 @@ class PedidoController extends Controller
 
         // Caso exista entregador_id, atualiza
         if (isset($validated['entregador_id'])) {
-            $pedido->entregador_id = $validated['entregador_id'];
+            $pedido->entregue_por = $validated['entregador_id'];
         }
 
 
