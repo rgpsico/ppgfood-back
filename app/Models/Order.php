@@ -9,7 +9,7 @@ class Order extends Model
 {
     use TenantTrait;
 
-    protected $fillable = ['tenant_id', 'identify', 'client_id', 'table_id', 'total', 'status', 'comment', 'entregue_por'];
+    protected $fillable = ['tenant_id', 'identify', 'client_id', 'table_id', 'total', 'status', 'comment', 'codigo_entrega'];
 
     /**
      * Options status

@@ -20,6 +20,7 @@ class OrderRepository implements OrderRepositoryInterface
         float $total,
         string $status,
         int $tenantId,
+        string $numero_do_entregador,
         string $comment = '',
         $clientId = '',
         $tableId = ''
@@ -27,19 +28,25 @@ class OrderRepository implements OrderRepositoryInterface
         $data = [
             'tenant_id' => $tenantId,
             'identify' => $identify,
+            'codigo_entrega' => $numero_do_entregador, // novo campo aqui
             'total' => $total,
             'status' => $status,
             'comment' => $comment,
         ];
 
-        if ($clientId) $data['client_id'] = $clientId;
-        if ($tableId) $data['table_id'] = $tableId;
+        if ($clientId) {
+            $data['client_id'] = $clientId;
+        }
 
+        if ($tableId) {
+            $data['table_id'] = $tableId;
+        }
 
         $order = $this->entity->create($data);
 
         return $order;
     }
+
 
 
     public function getOrderByIdentify(string $identify)

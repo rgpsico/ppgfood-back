@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Order;
 use App\Repositories\Contracts\OrderRepositoryInterface;
 use App\Repositories\Contracts\ProductRepositoryInterface;
 use App\Repositories\Contracts\TableRepositoryInterface;
@@ -38,10 +39,10 @@ class OrderService
 
     public function createNewOrder(array $order)
     {
-
         $productsOrder = $this->getProductsByOrder($order['products'] ?? []);
 
         $identify = $this->getIdentifyOrder();
+        $numero_do_entregador = $this->gerarCodigoEntrega();
         $total = $this->getTotalOrder($productsOrder);
         $status = 'open';
         $tenantId = $this->getTenantIdByOrder($order['token_company']);
@@ -54,12 +55,13 @@ class OrderService
 
         $tableId = $this->getTableIdByOrder($order['table'] ?? '');
 
-
+        // Adiciona o número do entregador no método createNewOrder
         $order = $this->orderRepository->createNewOrder(
             $identify,
             $total,
             $status,
             $tenantId,
+            $numero_do_entregador,
             $comment,
             $clientId,
             $tableId
@@ -69,6 +71,22 @@ class OrderService
 
         return $order;
     }
+
+
+    private function gerarCodigoEntrega(int $tamanho = 6)
+    {
+        // Letras e números simples, evitando caracteres confundíveis
+        $caracteres = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+        $codigo = substr(str_shuffle(str_repeat($caracteres, 5)), 0, $tamanho);
+
+        // Verifica se já existe, para garantir unicidade
+        if (Order::where('codigo_entrega', $codigo)->exists()) {
+            return $this->gerarCodigoEntrega($tamanho);
+        }
+
+        return strtoupper($codigo);
+    }
+
 
     private function getIdentifyOrder(int $qtyCaraceters = 8)
     {
