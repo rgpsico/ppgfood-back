@@ -17,7 +17,7 @@
             <h3>Opções de Pagamento</h3>
         </div>
         <div class="card-body">
-            <form action="{{ route('settings.update') }}" method="POST">
+            <form action="" method="POST">
                 @csrf
                 @method('PUT')
                 
