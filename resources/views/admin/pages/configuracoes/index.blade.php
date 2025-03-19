@@ -5,7 +5,7 @@
 @section('content_header')
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Dashboard</a></li>
-        <li class="breadcrumb-item active"><a href="{{ route('settings.index') }}" class="active">Configurações</a></li>
+        <li class="breadcrumb-item active"><a href="" class="active">Configurações</a></li>
     </ol>
 
     <h1>Configurações do Sistema de Delivery</h1>
