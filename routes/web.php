@@ -143,6 +143,14 @@ Route::prefix('admin')
          */
 
         Route::get('/', 'DashboardController@home')->name('admin.index');
+
+
+
+        /**
+         * Home Configurações
+         */
+
+        Route::get('/config', 'ConfiguracoesController@index')->name('admin.config');
     });
 
 
