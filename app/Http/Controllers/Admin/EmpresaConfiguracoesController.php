@@ -23,7 +23,7 @@ class EmpresaConfiguracoesController  extends Controller
             ->pluck('valor', 'chave')
             ->toArray();
 
-        return view('admin.pages.empresaconfiguracoes.index', compact('settings'));
+        return view('admin.pages.empresaconfiguracao.index', compact('settings'));
     }
 
     public function update(Request $request)
