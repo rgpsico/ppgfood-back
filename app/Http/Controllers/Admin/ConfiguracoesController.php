@@ -31,7 +31,7 @@ class ConfiguracoesController extends Controller
 
         foreach ($configuracoes as $chave => $valor) {
             Configuracao::updateOrCreate(
-                ['empresa_id' => null, 'chave' => $chave],
+                ['tenant_id' => null, 'chave' => $chave],
                 ['valor' => $valor, 'tipo' => is_array($valor) ? 'json' : 'string']
             );
         }
