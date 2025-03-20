@@ -19,7 +19,7 @@ class EmpresaConfiguracoesController  extends Controller
     public function index()
     {
         $empresaId = Auth::user()->empresa_id;
-        $settings = Configuracao::where('empresa_id', $empresaId)
+        $settings = Configuracao::where('tenant_id', $empresaId)
             ->pluck('valor', 'chave')
             ->toArray();
 
@@ -37,7 +37,7 @@ class EmpresaConfiguracoesController  extends Controller
 
         foreach ($configuracoes as $chave => $valor) {
             Configuracao::updateOrCreate(
-                ['empresa_id' => $empresaId, 'chave' => $chave],
+                ['tenant_id' => $empresaId, 'chave' => $chave],
                 ['valor' => $valor, 'tipo' => is_array($valor) ? 'json' : 'string']
             );
         }
