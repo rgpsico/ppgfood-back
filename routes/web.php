@@ -149,8 +149,16 @@ Route::prefix('admin')
         /**
          * Home Configurações
          */
+        Route::prefix('admin/config')->name('admin.config.')->group(function () {
+            Route::get('/', 'ConfiguracoesController@index')->name('admin.config');
+            Route::post('/', 'ConfiguracoesController@store')->name('store');
+            Route::put('/', 'ConfiguracoesController@update')->name('update');
+        });
 
-        Route::get('/config', 'ConfiguracoesController@index')->name('admin.config');
+        Route::prefix('empresa/config')->name('empresa.config.')->group(function () {
+            Route::get('/', 'EmpresaConfiguracaoController@index')->name('index');
+            Route::put('/', 'EmpresaConfiguracaoController@update')->name('update');
+        });
     });
 
 

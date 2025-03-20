@@ -10,20 +10,26 @@ use App\Models\Configuracao;
 use App\Services\OrderService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 
-class ConfiguracoesController extends Controller
+class EmpresaConfiguracoesController  extends Controller
 {
-
 
     public function index()
     {
+        $empresaId = Auth::user()->empresa_id;
+        $settings = Configuracao::where('empresa_id', $empresaId)
+            ->pluck('valor', 'chave')
+            ->toArray();
 
-        return view('admin.pages.configuracoes.index');
+        return view('admin.pages.empresa.empresaconfiguracoes.index', compact('settings'));
     }
 
     public function update(Request $request)
     {
+        $empresaId = Auth::user()->empresa_id;
+
         $configuracoes = [
             'payment_methods' => json_encode($request->input('payment_methods', [])),
             'delivery_mode' => $request->input('delivery_mode'),
@@ -31,11 +37,11 @@ class ConfiguracoesController extends Controller
 
         foreach ($configuracoes as $chave => $valor) {
             Configuracao::updateOrCreate(
-                ['empresa_id' => null, 'chave' => $chave],
+                ['empresa_id' => $empresaId, 'chave' => $chave],
                 ['valor' => $valor, 'tipo' => is_array($valor) ? 'json' : 'string']
             );
         }
 
-        return redirect()->back()->with('success', 'Configurações atualizadas com sucesso.');
+        return redirect()->back()->with('success', 'Configurações salvas com sucesso.');
     }
 }
