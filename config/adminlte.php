@@ -238,6 +238,11 @@ return [
             'icon' => 'fas fa-utensils',
         ],
         [
+            'text' => 'Admin Configuração',
+            'url'  => 'admin/config',
+            'icon' => 'fas fa-utensils',
+        ],
+        [
             'text' => 'Configuração',
             'url'  => 'admin/config',
             'icon' => 'fas fa-utensils',
