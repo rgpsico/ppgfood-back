@@ -156,8 +156,8 @@ Route::prefix('admin')
         });
 
         Route::prefix('empresa/config')->name('empresa.config.')->group(function () {
-            Route::get('/', 'EmpresaConfiguracaoController@index')->name('index');
-            Route::put('/', 'EmpresaConfiguracaoController@update')->name('update');
+            Route::get('/', 'EmpresaConfiguracoesController@index')->name('index');
+            Route::put('/', 'EmpresaConfiguracoesController@update')->name('update');
         });
     });
 
