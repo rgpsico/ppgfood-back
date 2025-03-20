@@ -149,7 +149,7 @@ Route::prefix('admin')
         /**
          * Home Configurações
          */
-        Route::prefix('admin/config')->name('admin.config.')->group(function () {
+        Route::prefix('config')->name('admin.config.')->group(function () {
             Route::get('/', 'ConfiguracoesController@index')->name('admin.config');
             Route::post('/', 'ConfiguracoesController@store')->name('store');
             Route::put('/', 'ConfiguracoesController@update')->name('update');
