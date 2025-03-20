@@ -239,7 +239,7 @@ return [
         ],
         [
             'text' => 'Admin Configuração',
-            'url'  => 'empresa/config',
+            'url'  => 'admin/empresa/config',
             'icon' => 'fas fa-utensils',
         ],
         [
