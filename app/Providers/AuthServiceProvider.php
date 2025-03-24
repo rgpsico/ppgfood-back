@@ -44,7 +44,9 @@ class AuthServiceProvider extends ServiceProvider
             return $user->id === $object->user_id;
         });
 
-
+        Gate::define('ver-configuracoes-do-sistema', function ($user) {
+            return $user->is_admin; // ou qualquer outro critério
+        });
 
         Gate::before(function (User $user) {
             if ($user->isAdmin()) {

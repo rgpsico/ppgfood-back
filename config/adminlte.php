@@ -274,12 +274,12 @@ return [
                 [
                     'text' => 'Configurações Globais',
                     'url'  => 'admin/config',
-                    'can'  => 'permissions',
+                    'can'  => 'ver-configuracoes-do-sistema',
                 ],
                 [
                     'text' => 'Nova Configuração',
                     'url'  => 'admin/config/create',
-                    'can'  => 'permissions',
+                    'can'  => 'ver-configuracoes-do-sistema',
                 ],
                 [
                     'text' => 'Por Empresa',
