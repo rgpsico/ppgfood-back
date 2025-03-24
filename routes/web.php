@@ -151,13 +151,16 @@ Route::prefix('admin')
          */
         Route::prefix('config')->name('admin.config.')->group(function () {
             Route::get('/', 'ConfiguracoesController@index')->name('admin.config');
-            Route::post('/', 'ConfiguracoesController@store')->name('store');
+            Route::post('/', 'EmpresaConfiguracoesController@store')->name('store');
             Route::put('/', 'ConfiguracoesController@update')->name('update');
         });
 
         Route::prefix('empresa/config')->name('empresa.config.')->group(function () {
             Route::get('/', 'EmpresaConfiguracoesController@index')->name('index');
-            Route::put('/', 'EmpresaConfiguracoesController@update')->name('update');
+            Route::get('/create', 'EmpresaConfiguracoesController@create')->name('create');
+            Route::put('/update/{id}', 'EmpresaConfiguracoesController@update')->name('update');
+            Route::post('/store', 'EmpresaConfiguracoesController@store')->name('store');
+            Route::delete('/destroy/{id}', 'EmpresaConfiguracoesController@destroy')->name('destroy');
         });
     });
 

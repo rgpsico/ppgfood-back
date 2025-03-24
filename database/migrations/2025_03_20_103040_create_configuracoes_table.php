@@ -16,13 +16,11 @@ class CreateConfiguracoesTable extends Migration
         Schema::create('configuracoes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('tenant_id')->constrained('tenants')->onDelete('cascade');
-            $table->string('chave')->index();
-            $table->text('valor');
-            $table->text('descricao')->nullable();
-            $table->enum('tipo', ['string', 'integer', 'boolean', 'json'])->default('string');
+            $table->foreignId('configuracoes_modelo_id')->constrained('configuracoes_modelo')->onDelete('cascade');
+            $table->text('valor')->nullable();
             $table->timestamps();
 
-            $table->unique(['tenant_id', 'chave']); // Garante que cada empresa tenha apenas uma configuração por chave
+            $table->unique(['tenant_id', 'configuracoes_modelo_id']); // uma config por empresa
         });
     }
 

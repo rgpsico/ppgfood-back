@@ -8,7 +8,7 @@ class Configuracao extends Model
 {
     public $table = 'configuracoes';
 
-    protected $fillable = ['empresa_id', 'chave', 'valor', 'tipo', 'descricao'];
+    protected $fillable = ['tenant_id', 'configuracoes_modelo_id', 'valor'];
 
     public function empresa()
     {

@@ -237,16 +237,30 @@ return [
             'url'  => 'admin/orders',
             'icon' => 'fas fa-utensils',
         ],
+        // [
+        //     'text' => 'Admin Configuração',
+        //     'url'  => 'admin/empresa/config',
+        //     'icon' => 'fas fa-utensils',
+        // ],
         [
-            'text' => 'Admin Configuração',
-            'url'  => 'admin/empresa/config',
-            'icon' => 'fas fa-utensils',
+            'text' => 'Configurações',
+            'icon' => 'fas fa-cogs',
+            'submenu' => [
+                [
+                    'text' => 'Configurações Globais',
+                    'url'  => 'admin/config',
+                ],
+                [
+                    'text' => 'Nova Configuração',
+                    'url'  => 'admin/empresa/config',
+                ],
+                [
+                    'text' => 'Configuração por Empresa',
+                    'url'  => 'admin/empresa/config',
+                ],
+            ],
         ],
-        [
-            'text' => 'Configuração',
-            'url'  => 'admin/config',
-            'icon' => 'fas fa-utensils',
-        ],
+
     ],
 
     /*
