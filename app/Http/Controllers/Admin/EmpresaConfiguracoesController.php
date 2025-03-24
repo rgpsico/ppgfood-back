@@ -20,6 +20,7 @@ class EmpresaConfiguracoesController  extends Controller
 
     public function index(Request $request)
     {
+        $tenantId = auth()->user()->tenant_id;
 
         $filtro = $request->get('filtro');
         $query = ConfiguracaoModelo::query();

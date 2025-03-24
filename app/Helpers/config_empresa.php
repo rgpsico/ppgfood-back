@@ -4,9 +4,9 @@ use App\Models\Configuracao;
 use App\Models\ConfiguracaoModelo;
 
 if (!function_exists('config_empresa')) {
-    function config_empresa($chave, $tenantId = null)
+    function config_empresa($chave)
     {
-        $tenantId = $tenantId ?? auth()->user()->tenant_id ?? null;
+        $tenantId = auth()->user()->tenant_id;
 
         $modelo = ConfiguracaoModelo::where('chave', $chave)->first();
         if (!$modelo) return null;
