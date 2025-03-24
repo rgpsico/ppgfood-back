@@ -30,7 +30,8 @@ class OrderApiController extends Controller
     {
 
         $order = $this->orderService->createNewOrder($request->all());
-
+        $tenantId = auth()->user()->tenant_id;
+        dd($tenantId);
         event(new OrderCreated($order));
 
         if ($request->payment_method == 'cartao_credito') {
@@ -42,8 +43,8 @@ class OrderApiController extends Controller
         }
 
         $result =  new OrderResource($order);
-        dd(config_empresa('entregador_externo') == 1);
-        if (config_empresa('entregador_externo') == '1') {
+        dd(config_empresa('entregador_externo', $tenantId) == 1);
+        if (config_empresa('entregador_externo', $tenantId) == '1') {
             $this->enviarPedidoEntregador($result);
         }
 
