@@ -28,7 +28,7 @@ class OrderApiController extends Controller
 
     public function store(StoreOrder $request)
     {
-        dd($request->all());
+
         $order = $this->orderService->createNewOrder($request->all());
         $user = auth()->user();
 
@@ -45,7 +45,7 @@ class OrderApiController extends Controller
         }
 
         $result =  new OrderResource($order);
-        dd(config_empresa('entregador_externo', $tenantId) == 1);
+
         if (config_empresa('entregador_externo', $tenantId) == '1') {
             $this->enviarPedidoEntregador($result);
         }
