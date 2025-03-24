@@ -28,10 +28,10 @@ class OrderApiController extends Controller
 
     public function store(StoreOrder $request)
     {
-
+        dd($request->all());
         $order = $this->orderService->createNewOrder($request->all());
         $user = auth()->user();
-        dd($user); // só pra depurar
+
         $tenantId = $user->tenant_id;
 
         event(new OrderCreated($order));
