@@ -10,6 +10,13 @@ class Configuracao extends Model
 
     protected $fillable = ['tenant_id', 'configuracoes_modelo_id', 'valor'];
 
+
+    public function modelo()
+    {
+        return $this->belongsTo(ConfiguracaoModelo::class, 'configuracoes_modelo_id');
+    }
+
+
     public function empresa()
     {
         return $this->belongsTo(Tenant::class);

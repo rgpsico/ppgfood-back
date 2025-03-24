@@ -150,8 +150,8 @@ Route::prefix('admin')
          * Home Configurações
          */
         Route::prefix('config')->name('admin.config.')->group(function () {
-            Route::get('/', 'ConfiguracoesController@index')->name('admin.config');
-            Route::post('/', 'EmpresaConfiguracoesController@store')->name('store');
+            Route::get('/', 'ConfiguracoesController@index')->name('index');
+            Route::post('/', 'ConfiguracoesController@store')->name('store');
             Route::put('/', 'ConfiguracoesController@update')->name('update');
         });
 

@@ -7,6 +7,7 @@ use App\Services\AsaasService;
 use App\Services\ClientService;
 use App\Models\Client;
 use App\Models\Configuracao;
+use App\Models\ConfiguracaoModelo;
 use App\Services\OrderService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -18,24 +19,47 @@ class ConfiguracoesController extends Controller
 
     public function index()
     {
+        $tenantId = auth()->user()->tenant_id;
 
-        return view('admin.pages.configuracoes.index');
+        $configuracoes_modelo = ConfiguracaoModelo::all();
+
+        // Busca as configurações salvas da empresa e agrupa por chave
+        $configuracoes_empresa = Configuracao::with('modelo')
+            ->where('tenant_id', $tenantId)
+            ->get()
+            ->mapWithKeys(function ($item) {
+                return [$item->modelo->chave => $item->valor];
+            })
+            ->toArray();
+
+        return view('admin.pages.configuracoes.index', compact('configuracoes_modelo', 'configuracoes_empresa'));
     }
+
+
 
     public function update(Request $request)
     {
-        $configuracoes = [
-            'payment_methods' => json_encode($request->input('payment_methods', [])),
-            'delivery_mode' => $request->input('delivery_mode'),
-        ];
+        $tenantId = auth()->user()->tenant_id;
 
-        foreach ($configuracoes as $chave => $valor) {
+
+        foreach ($request->input('config', []) as $chave => $valor) {
+            $modelo = ConfiguracaoModelo::where('chave', $chave)->first();
+
+            if (!$modelo) {
+                continue;
+            }
+
             Configuracao::updateOrCreate(
-                ['tenant_id' => null, 'chave' => $chave],
-                ['valor' => $valor, 'tipo' => is_array($valor) ? 'json' : 'string']
+                [
+                    'tenant_id' => $tenantId,
+                    'configuracoes_modelo_id' => $modelo->id,
+                ],
+                [
+                    'valor' => $valor,
+                ]
             );
         }
 
-        return redirect()->back()->with('success', 'Configurações atualizadas com sucesso.');
+        return redirect()->back()->with('success', 'Configurações salvas com sucesso!');
     }
 }

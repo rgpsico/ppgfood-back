@@ -1,52 +1,59 @@
 @extends('adminlte::page')
 
-@section('title', 'Configurações do Sistema de Delivery')
+@section('title', 'Configurações da Empresa')
 
 @section('content_header')
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Dashboard</a></li>
-        <li class="breadcrumb-item active"><a href="" class="active">Configurações</a></li>
-    </ol>
-
-    <h1>Configurações do Sistema de Delivery</h1>
+    <h1>Minhas Configurações</h1>
 @stop
 
 @section('content')
-    <div class="card">
-        <div class="card-header">
-            <h3>Opções de Pagamento</h3>
-        </div>
-        <div class="card-body">
-            <form action="" method="POST">
-                @csrf
-                @method('PUT')
-                
-                <div class="form-group">
-                    <label>Selecione os métodos de pagamento disponíveis:</label><br>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="payment_methods[]" value="credit_card" {{ in_array('credit_card', $settings->payment_methods ?? []) ? 'checked' : '' }}>
-                        <label class="form-check-label">Cartão de Crédito</label>
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+
+    <form action="{{ route('admin.config.update') }}" method="POST">
+        @csrf
+        @method('PUT')
+
+        <div class="card">
+            <div class="card-header">
+                <h3>Configurações Disponíveis</h3>
+            </div>
+            <div class="card-body">
+                @foreach ($configuracoes_modelo as $modelo)
+                    @php
+                        $valor = $configuracoes_empresa[$modelo->chave] ?? $modelo->valor_padrao;
+                    @endphp
+
+                    <div class="form-group">
+                        <label><strong>{{ $modelo->descricao ?? $modelo->chave }}</strong></label>
+
+                        @if ($modelo->tipo === 'boolean')
+                            <select name="config[{{ $modelo->chave }}]" class="form-control">
+                                <option value="1" {{ $valor == '1' ? 'selected' : '' }}>Sim</option>
+                                <option value="0" {{ $valor == '0' ? 'selected' : '' }}>Não</option>
+                            </select>
+                        @elseif ($modelo->tipo === 'select')
+                            @php
+                                $opcoes = explode(',', $modelo->valor_padrao); // lista das opções
+                            @endphp
+                            <select name="config[{{ $modelo->chave }}]" class="form-control">
+                                @foreach ($opcoes as $opcao)
+                                    <option value="{{ trim($opcao) }}" {{ trim($valor) == trim($opcao) ? 'selected' : '' }}>
+                                        {{ ucfirst(trim($opcao)) }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        @elseif ($modelo->tipo === 'json')
+                            <textarea name="config[{{ $modelo->chave }}]" class="form-control" rows="3">{{ $valor }}</textarea>
+                        @else
+                            <input type="text" name="config[{{ $modelo->chave }}]" class="form-control" value="{{ $valor }}">
+                        @endif
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="payment_methods[]" value="pix" {{ in_array('pix', $settings->payment_methods ?? []) ? 'checked' : '' }}>
-                        <label class="form-check-label">PIX</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="payment_methods[]" value="cash_on_delivery" {{ in_array('cash_on_delivery', $settings->payment_methods ?? []) ? 'checked' : '' }}>
-                        <label class="form-check-label">Pagamento na Entrega</label>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label>Configuração dos Entregadores:</label>
-                    <select class="form-control" name="delivery_mode">
-                        <option value="auto" {{ ($settings->delivery_mode ?? '') == 'auto' ? 'selected' : '' }}>Atribuição Automática</option>
-                        <option value="manual" {{ ($settings->delivery_mode ?? '') == 'manual' ? 'selected' : '' }}>Atribuição Manual</option>
-                    </select>
-                </div>
-                
+                @endforeach
+
                 <button type="submit" class="btn btn-primary">Salvar Configurações</button>
-            </form>
+            </div>
         </div>
-    </div>
+    </form>
 @stop
