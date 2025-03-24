@@ -20,7 +20,7 @@ class EmpresaConfiguracoesController  extends Controller
 
     public function index(Request $request)
     {
-        dd(config_empresa('entregador_externo'));
+
         $filtro = $request->get('filtro');
         $query = ConfiguracaoModelo::query();
 
