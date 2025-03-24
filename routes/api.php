@@ -23,8 +23,7 @@ Route::group([
     Route::post('/auth/v1/orders/{identifyOrder}/evaluations', 'Api\EvaluationApiController@store');
 
     Route::get('/auth/v1/my-orders', 'Api\OrderApiController@myOrders');
-    Route::post('/auth/v1/orders', 'Api\OrderApiController@store');
-    Route::post('/orders', 'OrderApiController@store');
+    //Route::post('/auth/v1/orders', 'Api\OrderApiController@store');
 });
 
 Route::group([
@@ -44,6 +43,7 @@ Route::group([
     // Route::get('/products/{identify}/teste', 'ProductApiController@productsByTenantId');
     Route::get('/products', 'ProductApiController@productsByTenant');
 
+    Route::post('/orders', 'OrderApiController@store');
     Route::get('/orders/{identify}', 'OrderApiController@show');
 });
 
