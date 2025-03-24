@@ -30,8 +30,10 @@ class OrderApiController extends Controller
     {
 
         $order = $this->orderService->createNewOrder($request->all());
-        $tenantId = auth()->user()->tenant_id;
-        dd($tenantId);
+        $user = auth()->user();
+        dd($user); // só pra depurar
+        $tenantId = $user->tenant_id;
+
         event(new OrderCreated($order));
 
         if ($request->payment_method == 'cartao_credito') {
