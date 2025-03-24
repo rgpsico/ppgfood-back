@@ -33,7 +33,7 @@ class OrderApiController extends Controller
         $user = auth()->user();
         var_dump($user);
         exit;
-        $tenantId = $user->tenant_id;
+        // $tenantId = $user->tenant_id;
 
         event(new OrderCreated($order));
 
@@ -47,9 +47,9 @@ class OrderApiController extends Controller
 
         $result =  new OrderResource($order);
 
-        if (config_empresa('entregador_externo', $tenantId) == '1') {
-            $this->enviarPedidoEntregador($result);
-        }
+        // if (config_empresa('entregador_externo', $tenantId) == '1') {
+        //     $this->enviarPedidoEntregador($result);
+        // }
 
 
         return $result;
