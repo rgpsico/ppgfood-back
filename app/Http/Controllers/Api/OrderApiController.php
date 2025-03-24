@@ -31,7 +31,8 @@ class OrderApiController extends Controller
 
         $order = $this->orderService->createNewOrder($request->all());
         $user = auth()->user();
-
+        var_dump($user);
+        exit;
         $tenantId = $user->tenant_id;
 
         event(new OrderCreated($order));
