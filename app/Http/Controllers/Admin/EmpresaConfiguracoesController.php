@@ -20,6 +20,7 @@ class EmpresaConfiguracoesController  extends Controller
 
     public function index(Request $request)
     {
+
         $filtro = $request->get('filtro');
         $query = ConfiguracaoModelo::query();
 

@@ -42,7 +42,11 @@ class OrderApiController extends Controller
         }
 
         $result =  new OrderResource($order);
-        $this->enviarPedidoEntregador($result);
+
+        if (config_empresa('entregador_externo') == '1') {
+            $this->enviarPedidoEntregador($result);
+        }
+
 
         return $result;
     }

@@ -19,6 +19,7 @@ class ConfiguracoesController extends Controller
 
     public function index()
     {
+        dd(config_empresa('entregador_externo'));
         $tenantId = auth()->user()->tenant_id;
 
         $configuracoes_modelo = ConfiguracaoModelo::all();
