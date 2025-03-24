@@ -24,10 +24,10 @@ Route::group([
 
     Route::get('/auth/v1/my-orders', 'Api\OrderApiController@myOrders');
     Route::post('/auth/v1/orders', 'Api\OrderApiController@store');
+    Route::post('/orders', 'OrderApiController@store');
 });
 
 Route::group([
-    'middleware' => ['auth:sanctum'],
     'prefix' => 'v1',
     'namespace' => 'Api'
 ], function () {
@@ -44,7 +44,6 @@ Route::group([
     // Route::get('/products/{identify}/teste', 'ProductApiController@productsByTenantId');
     Route::get('/products', 'ProductApiController@productsByTenant');
 
-    Route::post('/orders', 'OrderApiController@store');
     Route::get('/orders/{identify}', 'OrderApiController@show');
 });
 
