@@ -20,13 +20,15 @@ class ProductRepository implements ProductRepositoryInterface
             ->join('category_product', 'products.id', '=', 'category_product.product_id')
             ->join('categories', 'categories.id', '=', 'category_product.category_id')
             ->where('products.tenant_id', $idTenant)
+            ->where('products.is_active', true) // Garantir que só produtos ativos sejam retornados
             ->when(!empty($categories), function ($query) use ($categories) {
                 $query->whereIn('categories.uuid', $categories);
             })
             ->select('products.*')
-            ->distinct() // Evita registros duplicados caso haja múltiplas categorias associadas
+            ->distinct()
             ->get();
     }
+
 
 
     public function getProductByUuid(string $uuid)
