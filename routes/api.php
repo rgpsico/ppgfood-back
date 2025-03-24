@@ -47,6 +47,17 @@ Route::group([
     Route::get('/orders/{identify}', 'OrderApiController@show');
 });
 
+
+
+
+Route::group([
+    'middleware' => ['auth:sanctum'],
+    'prefix' => 'v1',
+    'namespace' => 'Api'
+], function () {
+
+    Route::post('/orders', 'OrderApiController@store');
+});
 /**
  * Test API
  */
