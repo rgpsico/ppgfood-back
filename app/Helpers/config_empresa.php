@@ -6,7 +6,7 @@ use App\Models\ConfiguracaoModelo;
 if (!function_exists('config_empresa')) {
     function config_empresa($chave, $tenantId = null)
     {
-        $tenantId = $tenantId ?? auth()->user()->empresa_id ?? null;
+        $tenantId = $tenantId ?? auth()->user()->tenant_id ?? null;
 
         $modelo = ConfiguracaoModelo::where('chave', $chave)->first();
         if (!$modelo) return null;
