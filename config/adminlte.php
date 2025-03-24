@@ -172,96 +172,124 @@ return [
     |
     */
 
+
     'menu' => [
+
         [
-            'text' => 'Home',
+            'text' => 'Dashboard',
             'url'  => 'admin',
             'icon' => 'fas fa-tachometer-alt',
+        ],
+
+        [
+            'header' => 'GESTÃO DE NEGÓCIOS'
         ],
         [
             'text' => 'Empresas',
             'url'  => 'admin/tenants',
             'icon' => 'fas fa-building',
-            'can'  =>  'tenants',
+            'can'  => 'tenants',
         ],
         [
             'text' => 'Planos',
             'url'  => 'admin/plans',
-            'icon' => 'fas fa-list-alt',
-            'can'  =>  'plans',
+            'icon' => 'fas fa-tags',
+            'can'  => 'plans',
+        ],
+
+        [
+            'header' => 'GESTÃO DE ACESSO'
         ],
         [
-            'text' => 'Perfis',
-            'url'  => 'admin/profiles',
-            'icon' => 'fas fa-address-book',
-            'can'  =>  'profiles',
+            'text' => 'Usuários & Permissões',
+            'icon' => 'fas fa-user-shield',
+            'submenu' => [
+                [
+                    'text' => 'Usuários',
+                    'url'  => 'admin/users',
+                    'icon' => 'fas fa-users',
+                    'can'  => 'users',
+                ],
+                [
+                    'text' => 'Perfis',
+                    'url'  => 'admin/profiles',
+                    'icon' => 'fas fa-id-badge',
+                    'can'  => 'profiles',
+                ],
+                [
+                    'text' => 'Cargos',
+                    'url'  => 'admin/roles',
+                    'icon' => 'fas fa-address-card',
+                    'can'  => 'roles',
+                ],
+                [
+                    'text' => 'Permissões',
+                    'url'  => 'admin/permissions',
+                    'icon' => 'fas fa-lock',
+                    'can'  => 'permissions',
+                ],
+            ],
+        ],
+
+        [
+            'header' => 'CARDÁPIO & ATENDIMENTO'
         ],
         [
-            'text' => 'Cargos',
-            'url'  => 'admin/roles',
-            'icon' => 'fas fa-address-card',
-            'can'  =>  'roles',
-        ],
-        [
-            'text' => 'Permissões',
-            'url'  => 'admin/permissions',
-            'icon' => 'fas fa-lock',
-            'can'  =>  'permissions',
-        ],
-        [
-            'text' => 'Usuários',
-            'url'  => 'admin/users',
-            'icon' => 'fas fa-users',
-            'can'  =>  'users',
-        ],
-        [
-            'text' => 'Categorias',
-            'url'  => 'admin/categories',
-            'icon' => 'fas fa-layer-group',
-            'can'  =>  'categories',
-        ],
-        [
-            'text' => 'Produtos',
-            'url'  => 'admin/products',
+            'text' => 'Produtos & Categorias',
             'icon' => 'fas fa-hamburger',
-            // 'can'  =>  'products',
+            'submenu' => [
+                [
+                    'text' => 'Categorias',
+                    'url'  => 'admin/categories',
+                    'icon' => 'fas fa-layer-group',
+                    'can'  => 'categories',
+                ],
+                [
+                    'text' => 'Produtos',
+                    'url'  => 'admin/products',
+                    'icon' => 'fas fa-hamburger',
+                    // 'can'  => 'products',
+                ],
+            ],
         ],
         [
             'text' => 'Mesas',
             'url'  => 'admin/tables',
             'icon' => 'fas fa-tablet',
-            'can'  =>  'tables',
+            'can'  => 'tables',
         ],
         [
             'text' => 'Pedidos',
             'url'  => 'admin/orders',
             'icon' => 'fas fa-utensils',
         ],
-        // [
-        //     'text' => 'Admin Configuração',
-        //     'url'  => 'admin/empresa/config',
-        //     'icon' => 'fas fa-utensils',
-        // ],
+
         [
-            'text' => 'Configurações',
+            'header' => 'CONFIGURAÇÕES'
+        ],
+        [
+            'text' => 'Sistema',
             'icon' => 'fas fa-cogs',
             'submenu' => [
                 [
                     'text' => 'Configurações Globais',
                     'url'  => 'admin/config',
+                    'can'  => 'permissions',
                 ],
                 [
                     'text' => 'Nova Configuração',
-                    'url'  => 'admin/empresa/config',
+                    'url'  => 'admin/config/create',
+                    'can'  => 'permissions',
                 ],
                 [
-                    'text' => 'Configuração por Empresa',
+                    'text' => 'Por Empresa',
                     'url'  => 'admin/empresa/config',
                 ],
             ],
         ],
-
     ],
+
+
 
     /*
     |--------------------------------------------------------------------------
