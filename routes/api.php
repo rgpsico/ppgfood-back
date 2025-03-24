@@ -27,6 +27,7 @@ Route::group([
 });
 
 Route::group([
+    'middleware' => ['auth:sanctum'],
     'prefix' => 'v1',
     'namespace' => 'Api'
 ], function () {
