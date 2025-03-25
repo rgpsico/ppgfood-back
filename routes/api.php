@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ConfiguracoesController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BatePapoController;
 use App\Http\Controllers\Api\EntregaController;
@@ -58,6 +59,8 @@ Route::group([
 
     Route::post('/orders', 'OrderApiController@store');
 });
+
+Route::get('v1/configuracao/get/{uuid}', [ConfiguracoesController::class, 'getConfig'])->name('getConfig');
 /**
  * Test API
  */

@@ -24,6 +24,7 @@ class TenantService
 
     public function getTenantByUuid(string $uuid)
     {
+
         return $this->repository->getTenantByUuid($uuid);
     }
 

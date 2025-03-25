@@ -23,8 +23,10 @@ class OrderRepository implements OrderRepositoryInterface
         string $numero_do_entregador,
         string $comment = '',
         $clientId = '',
-        $tableId = ''
+        $tableId = '',
+        $eEntregador
     ) {
+
         $data = [
             'tenant_id' => $tenantId,
             'identify' => $identify,
@@ -32,6 +34,7 @@ class OrderRepository implements OrderRepositoryInterface
             'total' => $total,
             'status' => $status,
             'comment' => $comment,
+            'eEntregador' =>  $eEntregador
         ];
 
         if ($clientId) {
@@ -40,6 +43,10 @@ class OrderRepository implements OrderRepositoryInterface
 
         if ($tableId) {
             $data['table_id'] = $tableId;
+        }
+
+        if ($eEntregador) {
+            $data['eEntregador'] = $eEntregador;
         }
 
         $order = $this->entity->create($data);

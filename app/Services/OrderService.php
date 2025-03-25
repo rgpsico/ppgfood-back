@@ -11,18 +11,20 @@ use Illuminate\Http\Request;
 
 class OrderService
 {
-    protected $orderRepository, $tenantRepository, $tableRepository, $productRepository;
+    protected $ConfigService, $orderRepository, $tenantRepository, $tableRepository, $productRepository;
 
     public function __construct(
         OrderRepositoryInterface $orderRepository,
         TenantRepositoryInterface $tenantRepository,
         TableRepositoryInterface $tableRepository,
-        ProductRepositoryInterface $productRepository
+        ProductRepositoryInterface $productRepository,
+        ConfigService $ConfigService
     ) {
         $this->orderRepository = $orderRepository;
         $this->tenantRepository = $tenantRepository;
         $this->tableRepository = $tableRepository;
         $this->productRepository = $productRepository;
+        $this->ConfigService = $ConfigService;
     }
 
     public function ordersByClient()
@@ -39,8 +41,14 @@ class OrderService
 
     public function createNewOrder(array $order)
     {
-        $productsOrder = $this->getProductsByOrder($order['products'] ?? []);
 
+
+
+
+        $configSEEntregador = $this->ConfigService->getTenantConfigs($order['token_company']);
+        $eEntregador = $configSEEntregador->valor;
+
+        $productsOrder = $this->getProductsByOrder($order['products'] ?? []);
         $identify = $this->getIdentifyOrder();
         $numero_do_entregador = $this->gerarCodigoEntrega();
         $total = $this->getTotalOrder($productsOrder);
@@ -64,10 +72,13 @@ class OrderService
             $numero_do_entregador,
             $comment,
             $clientId,
-            $tableId
+            $tableId,
+            $eEntregador
         );
 
+
         $this->orderRepository->registerProductsOrder($order->id, $productsOrder);
+
 
         return $order;
     }

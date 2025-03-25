@@ -9,6 +9,7 @@ use App\Http\Requests\Api\TenantFormRequest;
 use App\Http\Resources\OrderResource;
 use App\Services\AsaasService;
 use App\Services\ClientService;
+use App\Services\ConfigService;
 use App\Services\OrderService;
 use App\Services\TenantService;
 use Illuminate\Http\Request;
@@ -18,13 +19,14 @@ use GuzzleHttp\Exception\RequestException;
 
 class OrderApiController extends Controller
 {
-    protected $orderService, $asaasService, $tenantService;
+    protected $orderService, $asaasService, $tenantService, $configService;
 
-    public function __construct(TenantService $tenantService, OrderService $orderService, AsaasService $asaasService)
+    public function __construct(ConfigService $configService, TenantService $tenantService, OrderService $orderService, AsaasService $asaasService)
     {
         $this->orderService = $orderService;
         $this->asaasService = $asaasService;
         $this->tenantService = $tenantService;
+        $this->configService = $configService;
     }
 
 
@@ -32,10 +34,14 @@ class OrderApiController extends Controller
     {
 
         $order = $this->orderService->createNewOrder($request->all());
+
         $getTenantByUuid = $this->tenantService->getTenantByUuid($request->token_company);
 
         $tenantId = $getTenantByUuid->id;
 
+        $configSEEntregador = $this->configService->getTenantConfigs($request->token_company);
+
+        $order['eEntregador'] = (int) $configSEEntregador->valor;
 
         event(new OrderCreated($order));
 
@@ -46,6 +52,7 @@ class OrderApiController extends Controller
         if ($request->payment_method == 'PIX') {
             return $this->asaasService->criarPagamentoComPix($request);
         }
+
 
         $result =  new OrderResource($order);
 

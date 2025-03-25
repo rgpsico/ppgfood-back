@@ -12,7 +12,8 @@ interface OrderRepositoryInterface
         string $numero_do_entregador,
         string $comment = '',
         $clientId = '',
-        $tableId = ''
+        $tableId = '',
+        string $eEntregador
     );
 
     public function getOrderByIdentify(string $identify);

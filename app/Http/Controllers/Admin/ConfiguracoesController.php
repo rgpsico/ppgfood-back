@@ -3,64 +3,50 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Services\AsaasService;
-use App\Services\ClientService;
-use App\Models\Client;
-use App\Models\Configuracao;
-use App\Models\ConfiguracaoModelo;
-use App\Services\OrderService;
-use Illuminate\Http\JsonResponse;
+use App\Services\ConfigService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 
 class ConfiguracoesController extends Controller
 {
+    protected $configService;
 
+    public function __construct(ConfigService $configService)
+    {
+        $this->configService = $configService;
+    }
 
     public function index()
     {
-
         $tenantId = auth()->user()->tenant_id;
 
-        $configuracoes_modelo = ConfiguracaoModelo::all();
+        $configs = $this->configService->getTenantConfigs(auth()->user()->tenant->uuid);
 
-        // Busca as configurações salvas da empresa e agrupa por chave
-        $configuracoes_empresa = Configuracao::with('modelo')
-            ->where('tenant_id', $tenantId)
-            ->get()
-            ->mapWithKeys(function ($item) {
-                return [$item->modelo->chave => $item->valor];
-            })
-            ->toArray();
+        $configuracoes_empresa = $configs->mapWithKeys(function ($config) {
+            return [$config->modelo->chave => $config->valor];
+        })->toArray();
 
-        return view('admin.pages.configuracoes.index', compact('configuracoes_modelo', 'configuracoes_empresa'));
+        return view('admin.pages.configuracoes.index', [
+            'configuracoes_empresa' => $configuracoes_empresa,
+            'configuracoes_modelo' => \App\Models\ConfiguracaoModelo::all()
+        ]);
     }
-
-
 
     public function update(Request $request)
     {
         $tenantId = auth()->user()->tenant_id;
 
-
-        foreach ($request->input('config', []) as $chave => $valor) {
-            $modelo = ConfiguracaoModelo::where('chave', $chave)->first();
-
-            if (!$modelo) {
-                continue;
-            }
-
-            Configuracao::updateOrCreate(
-                [
-                    'tenant_id' => $tenantId,
-                    'configuracoes_modelo_id' => $modelo->id,
-                ],
-                [
-                    'valor' => $valor,
-                ]
-            );
-        }
+        $this->configService->updateTenantConfigs($tenantId, $request->input('config', []));
 
         return redirect()->back()->with('success', 'Configurações salvas com sucesso!');
+    }
+
+    public function getConfig($uuid)
+    {
+
+        $valor = $this->configService->getConfigValue($uuid, 'habilitar_codigo_entregador');
+
+        return response()->json([
+            'habilitar_codigo_entregador' => (bool)$valor
+        ]);
     }
 }
