@@ -30,6 +30,11 @@ class ConfigService
         return $this->configRepository->getCategoriesByTenantId($tenant->id);
     }
 
+    public function getTenantConfigsByIdTentant($idtenant)
+    {
+        return $this->configRepository->getCategoriesByTenantId($idtenant);
+    }
+
     public function updateTenantConfigs(int $tenantId, array $configs)
     {
         foreach ($configs as $chave => $valor) {

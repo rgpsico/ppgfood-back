@@ -88,10 +88,15 @@ class OrderApiController extends Controller
 
     public function show($identify)
     {
+
         if (!$order = $this->orderService->getOrderByIdentify($identify)) {
             return response()->json(['message' => 'Not Found'], 404);
         }
+        $tenantId = $order->tenant_id;
 
+        $valorConfigSeEEntregador = $this->configService->getTenantConfigsByIdTentant($tenantId);
+
+        $order['eEntregador'] = $valorConfigSeEEntregador->valor ?? 0;
         return new OrderResource($order);
     }
 
