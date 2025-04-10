@@ -106,4 +106,17 @@ class OrderApiController extends Controller
 
         return OrderResource::collection($orders);
     }
+
+
+
+    public function getUuidByCompanyUrl($url)
+    {
+        $tenant = Tenant::where('url', $url)->first();
+
+        if (!$tenant) {
+            return response()->json(['message' => 'Empresa não encontrada'], 404);
+        }
+
+        return response()->json(['uuid' => $tenant->uuid]);
+    }
 }

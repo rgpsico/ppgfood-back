@@ -44,11 +44,14 @@ Route::group([
     // Route::get('/products/{identify}/teste', 'ProductApiController@productsByTenantId');
     Route::get('/products', 'ProductApiController@productsByTenant');
 
+
+
+
     Route::post('/orders', 'OrderApiController@store');
     Route::get('/orders/{identify}', 'OrderApiController@show');
 });
 
-
+Route::get('/empresa/{url}/uuid', 'Api\ProductApiController@getUuidByCompanyUrl');
 
 
 Route::group([
