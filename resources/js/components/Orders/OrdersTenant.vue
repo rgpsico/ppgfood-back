@@ -228,6 +228,8 @@ window.Echo.channel('order-created.'+tenantId)
 
     .status-canceled {
         background-color: gray;
+
+        
     }
 
     .status-delivering {
