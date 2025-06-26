@@ -29,6 +29,7 @@ class ProductApiController extends Controller
         return ProductResourceFront::collection($products);
     }
 
+
     public function show(TenantFormRequest $request, $identify)
     {
         if (!$product = $this->productService->getProductByUuid($identify)) {
