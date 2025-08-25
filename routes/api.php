@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\ConfiguracoesController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BatePapoController;
+use App\Http\Controllers\Api\ClientController;
 use App\Http\Controllers\Api\EntregaController;
 use App\Http\Controllers\Api\NotificacaoController;
 use App\Http\Controllers\Api\PedidoController;
@@ -43,6 +44,12 @@ Route::group([
     Route::get('/products/{identify}', 'ProductApiController@show');
     // Route::get('/products/{identify}/teste', 'ProductApiController@productsByTenantId');
     Route::get('/products', 'ProductApiController@productsByTenant');
+
+       // Listar todos os clientes
+    Route::get('clientes', [ClientController::class, 'index']);
+
+    // Buscar cliente pelo ID
+    Route::get('clientes/{id}', [ClientController::class, 'show']);
 
 
 
@@ -105,6 +112,9 @@ Route::get('usuarios/{id}', 'Api\UsuarioController@show'); // Mostrar um
 Route::put('usuarios/{id}', 'Api\UsuarioController@update'); // Atualizar
 Route::delete('usuarios/{id}', 'Api\UsuarioController@destroy'); // Deletar
 
+
+
+
 Route::get('entregas', 'Api\EntregaController@index');
 Route::post('entregas', 'Api\EntregaController@store');
 Route::get('entregas/{id}', 'Api\EntregaController@show');
@@ -126,7 +136,7 @@ Route::put('notificacoes/{id}', 'Api\NotificacaoController@update');
 Route::delete('notificacoes/{id}', 'Api\NotificacaoController@destroy');
 
 
-Route::apiResource('usuarios', UsuarioController::class);
+// Route::apiResource('usuarios', UsuarioController::class);
 Route::post('register', 'Api\AuthController@register');
 Route::post('login', 'Api\AuthController@login');
 Route::post('logout', 'Api\AuthController@logout')->middleware('auth:sanctum');

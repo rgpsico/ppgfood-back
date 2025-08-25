@@ -14,6 +14,7 @@ class UsuarioController extends Controller
     // Listar todos os usuários
     public function index()
     {
+        
         return response()->json(Usuario::all());
     }
 
