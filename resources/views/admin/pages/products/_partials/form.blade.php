@@ -26,7 +26,22 @@
     <input type="number" name="stock" class="form-control" placeholder="Quantidade disponível" value="{{ $product->stock ?? old('stock') }}" min="0">
 </div>
 
+
+{{-- Ativar / Desativar Produto --}}
+<div class="form-group">
+    <label>
+        {{-- Campo hidden para enviar 0 se o checkbox não estiver marcado --}}
+        <input type="hidden" name="active" value="0">
+        <input type="checkbox" name="active" value="1"
+            {{ isset($product) && $product->active ? 'checked' : '' }}>
+        Produto ativo
+    </label>
+</div>
+
+
 {{-- Categorias --}}
+
+
 <div class="form-group">
     <label>Categorias:</label>
     <div class="row">

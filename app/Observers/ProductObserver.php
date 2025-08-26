@@ -30,12 +30,14 @@ class ProductObserver
         $product->flag = Str::kebab($product->title);
     }
 
-    public function saving(Product $product)
-    {
-        if ($product->stock <= 0) {
-            $product->active = false;
-        } else {
-            $product->active = true;
-        }
+  public function saving(Product $product)
+{
+    // Se o estoque for 0, força desativar
+    if ($product->stock <= 0) {
+        $product->active = false;
     }
+    // Se o estoque > 0, não sobrescreve o valor manual de active
+    // Ou seja, o admin pode desativar manualmente mesmo com estoque
+}
+
 }
