@@ -33,8 +33,15 @@ class OrderApiController extends Controller
     public function store(StoreOrder $request)
     {
 
-        dd("aaa");
-        $order = $this->orderService->createNewOrder($request->all());
+        
+     $order = $this->orderService->createNewOrder($request->all());
+
+    // Diminuir estoque de cada produto do pedido
+    foreach ($order->products as $productOrder) {
+        $product = $productOrder->product; // Objeto Product
+        $product->decrement('stock', $productOrder->quantity); 
+        // O Observer que criamos antes vai automaticamente atualizar 'active' se stock <= 0
+    }
 
         $getTenantByUuid = $this->tenantService->getTenantByUuid($request->token_company);
 
@@ -53,6 +60,7 @@ class OrderApiController extends Controller
         if ($request->payment_method == 'PIX') {
             return $this->asaasService->criarPagamentoComPix($request);
         }
+        
 
 
         $result =  new OrderResource($order);
