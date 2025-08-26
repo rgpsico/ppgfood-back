@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
+use Illuminate\Support\Facades\DB;
 
 class OrderApiController extends Controller
 {
@@ -34,15 +35,26 @@ class OrderApiController extends Controller
     {
 
         
-     $order = $this->orderService->createNewOrder($request->all());
+   $order = $this->orderService->createNewOrder($request->all())->load('products');
 
-    // Diminuir estoque de cada produto do pedido
-    foreach ($order->products as $productOrder) {
-        $product = $productOrder->product; // Objeto Product
-        $product->decrement('stock', $productOrder->quantity); 
-        // O Observer que criamos antes vai automaticamente atualizar 'active' se stock <= 0
-    }
+            // Update stock in a transaction
+            DB::transaction(function () use ($order) {
+                foreach ($order->products as $product) {
+                    // Ensure the product exists and has sufficient stock
+                    if ($product && $product->stock >= $product->pivot->qty) {
+                        $product->decrement('stock', $product->pivot->qty);
+                    } else {
+                        // Log and throw an error if stock is insufficient or product is null
+                        $errorMessage = $product ? 
+                            "Insufficient stock for product ID: {$product->id}. Requested: {$product->pivot->qty}, Available: {$product->stock}" :
+                            "Product is null for order ID: {$order->id}";
+                        // \Log::error($errorMessage);
+                        throw new \Exception($errorMessage);
+                    }
+                }
+            });
 
+     
         $getTenantByUuid = $this->tenantService->getTenantByUuid($request->token_company);
 
         $tenantId = $getTenantByUuid->id;
