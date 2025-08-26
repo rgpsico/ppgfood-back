@@ -152,6 +152,8 @@ class ProductController extends Controller
             $product->categories()->sync([]); // remove todas se nenhuma marcada
         }
 
+        
+
         return redirect()->route('products.index')->with('success', 'Produto atualizado com sucesso!');
     }
 
