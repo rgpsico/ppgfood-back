@@ -33,6 +33,7 @@ class OrderApiController extends Controller
     public function store(StoreOrder $request)
     {
 
+        dd("aaa");
         $order = $this->orderService->createNewOrder($request->all());
 
         $getTenantByUuid = $this->tenantService->getTenantByUuid($request->token_company);
