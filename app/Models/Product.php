@@ -9,7 +9,13 @@ class Product extends Model
 {
     use TenantTrait;
 
-    protected $fillable = ['title', 'flag', 'price', 'description', 'image'];
+   protected $fillable = ['title', 'flag', 'price', 'description', 'image', 'stock', 'active'];
+
+
+    public function scopeAvailable($query)
+    {
+        return $query->where('stock', '>', 0)->where('active', true);
+    }
 
 
     public function categories()

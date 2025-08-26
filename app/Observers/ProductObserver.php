@@ -29,4 +29,13 @@ class ProductObserver
     {
         $product->flag = Str::kebab($product->title);
     }
+
+    public function saving(Product $product)
+    {
+        if ($product->stock <= 0) {
+            $product->active = false;
+        } else {
+            $product->active = true;
+        }
+    }
 }

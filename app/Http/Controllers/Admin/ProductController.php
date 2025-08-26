@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Category;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUpdateProduct;
 use App\Models\Product;
@@ -37,8 +38,13 @@ class ProductController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {
-        return view('admin.pages.products.create');
+    { 
+        $tenant = auth()->user()->tenant;
+
+        $categories = Category::where('tenant_id', $tenant->id)->get();
+
+        return view('admin.pages.products.create', compact('categories'));
+       
     }
 
     /**
@@ -53,14 +59,22 @@ class ProductController extends Controller
 
         $tenant = auth()->user()->tenant;
 
+        // Salvar imagem se existir
         if ($request->hasFile('image') && $request->image->isValid()) {
             $data['image'] = $request->image->store("tenants/{$tenant->uuid}/products");
         }
 
-        $this->repository->create($data);
+        // Criar produto
+        $product = $this->repository->create($data);
+
+        // Vincular categorias selecionadas
+        if ($request->has('categories')) {
+            $product->categories()->sync($request->categories);
+        }
 
         return redirect()->route('products.index');
     }
+
 
     /**
      * Display the specified resource.
@@ -83,13 +97,23 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+   public function edit($id)
     {
+        // Buscar o produto
         if (!$product = $this->repository->find($id)) {
             return redirect()->back();
         }
 
-        return view('admin.pages.products.edit', compact('product'));
+        // Buscar todas as categorias
+       $tenant = auth()->user()->tenant;
+
+        $categories = Category::where('tenant_id', $tenant->id)->get();
+
+        // IDs das categorias que o produto já possui
+        $productCategories = $product->categories->pluck('id')->toArray();
+
+        // Enviar dados para a view
+        return view('admin.pages.products.edit', compact('product', 'categories', 'productCategories'));
     }
 
 
@@ -108,22 +132,29 @@ class ProductController extends Controller
         }
 
         $data = $request->all();
-
         $tenant = auth()->user()->tenant;
 
+        // Atualizar imagem se houver
         if ($request->hasFile('image') && $request->image->isValid()) {
-
             if (Storage::exists($product->image)) {
                 Storage::delete($product->image);
             }
-
             $data['image'] = $request->image->store("tenants/{$tenant->uuid}/products");
         }
 
+        // Atualizar produto
         $product->update($data);
 
-        return redirect()->route('products.index');
+        // Atualizar categorias vinculadas
+        if ($request->has('categories')) {
+            $product->categories()->sync($request->categories);
+        } else {
+            $product->categories()->sync([]); // remove todas se nenhuma marcada
+        }
+
+        return redirect()->route('products.index')->with('success', 'Produto atualizado com sucesso!');
     }
+
 
     /**
      * Remove the specified resource from storage.
