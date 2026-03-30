@@ -121,7 +121,7 @@ class RegisterController extends Controller
             
             //$id_assas = $this->assasService->createCustomerLoja($data);
 
-            // $validatedData['asaas_key'] = $id_assas;
+             $validatedData['asaas_key'] = null;
 
 
             $plan = session('plan');
