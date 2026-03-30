@@ -117,9 +117,11 @@ class RegisterController extends Controller
                 'empresa' => ['required', 'string', 'min:3', 'max:255', 'unique:tenants,name'],
                 'cnpj' => ['required', 'numeric', 'unique:tenants']
             ]);
-            $id_assas = $this->assasService->createCustomerLoja($data);
+            
+            
+            //$id_assas = $this->assasService->createCustomerLoja($data);
 
-            $validatedData['asaas_key'] = $id_assas;
+            // $validatedData['asaas_key'] = $id_assas;
 
 
             $plan = session('plan');
