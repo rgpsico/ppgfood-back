@@ -20,7 +20,8 @@ class ProductResourceFront extends JsonResource
             'title' => $this->title,
             'image' => preg_match('/^https?:\/\//i', (string) $this->image) ? $this->image : url("storage/{$this->image}"),
             'price' => $this->price,
-            'description' => $this->description
+            'description' => $this->description,
+            'stock' => $this->stock,
         ];
     }
 }
