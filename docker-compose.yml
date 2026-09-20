@@ -1,66 +1,75 @@
-version: '3'
 services:
 
-  # PHP Application
-  app:
+  # ─── API Laravel ──────────────────────────────────────────────────
+  api:
     build:
       context: .
-      dockerfile: Dockerfile
-    image: sua-imagem-laravel
-    container_name: app
-    restart: unless-stopped
-    tty: true
-    environment:
-      SERVICE_NAME: app
-      SERVICE_TAGS: dev
+      dockerfile: docker/php/Dockerfile
+    container_name: ppgfood_api
+    volumes:
+      - ./:/var/www
     working_dir: /var/www
-    volumes:
-      - ./:/var/www
-      - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    depends_on:
+      - mysql
+      - redis
     networks:
-      - app-network
+      - ppgfood_net
+      - proxy_net
 
-  # Nginx Service
-  webserver:
+  nginx:
     image: nginx:alpine
-    container_name: webserver
-    restart: unless-stopped
-    tty: true
+    container_name: ppgfood_api_nginx
     ports:
-      - "80:80"
-      - "443:443"
+      - "8080:80"
     volumes:
       - ./:/var/www
-      - ./nginx/conf.d/:/etc/nginx/conf.d/
+      - ./docker/nginx/api.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - api
     networks:
-      - app-network
+      - ppgfood_net
+      - proxy_net
 
-  # MySQL Service (optional)
-  db:
-    image: mysql:5.7
-    container_name: db
-    restart: unless-stopped
-    tty: true
+  # ─── Websocket (Laravel Echo Server) ──────────────────────────────
+  echo:
+    build:
+      context: .
+      dockerfile: docker/node/Dockerfile
+    container_name: ppgfood_echo
     ports:
-      - "3306:3306"
-    environment:
-      MYSQL_DATABASE: laravel
-      MYSQL_USER: root
-      MYSQL_PASSWORD: "157121214"
-      MYSQL_ROOT_PASSWORD: "157121214"
-      SERVICE_TAGS: dev
-      SERVICE_NAME: mysql
-    volumes:
-      - dbdata:/var/lib/mysql/
+      - "6001:6001"
+    depends_on:
+      - redis
     networks:
-      - app-network
+      - ppgfood_net
 
-# Volumes
-volumes:
-  dbdata:
-    driver: local
+  # ─── Banco de dados ───────────────────────────────────────────────
+  mysql:
+    image: mysql:8.0
+    container_name: ppgfood_mysql
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE:-ppgfood}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root}
+      MYSQL_USER: ${DB_USERNAME:-ppgfood}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-secret}
+    ports:
+      - "3310:3306"
+    volumes:
+      - ppgfood_mysql_data:/var/lib/mysql
+    networks:
+      - ppgfood_net
 
-# Networks
+  redis:
+    image: redis:7-alpine
+    container_name: ppgfood_redis
+    networks:
+      - ppgfood_net
+
 networks:
-  app-network:
+  ppgfood_net:
     driver: bridge
+  proxy_net:
+    external: true
+
+volumes:
+  ppgfood_mysql_data:

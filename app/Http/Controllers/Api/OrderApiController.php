@@ -61,7 +61,7 @@ class OrderApiController extends Controller
 
         $configSEEntregador = $this->configService->getTenantConfigs($request->token_company);
 
-        $order['eEntregador'] = (int) $configSEEntregador->valor;
+        $order['eEntregador'] = $configSEEntregador ? (int) $configSEEntregador->valor : 0;
 
         event(new OrderCreated($order));
 

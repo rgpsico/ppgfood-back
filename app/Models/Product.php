@@ -17,6 +17,23 @@ class Product extends Model
         return $query->where('stock', '>', 0)->where('active', true);
     }
 
+    /**
+     * Resolve a URL para a imagem do produto, aceitando tanto um arquivo
+     * salvo em storage/ quanto um link externo direto.
+     */
+    public function getImageUrlAttribute(): string
+    {
+        if (! $this->image) {
+            return '';
+        }
+
+        if (preg_match('/^https?:\/\//i', $this->image)) {
+            return $this->image;
+        }
+
+        return url("storage/{$this->image}");
+    }
+
 
     public function categories()
     {

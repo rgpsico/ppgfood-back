@@ -1,37 +1,36 @@
 {
-	"authHost": "admin.rjpasseios.com.br",
-	"authEndpoint": "broadcasting/auth",
+	"authHost": "http://ppgfood_api_nginx",
+	"authEndpoint": "/broadcasting/auth",
 	"clients": [
 		{
-			"appId": "bcb571a63b8841ce",
-			"key": "7375789f1b80e8ce6cc6de011dea05b7"
+			"appId": "ppgfood",
+			"key": "ppgfood_local_key_change_me"
 		}
 	],
 	"database": "redis",
 	"databaseConfig": {
-		"redis": {},
-		"sqlite": {
-			"databasePath": "/database/laravel-echo-server.sqlite"
+		"redis": {
+			"host": "ppgfood_redis",
+			"port": "6379"
 		}
 	},
 	"devMode": true,
 	"host": null,
 	"port": "6001",
-	"protocol": "https",
+	"protocol": "http",
 	"socketio": {},
 	"secureOptions": 67108864,
-	"sslCertPath": "/etc/letsencrypt/live/admin.rjpasseios.com.br/fullchain.pem",
-
-	"sslKeyPath": " /etc/letsencrypt/live/admin.rjpasseios.com.br/privkey.pem",
+	"sslCertPath": "",
+	"sslKeyPath": "",
 	"sslCertChainPath": "",
 	"sslPassphrase": "",
 	"subscribers": {
 		"http": true,
 		"redis": true
 	},
-	"adminOriginAllow": {
+	"apiOriginAllow": {
 		"allowCors": true,
-		"allowOrigin": "admin.rjpasseios.com.br",
+		"allowOrigin": "*",
 		"allowMethods": "GET, POST",
 		"allowHeaders": "Origin, Content-Type, X-Auth-Token, X-Requested-With, Accept, Authorization, X-CSRF-TOKEN, X-Socket-Id"
 	}

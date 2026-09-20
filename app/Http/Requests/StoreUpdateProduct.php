@@ -35,12 +35,17 @@ class StoreUpdateProduct extends FormRequest
                 new UniqueTenant('products', $id),
             ],
             'description' => ['required', 'min:3', 'max:500'],
-            'image' => ['required', 'image'],
+            // Aceita tanto upload de arquivo quanto um link direto da imagem
+            'image' => $this->hasFile('image')
+                ? ['required', 'image']
+                : ['required', 'string', 'url', 'max:2048'],
             'price' => "required|regex:/^\d+(\.\d{1,2})?$/",
         ];
 
         if ($this->method() == 'PUT') {
-            $rules['image'] = ['nullable', 'image'];
+            $rules['image'] = $this->hasFile('image')
+                ? ['nullable', 'image']
+                : ['nullable', 'string', 'url', 'max:2048'];
         }
 
         return $rules;

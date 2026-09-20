@@ -21,7 +21,7 @@ class ConfigService
     public function getTenantConfigs($uuid)
     {
 
-        $tenant = $this->tenantService->getTenantByUuid($uuid)->first();
+        $tenant = $this->tenantService->getTenantByUuid($uuid);
 
         if (!$tenant) {
             return null;

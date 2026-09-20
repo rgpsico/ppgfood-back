@@ -18,7 +18,7 @@ class ProductResource extends JsonResource
             'identify' => $this->uuid,
             'flag' => $this->flag,
             'title' => $this->title,
-            'image' => url("storage/{$this->image}"),
+            'image' => preg_match('/^https?:\/\//i', (string) $this->image) ? $this->image : url("storage/{$this->image}"),
             'price' => $this->price,
             'description' => $this->description,
             'quantity' => $this->whenPivotLoaded('order_product', function () {

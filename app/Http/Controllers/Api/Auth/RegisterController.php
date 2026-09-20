@@ -8,6 +8,7 @@ use App\Http\Resources\ClientResource;
 use App\Services\AsaasService;
 use App\Services\ClientService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class RegisterController extends Controller
 {
@@ -22,15 +23,24 @@ class RegisterController extends Controller
 
     public function store(StoreClient $request)
     {
-        // Criar cliente no Asaas
-        $criarClienteAsaas = $this->assasService->createCustomer($request);
+        // Criar cliente no Asaas (não bloqueia o cadastro caso falhe)
+        $asaasId = null;
 
-        if (!$criarClienteAsaas->successful()) {
-            return response()->json(['error' => 'Não foi possível criar o cliente no Asaas'], 500);
+        try {
+            $criarClienteAsaas = $this->assasService->createCustomer($request);
+
+            if ($criarClienteAsaas->successful()) {
+                $asaasId = $criarClienteAsaas['id'];
+            } else {
+                Log::warning('Falha ao criar cliente no Asaas, prosseguindo sem asaas_key', [
+                    'response' => $criarClienteAsaas->body(),
+                ]);
+            }
+        } catch (\Throwable $e) {
+            Log::warning('Exceção ao criar cliente no Asaas, prosseguindo sem asaas_key', [
+                'message' => $e->getMessage(),
+            ]);
         }
-
-        // Pegar o ID retornado do Asaas
-        $asaasId = $criarClienteAsaas['id'];
 
         $requestData = $request->all();
         $requestData['asaas_key'] = $asaasId;
