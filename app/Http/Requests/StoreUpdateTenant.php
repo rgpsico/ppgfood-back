@@ -29,7 +29,12 @@ class StoreUpdateTenant extends FormRequest
             'name' => ['required', 'min:3', 'max:255', "unique:tenants,name,{$id},id"],
             'email' => ['required', 'min:3', 'max:255', "unique:tenants,email,{$id},id"],
             'cnpj' => ['required', 'digits:14', "unique:tenants,cnpj,{$id},id"],
+            // Aceita tanto upload de arquivo quanto um link direto da imagem
             'logo' => ['nullable', 'image'],
+            'logo_url' => ['nullable', 'string', 'url', 'max:2048'],
+            'cover_image' => ['nullable', 'image'],
+            'cover_image_url' => ['nullable', 'string', 'url', 'max:2048'],
+            'location_label' => ['nullable', 'string', 'max:255'],
             'active' => ['required', 'in:Y,N'],
 
             // subscription

@@ -13,6 +13,8 @@ class Tenant extends Model
         'url',
         'email',
         'logo',
+        'cover_image',
+        'location_label',
         'active',
         'subscription',
         'expires_at',
@@ -42,6 +44,23 @@ class Tenant extends Model
         }
 
         return url("storage/{$this->logo}");
+    }
+
+    /**
+     * Resolve a URL da capa, aceitando tanto um arquivo salvo em storage/
+     * quanto um link externo direto.
+     */
+    public function getCoverImageUrlAttribute(): string
+    {
+        if (! $this->cover_image) {
+            return '';
+        }
+
+        if (preg_match('/^https?:\/\//i', $this->cover_image)) {
+            return $this->cover_image;
+        }
+
+        return url("storage/{$this->cover_image}");
     }
 
     public function plan()

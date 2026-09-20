@@ -5,8 +5,26 @@
     <input type="text" name="name" class="form-control" placeholder="Nome:" value="{{ $tenant->name ?? old('name') }}">
 </div>
 <div class="form-group">
-    <label>Logo:</label>
+    <label>Logo (upload):</label>
     <input type="file" name="logo" class="form-control">
+    <small class="form-text text-muted">Ou informe um link direto no campo abaixo (não preencha os dois).</small>
+</div>
+<div class="form-group">
+    <label>Logo (link direto):</label>
+    <input type="url" name="logo_url" class="form-control" placeholder="https://..." value="{{ (isset($tenant) && !str_starts_with($tenant->logo ?? '', 'tenants/')) ? $tenant->logo : old('logo_url') }}">
+</div>
+<div class="form-group">
+    <label>Foto de capa (upload):</label>
+    <input type="file" name="cover_image" class="form-control">
+    <small class="form-text text-muted">Ou informe um link direto no campo abaixo (não preencha os dois).</small>
+</div>
+<div class="form-group">
+    <label>Foto de capa (link direto):</label>
+    <input type="url" name="cover_image_url" class="form-control" placeholder="https://..." value="{{ (isset($tenant) && !str_starts_with($tenant->cover_image ?? '', 'tenants/')) ? $tenant->cover_image : old('cover_image_url') }}">
+</div>
+<div class="form-group">
+    <label>Localização / tagline:</label>
+    <input type="text" name="location_label" class="form-control" placeholder="Ex: Rio de Janeiro • Pé na areia" value="{{ $tenant->location_label ?? old('location_label') }}">
 </div>
 <div class="form-group">
     <label>* E-mail:</label>

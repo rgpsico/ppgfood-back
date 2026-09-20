@@ -108,6 +108,19 @@ class TenantController extends Controller
             }
 
             $data['logo'] = $request->logo->store("tenants/{$tenant->uuid}");
+        } elseif ($request->filled('logo_url')) {
+            $data['logo'] = $request->logo_url;
+        }
+
+        if ($request->hasFile('cover_image') && $request->cover_image->isValid()) {
+
+            if (Storage::exists($tenant->cover_image)) {
+                Storage::delete($tenant->cover_image);
+            }
+
+            $data['cover_image'] = $request->cover_image->store("tenants/{$tenant->uuid}");
+        } elseif ($request->filled('cover_image_url')) {
+            $data['cover_image'] = $request->cover_image_url;
         }
 
         $tenant->update($data);
