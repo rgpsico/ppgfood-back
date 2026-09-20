@@ -4,7 +4,7 @@ import Bus from './bus'
 // get id tenant
 const tenantId = window.Laravel.tenantId;
 
-window.Echo.channel(`order-created`)
+window.Echo.channel(`order-created.${tenantId}`)
 .listen('OrderCreated', (e) => {
    console.log(e)
     Vue.$vToastify.success(`Novo pedido ${e.order.identify}`, 'Novo Pedido')
