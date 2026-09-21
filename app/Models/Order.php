@@ -11,6 +11,11 @@ class Order extends Model
 
     protected $fillable = ['tenant_id', 'identify', 'client_id', 'table_id', 'total', 'status', 'comment', 'codigo_entrega'];
 
+    // Status em que o cliente ainda esta esperando algo acontecer com o pedido
+    const ACTIVE_STATUSES = ['open', 'working', 'delivering'];
+
+    const DELIVERED_STATUS = 'done';
+
     /**
      * Options status
      */

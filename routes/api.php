@@ -75,6 +75,8 @@ Route::group([
     Route::get('/staff/me', 'Auth\AuthStaffController@me');
     Route::post('/staff/logout', 'Auth\AuthStaffController@logout');
     Route::get('/staff/orders-board', 'OrderApiController@board');
+    Route::get('/staff/orders', 'OrderApiController@index');
+    Route::patch('/staff/orders/{identify}/status', 'OrderApiController@updateStatus');
 });
 
 Route::get('v1/configuracao/get/{uuid}', [ConfiguracoesController::class, 'getConfig'])->name('getConfig');

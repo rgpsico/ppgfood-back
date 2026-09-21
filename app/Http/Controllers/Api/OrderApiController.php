@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\StoreOrder;
 use App\Http\Requests\Api\TenantFormRequest;
 use App\Http\Resources\OrderResource;
+use App\Models\Order;
 use App\Models\Table;
 use App\Services\AsaasService;
 use App\Services\ClientService;
@@ -21,9 +22,6 @@ use Illuminate\Support\Facades\DB;
 
 class OrderApiController extends Controller
 {
-    // Status em que o cliente ainda esta esperando algo acontecer com o pedido
-    const ACTIVE_STATUSES = ['open', 'working', 'delivering'];
-
     protected $orderService, $asaasService, $tenantService, $configService;
 
     public function __construct(ConfigService $configService, TenantService $tenantService, OrderService $orderService, AsaasService $asaasService)
@@ -141,7 +139,7 @@ class OrderApiController extends Controller
     public function board()
     {
         $tables = Table::with(['orders' => function ($query) {
-            $query->whereIn('status', self::ACTIVE_STATUSES)
+            $query->whereIn('status', Order::ACTIVE_STATUSES)
                 ->with('products', 'client')
                 ->latest();
         }])->get();
@@ -158,12 +156,47 @@ class OrderApiController extends Controller
         });
 
         $ordersWithoutTable = $this->orderService
-            ->ordersActiveWithoutTable(self::ACTIVE_STATUSES);
+            ->ordersActiveWithoutTable(Order::ACTIVE_STATUSES);
 
         return response()->json([
             'tables' => $tablesData,
             'orders_without_table' => OrderResource::collection($ordersWithoutTable),
         ]);
+    }
+
+    /**
+     * Lista de pedidos com filtro por status (pendente/entregue/todos)
+     * e por guarda-sol/cadeira - usado na tela de historico/filtros do painel.
+     */
+    public function index(Request $request)
+    {
+        $orders = $this->orderService->ordersFiltered(
+            $request->query('status', 'all'),
+            $request->query('table')
+        );
+
+        return OrderResource::collection($orders);
+    }
+
+    /**
+     * Atualiza o status de um pedido a partir do painel de recebimento.
+     * O painel so trabalha com dois estados: pedido pendente (open) ou
+     * entregue (done) - os demais status (rejeitado/cancelado/etc) continuam
+     * sendo geridos pelo admin Blade.
+     */
+    public function updateStatus(Request $request, $identify)
+    {
+        $request->validate([
+            'status' => 'required|in:open,done',
+        ]);
+
+        $order = $this->orderService->updateStatusOrder($identify, $request->status);
+
+        if (!$order) {
+            return response()->json(['message' => 'Pedido não encontrado'], 404);
+        }
+
+        return new OrderResource($order->load('products', 'client', 'table'));
     }
 
     public function getUuidByCompanyUrl($url)

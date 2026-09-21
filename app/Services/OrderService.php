@@ -178,4 +178,22 @@ class OrderService
             ->latest()
             ->get();
     }
+
+    public function ordersFiltered(string $status = 'all', string $tableUuid = null)
+    {
+        $query = Order::with('products', 'client', 'table')->latest();
+
+        if ($status === 'delivered') {
+            $query->where('status', Order::DELIVERED_STATUS);
+        } elseif ($status === 'pending') {
+            $query->whereIn('status', Order::ACTIVE_STATUSES);
+        }
+
+        if ($tableUuid) {
+            $table = $this->tableRepository->getTableByUuid($tableUuid);
+            $query->where('table_id', $table ? $table->id : 0);
+        }
+
+        return $query->get();
+    }
 }
