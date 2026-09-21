@@ -151,6 +151,8 @@ class OrderApiController extends Controller
                 'identify' => $table->uuid,
                 'name' => $table->identify,
                 'description' => $table->description,
+                'position_x' => $table->position_x,
+                'position_y' => $table->position_y,
                 'order' => $order ? new OrderResource($order) : null,
             ];
         });

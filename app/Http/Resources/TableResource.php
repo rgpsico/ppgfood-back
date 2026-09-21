@@ -18,6 +18,8 @@ class TableResource extends JsonResource
             'identify' => $this->uuid,
             'name' => $this->identify,
             'description' => $this->description,
+            'position_x' => $this->position_x,
+            'position_y' => $this->position_y,
         ];
     }
 }
