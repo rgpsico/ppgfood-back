@@ -1,9 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', "Editar a mesa {$table->identify}")
+@section('title', "Editar {$table->identify}")
 
 @section('content_header')
-    <h1>Editar a mesa {{ $table->identify }}</h1>
+    <h1>Editar {{ $table->identify }}</h1>
 @stop
 
 @section('content')

@@ -1,14 +1,14 @@
 @extends('adminlte::page')
 
-@section('title', 'Mesas')
+@section('title', 'Guarda-sóis / Cadeiras')
 
 @section('content_header')
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Dashboard</a></li>
-        <li class="breadcrumb-item active"><a href="{{ route('tables.index') }}" class="active">Mesas</a></li>
+        <li class="breadcrumb-item active"><a href="{{ route('tables.index') }}" class="active">Guarda-sóis / Cadeiras</a></li>
     </ol>
 
-    <h1>Mesas <a href="{{ route('tables.create') }}" class="btn btn-dark">ADD</a></h1>
+    <h1>Guarda-sóis / Cadeiras <a href="{{ route('tables.create') }}" class="btn btn-dark">ADD</a></h1>
 @stop
 
 @section('content')
@@ -24,7 +24,7 @@
             <table class="table table-condensed">
                 <thead>
                     <tr>
-                        <th>Identify</th>
+                        <th>Identificador</th>
                         <th>Descrição</th>
                         <th width="190">Ações</th>
                     </tr>

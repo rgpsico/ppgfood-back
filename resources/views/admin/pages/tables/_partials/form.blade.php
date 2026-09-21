@@ -1,8 +1,8 @@
 @include('admin.includes.alerts')
 
 <div class="form-group">
-    <label>Identificador da Mesa:</label>
-    <input type="text" name="identify" class="form-control" placeholder="Identificador da Mesa:" value="{{ $table->identify ?? old('identify') }}">
+    <label>Identificador do Guarda-sol / Cadeira:</label>
+    <input type="text" name="identify" class="form-control" placeholder="Ex: Guarda-sol 12" value="{{ $table->identify ?? old('identify') }}">
 </div>
 <div class="form-group">
     <label>Descrição:</label>

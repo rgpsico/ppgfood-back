@@ -253,9 +253,9 @@ return [
             ],
         ],
         [
-            'text' => 'Mesas',
+            'text' => 'Guarda-sóis / Cadeiras',
             'url'  => 'admin/tables',
-            'icon' => 'fas fa-tablet',
+            'icon' => 'fas fa-umbrella-beach',
             'can'  => 'tables',
         ],
         [

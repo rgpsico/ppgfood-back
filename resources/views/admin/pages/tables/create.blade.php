@@ -1,9 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', 'Cadastrar Nova Mesa')
+@section('title', 'Cadastrar Guarda-sol / Cadeira')
 
 @section('content_header')
-    <h1>Cadastrar Nova Mesa</h1>
+    <h1>Cadastrar Guarda-sol / Cadeira</h1>
 @stop
 
 @section('content')
