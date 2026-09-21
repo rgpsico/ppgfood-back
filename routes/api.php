@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\Route;
 Route::post('/auth/register', 'Api\Auth\RegisterController@store');
 Route::post('/auth/token', 'Api\Auth\AuthClientController@auth');
 
+// Login do painel de recebimento de pedidos (staff/tenant, nao cliente)
+Route::post('/staff/login', 'Api\Auth\AuthStaffController@login');
+
 Route::group([
     'middleware' => ['auth:sanctum']
 ], function () {
@@ -68,6 +71,10 @@ Route::group([
 ], function () {
 
     Route::post('/orders', 'OrderApiController@store');
+
+    Route::get('/staff/me', 'Auth\AuthStaffController@me');
+    Route::post('/staff/logout', 'Auth\AuthStaffController@logout');
+    Route::get('/staff/orders-board', 'OrderApiController@board');
 });
 
 Route::get('v1/configuracao/get/{uuid}', [ConfiguracoesController::class, 'getConfig'])->name('getConfig');

@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\StoreOrder;
 use App\Http\Requests\Api\TenantFormRequest;
 use App\Http\Resources\OrderResource;
+use App\Models\Table;
 use App\Services\AsaasService;
 use App\Services\ClientService;
 use App\Services\ConfigService;
@@ -20,6 +21,9 @@ use Illuminate\Support\Facades\DB;
 
 class OrderApiController extends Controller
 {
+    // Status em que o cliente ainda esta esperando algo acontecer com o pedido
+    const ACTIVE_STATUSES = ['open', 'working', 'delivering'];
+
     protected $orderService, $asaasService, $tenantService, $configService;
 
     public function __construct(ConfigService $configService, TenantService $tenantService, OrderService $orderService, AsaasService $asaasService)
@@ -129,6 +133,38 @@ class OrderApiController extends Controller
     }
 
 
+
+    /**
+     * Painel de recebimento: guarda-sois/cadeiras com o pedido ativo
+     * de cada um (se houver), mais os pedidos ativos sem mesa (delivery/retirada).
+     */
+    public function board()
+    {
+        $tables = Table::with(['orders' => function ($query) {
+            $query->whereIn('status', self::ACTIVE_STATUSES)
+                ->with('products', 'client')
+                ->latest();
+        }])->get();
+
+        $tablesData = $tables->map(function ($table) {
+            $order = $table->orders->first();
+
+            return [
+                'identify' => $table->uuid,
+                'name' => $table->identify,
+                'description' => $table->description,
+                'order' => $order ? new OrderResource($order) : null,
+            ];
+        });
+
+        $ordersWithoutTable = $this->orderService
+            ->ordersActiveWithoutTable(self::ACTIVE_STATUSES);
+
+        return response()->json([
+            'tables' => $tablesData,
+            'orders_without_table' => OrderResource::collection($ordersWithoutTable),
+        ]);
+    }
 
     public function getUuidByCompanyUrl($url)
     {

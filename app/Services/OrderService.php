@@ -169,4 +169,13 @@ class OrderService
     {
         return $this->orderRepository->updateStatusOrder($identify, $status);
     }
+
+    public function ordersActiveWithoutTable(array $statuses)
+    {
+        return Order::whereNull('table_id')
+            ->whereIn('status', $statuses)
+            ->with('products', 'client')
+            ->latest()
+            ->get();
+    }
 }

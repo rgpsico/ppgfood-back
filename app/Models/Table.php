@@ -10,4 +10,9 @@ class Table extends Model
     use TenantTrait;
 
     protected $fillable = ['identify', 'description'];
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
 }
