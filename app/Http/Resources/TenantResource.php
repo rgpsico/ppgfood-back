@@ -24,6 +24,7 @@ class TenantResource extends JsonResource
             'flag' => $this->url,
             'contact' => $this->email,
             'date_created' => Carbon::parse($this->created_at)->format('d/m/Y'),
+            'guest_checkout_enabled' => config_empresa('pedido_sem_login', $this->id) === '1',
         ];
     }
 }
