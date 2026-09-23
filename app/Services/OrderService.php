@@ -50,7 +50,7 @@ class OrderService
         $clientId = $this->getClientIdByOrder();
 
         if (!$clientId) {
-            $clientId = $order['client_id'];
+            $clientId = $order['client_id'] ?? null;
         }
 
         $tableId = $this->getTableIdByOrder($order['table'] ?? '');

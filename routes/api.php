@@ -70,7 +70,11 @@ Route::group([
     'namespace' => 'Api'
 ], function () {
 
-    Route::post('/orders', 'OrderApiController@store');
+    // NAO duplicar a rota POST /orders aqui: como o metodo+URI e
+    // identico a rota publica la em cima, o Laravel sobrescreve essa
+    // com essa, exigindo login pra TODO pedido - inclusive pra lojas
+    // com "pedido sem login" habilitado. Pedido usa token_company pra
+    // identificar a loja, entao autenticacao e opcional por design.
 
     Route::get('/staff/me', 'Auth\AuthStaffController@me');
     Route::post('/staff/logout', 'Auth\AuthStaffController@logout');
