@@ -86,6 +86,7 @@ Route::group([
     Route::get('/staff/orders', 'OrderApiController@index');
     Route::patch('/staff/orders/{identify}/status', 'OrderApiController@updateStatus');
     Route::patch('/staff/tables/{identify}/position', 'TableApiController@updatePosition');
+    Route::patch('/staff/tables/{identify}/beach-position', 'TableApiController@updateBeachPosition');
 });
 
 Route::get('v1/configuracao/get/{uuid}', [ConfiguracoesController::class, 'getConfig'])->name('getConfig');

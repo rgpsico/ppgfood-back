@@ -20,6 +20,8 @@ class TableResource extends JsonResource
             'description' => $this->description,
             'position_x' => $this->position_x,
             'position_y' => $this->position_y,
+            'beach_row' => $this->beach_row,
+            'beach_col' => $this->beach_col,
         ];
     }
 }

@@ -153,6 +153,8 @@ class OrderApiController extends Controller
                 'description' => $table->description,
                 'position_x' => $table->position_x,
                 'position_y' => $table->position_y,
+                'beach_row' => $table->beach_row,
+                'beach_col' => $table->beach_col,
                 'order' => $order ? new OrderResource($order) : null,
             ];
         });

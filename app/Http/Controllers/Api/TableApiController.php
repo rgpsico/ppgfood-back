@@ -61,4 +61,28 @@ class TableApiController extends Controller
 
         return new TableResource($table);
     }
+
+    /**
+     * Salva a posicao em linha/coluna (grade fixa) da visao "Praia" -
+     * diferente do mapa livre, funciona igual em qualquer tamanho de tela
+     * porque o numero de colunas nao muda por breakpoint.
+     */
+    public function updateBeachPosition(Request $request, $identify)
+    {
+        $request->validate([
+            'beach_row' => 'required|integer|min:0',
+            'beach_col' => 'required|integer|min:0',
+        ]);
+
+        if (!$table = Table::where('uuid', $identify)->first()) {
+            return response()->json(['message' => 'Table Not Found'], 404);
+        }
+
+        $table->update([
+            'beach_row' => $request->beach_row,
+            'beach_col' => $request->beach_col,
+        ]);
+
+        return new TableResource($table);
+    }
 }
