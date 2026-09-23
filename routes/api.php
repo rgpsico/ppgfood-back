@@ -19,6 +19,10 @@ Route::post('/auth/token', 'Api\Auth\AuthClientController@auth');
 // Login do painel de recebimento de pedidos (staff/tenant, nao cliente)
 Route::post('/staff/login', 'Api\Auth\AuthStaffController@login');
 
+// Cadastro rapido de novo barraqueiro: cria a barraca, o admin e os
+// guarda-sois de uma vez, ja devolvendo token pra cair direto no painel
+Route::post('/tenant/signup', 'Api\Auth\TenantSignupController@store');
+
 Route::group([
     'middleware' => ['auth:sanctum']
 ], function () {
