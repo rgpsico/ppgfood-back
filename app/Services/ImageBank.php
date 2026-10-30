@@ -28,6 +28,18 @@ class ImageBank
             ->baseUrl(rtrim((string) config('services.mediahub.url'), '/') . '/api/v1/integration');
     }
 
+    /** Cache é só um ganho de velocidade: se o disco de cache falhar (permissão, cheio), busca direto na API em vez de dar erro. */
+    private function cached(string $key, int $seconds, \Closure $fn)
+    {
+        try {
+            return Cache::remember($key, $seconds, $fn);
+        } catch (\ErrorException $e) {
+            report($e);
+
+            return $fn();
+        }
+    }
+
     /** @return list<string> nomes das pastas raiz liberadas para este sistema (vazio = todas) */
     private function allowedRoots(): array
     {
@@ -41,7 +53,7 @@ class ImageBank
      */
     public function collections(): array
     {
-        $all = collect(Cache::remember('imagebank:collections', 300, fn () => $this->http()->get('/collections')->throw()->json('data') ?? []));
+        $all = collect($this->cached('imagebank:collections', 300, fn () => $this->http()->get('/collections')->throw()->json('data') ?? []));
         $roots = $this->allowedRoots();
 
         if ($roots) {
@@ -77,7 +89,7 @@ class ImageBank
         ], fn ($v) => $v !== null && $v !== '');
 
         // Cache menor que o url_ttl para nunca devolver link assinado vencido.
-        $json = Cache::remember('imagebank:' . md5(json_encode($params)), 600, fn () => $this->http()->get('/media', $params)->throw()->json());
+        $json = $this->cached('imagebank:' . md5(json_encode($params)), 600, fn () => $this->http()->get('/media', $params)->throw()->json());
 
         return [
             'data' => collect($json['data'] ?? [])->map(fn ($m) => [
