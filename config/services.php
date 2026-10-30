@@ -24,6 +24,8 @@ return [
     'mediahub' => [
         'url' => env('MEDIAHUB_URL'),
         'key' => env('MEDIAHUB_KEY'),
+        // Pastas (raiz) que ESTE sistema mostra, separadas por vírgula. Vazio = todas. Ex.: Comidas,Bebidas,Sobremesas
+        'folders' => env('MEDIAHUB_FOLDERS'),
     ],
 
     'postmark' => [

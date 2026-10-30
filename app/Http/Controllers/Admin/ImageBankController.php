@@ -22,7 +22,7 @@ class ImageBankController extends Controller
 
         try {
             return response()->json(array_merge(
-                ['collections' => collect($this->bank->collections())->map(fn ($c) => ['id' => $c['id'], 'name' => $c['name']])->values()],
+                ['collections' => $this->bank->collections()],
                 $this->bank->search($request->query('q'), $request->query('collection'), (int) $request->query('page', 1))
             ));
         } catch (Throwable $e) {

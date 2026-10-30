@@ -93,8 +93,9 @@
         </div>
         <div class="d-flex mb-2" style="gap:8px">
             <input type="search" id="bank-q" class="form-control" placeholder="Buscar: hambúrguer, caipirinha, pizza...">
-            <select id="bank-col" class="form-control" style="max-width:220px"><option value="">Todas as pastas</option></select>
         </div>
+        <div id="bank-chips" class="mb-1" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+        <div id="bank-subchips" class="mb-2" style="display:flex;flex-wrap:wrap;gap:6px"></div>
         <div id="bank-msg" class="text-muted small mb-2"></div>
         <div id="bank-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px"></div>
         <div class="text-center mt-3"><button type="button" class="btn btn-outline-secondary btn-sm" id="bank-more" style="display:none">Carregar mais</button></div>
@@ -105,20 +106,18 @@
 (function () {
     var URL_ = @json(route('image-bank.index'));
     var $ = function (id) { return document.getElementById(id); };
-    var modal = $('bank-modal'), grid = $('bank-grid'), msg = $('bank-msg'), more = $('bank-more'), q = $('bank-q'), col = $('bank-col');
+    var modal = $('bank-modal'), grid = $('bank-grid'), msg = $('bank-msg'), more = $('bank-more'), q = $('bank-q');
     var page = 1, last = 1, timer = null, loadedCols = false;
+    var cols = [], root = '', sub = '';   // pasta raiz e subpasta escolhidas (ids)
 
     function load(reset) {
         if (reset) { page = 1; grid.innerHTML = ''; }
         msg.textContent = 'Carregando...';
-        var qs = new URLSearchParams({ q: q.value.trim(), collection: col.value, page: page });
+        var qs = new URLSearchParams({ q: q.value.trim(), collection: sub || root, page: page });
         fetch(URL_ + '?' + qs, { headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }, credentials: 'same-origin' })
             .then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error(j.message || 'Erro'); return j; }); })
             .then(function (j) {
-                if (!loadedCols) {
-                    (j.collections || []).forEach(function (c) { var o = document.createElement('option'); o.value = c.id; o.textContent = c.name; col.appendChild(o); });
-                    loadedCols = true;
-                }
+                if (!loadedCols) { cols = j.collections || []; loadedCols = true; drawChips(); }
                 last = j.last_page || 1;
                 j.data.forEach(function (m) {
                     var b = document.createElement('button');
@@ -137,6 +136,27 @@
             .catch(function (e) { msg.textContent = e.message || 'Não foi possível carregar o banco de imagens.'; });
     }
 
+    // Total de fotos de uma pasta contando as subpastas.
+    function total(c) { return (c.media_count || 0) + cols.filter(function (x) { return x.parent_id === c.id; }).reduce(function (n, x) { return n + total(x); }, 0); }
+
+    function chip(label, active, onClick) {
+        var b = document.createElement('button'); b.type = 'button'; b.textContent = label;
+        b.className = 'btn btn-sm ' + (active ? 'btn-dark' : 'btn-outline-secondary'); b.style.borderRadius = '999px';
+        b.addEventListener('click', onClick); return b;
+    }
+    function drawChips() {
+        var top = $('bank-chips'), low = $('bank-subchips'); top.innerHTML = ''; low.innerHTML = '';
+        top.appendChild(chip('Todas', !root, function () { root = ''; sub = ''; drawChips(); load(true); }));
+        cols.filter(function (c) { return !c.parent_id && total(c) > 0; }).forEach(function (c) {
+            top.appendChild(chip(c.name + ' (' + total(c) + ')', root === c.id, function () { root = c.id; sub = ''; drawChips(); load(true); }));
+        });
+        if (!root) return;
+        var kids = cols.filter(function (c) { return c.parent_id === root && total(c) > 0; });
+        if (!kids.length) return;
+        low.appendChild(chip('Tudo', !sub, function () { sub = ''; drawChips(); load(true); }));
+        kids.forEach(function (c) { low.appendChild(chip(c.name + ' (' + total(c) + ')', sub === c.id, function () { sub = c.id; drawChips(); load(true); })); });
+    }
+
     function pick(m) {
         $('bank-media-id').value = m.id;
         $('bank-picked-img').src = m.thumb; $('bank-picked-name').textContent = m.name;
@@ -152,7 +172,6 @@
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') modal.style.display = 'none'; });
     $('bank-clear').addEventListener('click', clearPick);
     q.addEventListener('input', function () { clearTimeout(timer); timer = setTimeout(function () { load(true); }, 350); });
-    col.addEventListener('change', function () { load(true); });
     more.addEventListener('click', function () { page++; load(false); });
     // Escolher um arquivo manual descarta a escolha do banco.
     var f = $('product-image-file'); if (f) f.addEventListener('change', function () { if (f.value) clearPick(); });
