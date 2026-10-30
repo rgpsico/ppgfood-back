@@ -6,6 +6,8 @@ use App\Models\Category;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUpdateProduct;
 use App\Models\Product;
+use App\Services\ImageBank;
+use Throwable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -62,6 +64,15 @@ class ProductController extends Controller
         // Salvar imagem se existir
         if ($request->hasFile('image') && $request->image->isValid()) {
             $data['image'] = $request->image->store("tenants/{$tenant->uuid}/products");
+        } elseif ($request->filled('bank_media_id')) {
+            // Imagem escolhida no banco de imagens compartilhado: copia para o storage deste sistema.
+            try {
+                $data['image'] = app(ImageBank::class)->copyTo($request->bank_media_id, "tenants/{$tenant->uuid}/products");
+            } catch (Throwable $e) {
+                report($e);
+
+                return back()->withInput()->withErrors(['image' => 'Não foi possível copiar a imagem do banco. Tente de novo ou envie um arquivo.']);
+            }
         }
 
         // Criar produto
@@ -140,6 +151,17 @@ class ProductController extends Controller
                 Storage::delete($product->image);
             }
             $data['image'] = $request->image->store("tenants/{$tenant->uuid}/products");
+        } elseif ($request->filled('bank_media_id')) {
+            try {
+                $data['image'] = app(ImageBank::class)->copyTo($request->bank_media_id, "tenants/{$tenant->uuid}/products");
+            } catch (Throwable $e) {
+                report($e);
+
+                return back()->withInput()->withErrors(['image' => 'Não foi possível copiar a imagem do banco. Tente de novo ou envie um arquivo.']);
+            }
+            if ($product->image && ! preg_match('/^https?:\/\//i', $product->image) && Storage::exists($product->image)) {
+                Storage::delete($product->image);
+            }
         }
 
         // Atualizar produto

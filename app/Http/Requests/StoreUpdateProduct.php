@@ -25,6 +25,7 @@ class StoreUpdateProduct extends FormRequest
     public function rules()
     {
         $id = $this->segment(3);
+        $fromBank = $this->filled('bank_media_id'); // imagem escolhida no banco de imagens compartilhado
 
         $rules = [
             'title' => [
@@ -38,14 +39,15 @@ class StoreUpdateProduct extends FormRequest
             // Aceita tanto upload de arquivo quanto um link direto da imagem
             'image' => $this->hasFile('image')
                 ? ['required', 'image']
-                : ['required', 'string', 'url', 'max:2048'],
+                : ($fromBank ? ['nullable'] : ['required', 'string', 'url', 'max:2048']),
+            'bank_media_id' => ['nullable', 'string', 'regex:/^[0-9A-Za-z]{20,40}$/'],
             'price' => "required|regex:/^\d+(\.\d{1,2})?$/",
         ];
 
         if ($this->method() == 'PUT') {
             $rules['image'] = $this->hasFile('image')
                 ? ['nullable', 'image']
-                : ['nullable', 'string', 'url', 'max:2048'];
+                : ($fromBank ? ['nullable'] : ['nullable', 'string', 'url', 'max:2048']);
         }
 
         return $rules;

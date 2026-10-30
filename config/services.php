@@ -20,6 +20,12 @@ return [
         'endpoint' => env('MAILGUN_ENDPOINT', 'api.mailgun.net'),
     ],
 
+    // Banco de imagens compartilhado (MediaHub): chave de API somente leitura, usada só no servidor.
+    'mediahub' => [
+        'url' => env('MEDIAHUB_URL'),
+        'key' => env('MEDIAHUB_KEY'),
+    ],
+
     'postmark' => [
         'token' => env('POSTMARK_TOKEN'),
     ],

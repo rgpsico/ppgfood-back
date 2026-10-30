@@ -67,6 +67,7 @@ Route::prefix('admin')
         /**
          * Routes Products
          */
+        Route::get('image-bank', 'ImageBankController@index')->name('image-bank.index');
         Route::any('products/search', 'ProductController@search')->name('products.search');
         Route::resource('products', 'ProductController');
 
