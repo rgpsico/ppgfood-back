@@ -80,6 +80,13 @@ Route::prefix('admin')
 
 
         /**
+         * Routes Atendentes (atendimento por funcionario)
+         */
+        Route::patch('atendentes/{id}/toggle', 'AtendenteController@toggle')->name('atendentes.toggle');
+        Route::patch('atendentes/pedidos/{orderId}/reatribuir', 'AtendenteController@reatribuir')->name('atendentes.reatribuir');
+        Route::resource('atendentes', 'AtendenteController')->except(['destroy']);
+
+        /**
          * Routes Users
          */
         Route::any('users/search', 'UserController@search')->name('users.search');

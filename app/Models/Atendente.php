@@ -16,10 +16,9 @@ class Atendente extends Model
 
     protected $casts = ['ativo' => 'boolean'];
 
-    protected static function boot()
+    // booted() e nao boot(): sobrescrever boot() desligaria o escopo/observer por tenant do TenantTrait
+    protected static function booted()
     {
-        parent::boot();
-
         static::creating(function (Atendente $atendente) {
             $atendente->uuid = $atendente->uuid ?: (string) Str::uuid();
         });

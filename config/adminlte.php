@@ -259,6 +259,12 @@ return [
             'can'  => 'tables',
         ],
         [
+            'text' => 'Atendentes',
+            'url'  => 'admin/atendentes',
+            'icon' => 'fas fa-user-tie',
+            'can'  => 'users',
+        ],
+        [
             'text' => 'Pedidos',
             'url'  => 'admin/orders',
             'icon' => 'fas fa-utensils',
