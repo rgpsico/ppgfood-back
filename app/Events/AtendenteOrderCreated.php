@@ -33,11 +33,6 @@ class AtendenteOrderCreated implements ShouldBroadcast
         return new PrivateChannel('atendente.' . $this->userId);
     }
 
-    public function broadcastAs()
-    {
-        return 'AtendenteOrderCreated';
-    }
-
     public function broadcastWith()
     {
         return ['order' => (new OrderResource($this->order))->resolve()];

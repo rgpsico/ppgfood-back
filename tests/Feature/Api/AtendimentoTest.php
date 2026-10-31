@@ -13,7 +13,10 @@ use App\Models\Product;
 use App\Models\Table;
 use App\Models\Tenant;
 use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Event;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
@@ -491,5 +494,54 @@ class AtendimentoTest extends TestCase
             ->assertJsonPath('data.0.attendant', null);
 
         $this->getJson('/api/v1/orders/' . $antigo->identify)->assertStatus(200);
+    }
+
+    // ---- canal privado ---------------------------------------------------------------------------------------
+
+    private function podeEntrarNoCanal(?User $user, string $canal): bool
+    {
+        $request = Request::create('/broadcasting/auth', 'POST', ['channel_name' => $canal]);
+        $request->setUserResolver(fn () => $user);
+
+        $broadcaster = Broadcast::driver();
+        $metodo = new \ReflectionMethod($broadcaster, 'verifyUserCanAccessChannel');
+        $metodo->setAccessible(true);
+
+        // O driver "log" devolve null quando autoriza; quem nega lanca AccessDeniedHttpException
+        try {
+            $metodo->invoke($broadcaster, $request, $canal);
+
+            return true;
+        } catch (AccessDeniedHttpException $e) {
+            return false;
+        }
+    }
+
+    public function testCanalPrivadoDoAtendenteSoAbreParaOProprioAtendente()
+    {
+        $tenant = $this->tenant($this->ligado());
+        $joaoUser = $this->usuario($tenant);
+        $mariaUser = $this->usuario($tenant);
+        $donoSemCadastro = $this->usuario($tenant);
+        $this->atendente($tenant, 'João', true, $joaoUser);
+        $this->atendente($tenant, 'Maria', true, $mariaUser);
+
+        $this->assertTrue($this->podeEntrarNoCanal($joaoUser, 'atendente.' . $joaoUser->id));
+        // colega da mesma empresa nao escuta o canal do outro
+        $this->assertFalse($this->podeEntrarNoCanal($mariaUser, 'atendente.' . $joaoUser->id));
+        // quem nao e atendente nao entra nem no proprio canal
+        $this->assertFalse($this->podeEntrarNoCanal($donoSemCadastro, 'atendente.' . $donoSemCadastro->id));
+        // sem login nao entra
+        $this->assertFalse($this->podeEntrarNoCanal(null, 'atendente.' . $joaoUser->id));
+    }
+
+    public function testCanalDaBarracaContinuaRestritoAEmpresa()
+    {
+        $a = $this->tenant();
+        $b = $this->tenant();
+        $donoA = $this->usuario($a);
+
+        $this->assertTrue($this->podeEntrarNoCanal($donoA, 'order-created.' . $a->id));
+        $this->assertFalse($this->podeEntrarNoCanal($donoA, 'order-created.' . $b->id));
     }
 }
