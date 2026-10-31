@@ -15,3 +15,10 @@ Broadcast::channel('order-created.{tenantId}', function ($user, $tenantId) {
 Broadcast::channel('teste', function ($user, $tenantId) {
     return $user->tenant_id == $tenantId;
 });
+
+// Pedidos do proprio atendente: so o usuario dono do canal, e so quem esta cadastrado como atendente
+Broadcast::channel('atendente.{userId}', function ($user, $userId) {
+    return $user instanceof \App\Models\User
+        && (int) $user->id === (int) $userId
+        && \App\Models\Atendente::where('user_id', $user->id)->exists();
+});

@@ -64,7 +64,8 @@ class OrderService
             $numero_do_entregador,
             $comment,
             $clientId,
-            $tableId
+            $tableId,
+            $order['attendant_id'] ?? null
         );
 
         $this->orderRepository->registerProductsOrder($order->id, $productsOrder);
@@ -170,18 +171,24 @@ class OrderService
         return $this->orderRepository->updateStatusOrder($identify, $status);
     }
 
-    public function ordersActiveWithoutTable(array $statuses)
+    public function ordersActiveWithoutTable(array $statuses, $attendantId = null)
     {
         return Order::whereNull('table_id')
+            ->when($attendantId, fn ($q) => $q->where('attendant_id', $attendantId))
             ->whereIn('status', $statuses)
             ->with('products', 'client')
             ->latest()
             ->get();
     }
 
-    public function ordersFiltered(string $status = 'all', string $tableUuid = null)
+    public function ordersFiltered(string $status = 'all', string $tableUuid = null, $attendantId = null)
     {
-        $query = Order::with('products', 'client', 'table')->latest();
+        $query = Order::with('products', 'client', 'table', 'attendant')->latest();
+
+        // 0 = filtro por atendente que nao existe: nao devolve nada (e nao tudo)
+        if ($attendantId !== null) {
+            $query->where('attendant_id', $attendantId);
+        }
 
         if ($status === 'delivered') {
             $query->where('status', Order::DELIVERED_STATUS);

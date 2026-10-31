@@ -9,7 +9,7 @@ class Order extends Model
 {
     use TenantTrait;
 
-    protected $fillable = ['tenant_id', 'identify', 'client_id', 'table_id', 'total', 'status', 'comment', 'codigo_entrega'];
+    protected $fillable = ['tenant_id', 'identify', 'client_id', 'table_id', 'total', 'status', 'comment', 'codigo_entrega', 'attendant_id'];
 
     // Status em que o cliente ainda esta esperando algo acontecer com o pedido
     const ACTIVE_STATUSES = ['open', 'working', 'delivering'];
@@ -41,6 +41,11 @@ class Order extends Model
     public function table()
     {
         return $this->belongsTo(Table::class);
+    }
+
+    public function attendant()
+    {
+        return $this->belongsTo(Atendente::class, 'attendant_id');
     }
 
     public function products()

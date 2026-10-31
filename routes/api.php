@@ -48,6 +48,9 @@ Route::group([
     Route::get('/tables/{identify}', 'TableApiController@show');
     Route::get('/tables', 'TableApiController@tablesByTenant');
 
+    // Atendentes ativos da empresa (vazio quando o modulo esta desligado)
+    Route::get('/atendentes', 'AtendenteApiController@index');
+
     Route::get('/products/{identify}', 'ProductApiController@show');
     // Route::get('/products/{identify}/teste', 'ProductApiController@productsByTenantId');
     Route::get('/products', 'ProductApiController@productsByTenant');
@@ -69,7 +72,7 @@ Route::get('/empresa/{url}/uuid', 'Api\ProductApiController@getUuidByCompanyUrl'
 
 
 Route::group([
-    'middleware' => ['auth:sanctum'],
+    'middleware' => ['auth:sanctum', 'staff'],
     'prefix' => 'v1',
     'namespace' => 'Api'
 ], function () {

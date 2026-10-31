@@ -52,6 +52,10 @@ class AuthStaffController extends Controller
             'tenant_id' => $user->tenant_id,
             'tenant_uuid' => optional($user->tenant)->uuid,
             'tenant_name' => optional($user->tenant)->name,
+            // Preenchido so para quem atende clientes: o painel passa a mostrar apenas os pedidos dele
+            'atendente' => $user->atendente
+                ? ['identify' => $user->atendente->uuid, 'name' => $user->atendente->nome]
+                : null,
         ];
     }
 }

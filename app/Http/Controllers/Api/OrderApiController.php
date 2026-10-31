@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\AtendenteOrderCreated;
 use App\Events\OrderCreated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\StoreOrder;
@@ -10,6 +11,7 @@ use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use App\Models\Table;
 use App\Services\AsaasService;
+use App\Services\AtendimentoService;
 use App\Services\ClientService;
 use App\Services\ConfigService;
 use App\Services\OrderService;
@@ -22,10 +24,11 @@ use Illuminate\Support\Facades\DB;
 
 class OrderApiController extends Controller
 {
-    protected $orderService, $asaasService, $tenantService, $configService;
+    protected $orderService, $asaasService, $tenantService, $configService, $atendimentoService;
 
-    public function __construct(ConfigService $configService, TenantService $tenantService, OrderService $orderService, AsaasService $asaasService)
+    public function __construct(ConfigService $configService, TenantService $tenantService, OrderService $orderService, AsaasService $asaasService, AtendimentoService $atendimentoService)
     {
+        $this->atendimentoService = $atendimentoService;
         $this->orderService = $orderService;
         $this->asaasService = $asaasService;
         $this->tenantService = $tenantService;
@@ -35,9 +38,18 @@ class OrderApiController extends Controller
 
     public function store(StoreOrder $request)
     {
+        // Atendente validado no backend (empresa, ativo, regras da empresa) ANTES de criar o pedido.
+        // attendant_id vindo do cliente e sempre sobrescrito: so vale o que o servico resolveu.
+        $tenantDoPedido = $this->tenantService->getTenantByUuid($request->token_company);
+        $atendente = $this->atendimentoService->resolverParaPedido(
+            $tenantDoPedido,
+            $request->input('attendant'),
+            (bool) $request->input('table')
+        );
 
-        
-   $order = $this->orderService->createNewOrder($request->all())->load('products');
+        $order = $this->orderService->createNewOrder(
+            array_merge($request->all(), ['attendant_id' => $atendente ? $atendente->id : null])
+        )->load('products');
 
             // Update stock in a transaction
             DB::transaction(function () use ($order) {
@@ -66,6 +78,10 @@ class OrderApiController extends Controller
         $order['eEntregador'] = $configSEEntregador ? (int) $configSEEntregador->valor : 0;
 
         event(new OrderCreated($order));
+
+        if ($this->atendimentoService->deveNotificar($tenantDoPedido, $atendente)) {
+            event(new AtendenteOrderCreated($order, $atendente->user_id));
+        }
 
         if ($request->payment_method == 'cartao_credito') {
             return $this->asaasService->cartao_de_credito($request);
@@ -133,14 +149,27 @@ class OrderApiController extends Controller
 
 
     /**
+     * Usuario do painel que e atendente enxerga so os proprios pedidos; usuario sem cadastro de
+     * atendente (dono/gerente) continua vendo tudo, como antes.
+     */
+    private function atendenteDoPainel(Request $request)
+    {
+        return $request->user()->atendente;
+    }
+
+    /**
      * Painel de recebimento: guarda-sois/cadeiras com o pedido ativo
      * de cada um (se houver), mais os pedidos ativos sem mesa (delivery/retirada).
      */
-    public function board()
+    public function board(Request $request)
     {
-        $tables = Table::with(['orders' => function ($query) {
+        $atendente = $this->atendenteDoPainel($request);
+        $attendantId = $atendente ? $atendente->id : null;
+
+        $tables = Table::with(['orders' => function ($query) use ($attendantId) {
             $query->whereIn('status', Order::ACTIVE_STATUSES)
-                ->with('products', 'client')
+                ->when($attendantId, fn ($q) => $q->where('attendant_id', $attendantId))
+                ->with('products', 'client', 'attendant')
                 ->latest();
         }])->get();
 
@@ -160,7 +189,7 @@ class OrderApiController extends Controller
         });
 
         $ordersWithoutTable = $this->orderService
-            ->ordersActiveWithoutTable(Order::ACTIVE_STATUSES);
+            ->ordersActiveWithoutTable(Order::ACTIVE_STATUSES, $attendantId);
 
         return response()->json([
             'tables' => $tablesData,
@@ -174,9 +203,19 @@ class OrderApiController extends Controller
      */
     public function index(Request $request)
     {
+        $atendente = $this->atendenteDoPainel($request);
+        $attendantId = $atendente ? $atendente->id : null;
+
+        // Dono/gerente pode filtrar por atendente (?attendant=uuid); atendente nao escolhe: so os dele
+        if (!$attendantId && $request->query('attendant')) {
+            $filtrado = \App\Models\Atendente::where('uuid', $request->query('attendant'))->first();
+            $attendantId = $filtrado ? $filtrado->id : 0;
+        }
+
         $orders = $this->orderService->ordersFiltered(
             $request->query('status', 'all'),
-            $request->query('table')
+            $request->query('table'),
+            $attendantId
         );
 
         return OrderResource::collection($orders);
@@ -194,13 +233,20 @@ class OrderApiController extends Controller
             'status' => 'required|in:open,done',
         ]);
 
+        $atendente = $this->atendenteDoPainel($request);
+
+        // Atendente so mexe nos pedidos dele (e o escopo por empresa ja barra pedido de outra barraca)
+        if ($atendente && !Order::where('identify', $identify)->where('attendant_id', $atendente->id)->exists()) {
+            return response()->json(['message' => 'Pedido não encontrado'], 404);
+        }
+
         $order = $this->orderService->updateStatusOrder($identify, $request->status);
 
         if (!$order) {
             return response()->json(['message' => 'Pedido não encontrado'], 404);
         }
 
-        return new OrderResource($order->load('products', 'client', 'table'));
+        return new OrderResource($order->load('products', 'client', 'table', 'attendant'));
     }
 
     public function getUuidByCompanyUrl($url)

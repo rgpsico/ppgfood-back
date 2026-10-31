@@ -23,7 +23,8 @@ class OrderRepository implements OrderRepositoryInterface
         string $numero_do_entregador,
         string $comment = '',
         $clientId = '',
-        $tableId = ''
+        $tableId = '',
+        $attendantId = null
     ) {
 
         $data = [
@@ -41,6 +42,10 @@ class OrderRepository implements OrderRepositoryInterface
 
         if ($tableId) {
             $data['table_id'] = $tableId;
+        }
+
+        if ($attendantId) {
+            $data['attendant_id'] = $attendantId;
         }
 
 

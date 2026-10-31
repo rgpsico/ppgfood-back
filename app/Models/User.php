@@ -53,6 +53,14 @@ class User extends Authenticatable
 
 
     /**
+     * Cadastro de atendente deste usuario (so existe pra quem atende clientes)
+     */
+    public function atendente()
+    {
+        return $this->hasOne(Atendente::class, 'user_id');
+    }
+
+    /**
      * Tenant
      */
     public function tenant()

@@ -32,6 +32,8 @@ class StoreOrder extends FormRequest
                 'nullable',
                 'exists:tables,uuid',
             ],
+            // Validado de verdade no AtendimentoService (mesma empresa, ativo, modulo ligado)
+            'attendant' => ['nullable', 'string', 'max:64'],
             'comment' => [
                 'nullable',
                 'max:1000',
