@@ -173,6 +173,11 @@ class OrderApiController extends Controller
                 ->latest();
         }])->get();
 
+        // Atendente so enxerga os guarda-sois que esta atendendo (com pedido ativo dele)
+        if ($attendantId) {
+            $tables = $tables->filter(fn ($table) => $table->orders->isNotEmpty())->values();
+        }
+
         $tablesData = $tables->map(function ($table) {
             $order = $table->orders->first();
 
@@ -194,6 +199,8 @@ class OrderApiController extends Controller
         return response()->json([
             'tables' => $tablesData,
             'orders_without_table' => OrderResource::collection($ordersWithoutTable),
+            // true = lista ja filtrada para o atendente (o painel nao deve oferecer reorganizar o mapa)
+            'only_serving' => (bool) $attendantId,
         ]);
     }
 

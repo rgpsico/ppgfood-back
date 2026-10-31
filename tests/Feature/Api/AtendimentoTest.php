@@ -544,4 +544,59 @@ class AtendimentoTest extends TestCase
         $this->assertTrue($this->podeEntrarNoCanal($donoA, 'order-created.' . $a->id));
         $this->assertFalse($this->podeEntrarNoCanal($donoA, 'order-created.' . $b->id));
     }
+
+    // ---- guarda-sois do atendente ------------------------------------------------------------------------------
+
+    public function testAtendenteVeNoMapaSoOsGuardaSoisQueEstaAtendendo()
+    {
+        $tenant = $this->tenant($this->ligado());
+        $userJoao = $this->usuario($tenant);
+        $dono = $this->usuario($tenant);
+        $joao = $this->atendente($tenant, 'João', true, $userJoao);
+        $maria = $this->atendente($tenant, 'Maria');
+        $mesa1 = factory(Table::class)->create(['tenant_id' => $tenant->id]);
+        $mesa2 = factory(Table::class)->create(['tenant_id' => $tenant->id]);
+        $mesa3 = factory(Table::class)->create(['tenant_id' => $tenant->id]);
+        $mesaLivre = factory(Table::class)->create(['tenant_id' => $tenant->id]);
+
+        $this->pedidoNaMesa($tenant, $joao, $mesa1, 'open');
+        $this->pedidoNaMesa($tenant, $maria, $mesa2, 'open');
+        $this->pedidoNaMesa($tenant, $joao, $mesa3, 'done'); // entregue: ja nao esta atendendo
+
+        Sanctum::actingAs($userJoao);
+        $mapa = $this->getJson('/api/v1/staff/orders-board')->assertStatus(200);
+        $mapa->assertJsonCount(1, 'tables')
+            ->assertJsonPath('tables.0.identify', (string) $mesa1->uuid)
+            ->assertJsonPath('only_serving', true);
+
+        // dono continua vendo todos os guarda-sois
+        Sanctum::actingAs($dono);
+        $this->getJson('/api/v1/staff/orders-board')
+            ->assertJsonCount(4, 'tables')
+            ->assertJsonPath('only_serving', false);
+    }
+
+    public function testAtendenteNaoReorganizaOMapaDaBarraca()
+    {
+        $tenant = $this->tenant($this->ligado());
+        $userJoao = $this->usuario($tenant);
+        $dono = $this->usuario($tenant);
+        $this->atendente($tenant, 'João', true, $userJoao);
+        $mesa = factory(Table::class)->create(['tenant_id' => $tenant->id]);
+
+        Sanctum::actingAs($userJoao);
+        $this->patchJson("/api/v1/staff/tables/{$mesa->uuid}/position", ['position_x' => 10, 'position_y' => 10])->assertStatus(403);
+        $this->patchJson("/api/v1/staff/tables/{$mesa->uuid}/beach-position", ['beach_row' => 1, 'beach_col' => 1])->assertStatus(403);
+
+        Sanctum::actingAs($dono);
+        $this->patchJson("/api/v1/staff/tables/{$mesa->uuid}/position", ['position_x' => 10, 'position_y' => 10])->assertStatus(200);
+    }
+
+    private function pedidoNaMesa(Tenant $tenant, Atendente $atendente, Table $mesa, string $status): Order
+    {
+        return Order::create([
+            'tenant_id' => $tenant->id, 'identify' => uniqid('m'), 'total' => 10, 'status' => $status,
+            'attendant_id' => $atendente->id, 'table_id' => $mesa->id,
+        ]);
+    }
 }

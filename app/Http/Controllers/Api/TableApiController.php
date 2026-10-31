@@ -45,6 +45,11 @@ class TableApiController extends Controller
      */
     public function updatePosition(Request $request, $identify)
     {
+        // Mapa e compartilhado: atendente nao reorganiza os guarda-sois da barraca
+        if ($request->user()->atendente) {
+            return response()->json(['message' => 'Acesso restrito ao gerente.'], 403);
+        }
+
         $request->validate([
             'position_x' => 'required|numeric|min:0|max:100',
             'position_y' => 'required|numeric|min:0|max:100',
@@ -69,6 +74,11 @@ class TableApiController extends Controller
      */
     public function updateBeachPosition(Request $request, $identify)
     {
+        // Mapa e compartilhado: atendente nao reorganiza os guarda-sois da barraca
+        if ($request->user()->atendente) {
+            return response()->json(['message' => 'Acesso restrito ao gerente.'], 403);
+        }
+
         $request->validate([
             'beach_row' => 'required|integer|min:0',
             'beach_col' => 'required|integer|min:0',
