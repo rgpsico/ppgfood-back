@@ -9,7 +9,11 @@ class Table extends Model
 {
     use TenantTrait;
 
-    protected $fillable = ['identify', 'description', 'position_x', 'position_y', 'beach_row', 'beach_col'];
+    const TIPO_GUARDA_SOL = 'guarda_sol';
+    const TIPO_CADEIRA = 'cadeira';
+    const TIPOS = [self::TIPO_GUARDA_SOL, self::TIPO_CADEIRA];
+
+    protected $fillable = ['identify', 'tipo', 'description', 'position_x', 'position_y', 'beach_row', 'beach_col'];
 
     public function orders()
     {

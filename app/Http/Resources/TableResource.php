@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Table;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class TableResource extends JsonResource
@@ -17,6 +18,7 @@ class TableResource extends JsonResource
         return [
             'identify' => $this->uuid,
             'name' => $this->identify,
+            'tipo' => $this->tipo ?: Table::TIPO_GUARDA_SOL,
             'description' => $this->description,
             'position_x' => $this->position_x,
             'position_y' => $this->position_y,

@@ -184,6 +184,7 @@ class OrderApiController extends Controller
             return [
                 'identify' => $table->uuid,
                 'name' => $table->identify,
+                'tipo' => $table->tipo ?: Table::TIPO_GUARDA_SOL,
                 'description' => $table->description,
                 'position_x' => $table->position_x,
                 'position_y' => $table->position_y,
