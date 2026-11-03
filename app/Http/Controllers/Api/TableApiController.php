@@ -40,15 +40,19 @@ class TableApiController extends Controller
     }
 
     /**
-     * Cadastra guarda-sol ou cadeira no painel. Sem nome, numera sozinho
+     * Todos os pontos da barraca (o quadro do atendente so traz os que ele esta atendendo).
+     */
+    public function index()
+    {
+        return TableResource::collection(Table::orderBy('id')->get());
+    }
+
+    /**
+     * Cadastra guarda-sol ou cadeira no painel (gerente e atendente). Sem nome, numera sozinho
      * ("Guarda-sol 7", "Cadeira 3"); com quantidade > 1 cria varios de uma vez.
      */
     public function store(Request $request)
     {
-        if ($erro = $this->soGerente($request)) {
-            return $erro;
-        }
-
         $dados = $request->validate([
             'tipo' => 'required|in:' . implode(',', Table::TIPOS),
             'nome' => 'nullable|string|min:1|max:60',
@@ -85,10 +89,6 @@ class TableApiController extends Controller
      */
     public function update(Request $request, $identify)
     {
-        if ($erro = $this->soGerente($request)) {
-            return $erro;
-        }
-
         if (!$table = Table::where('uuid', $identify)->first()) {
             return response()->json(['message' => 'Table Not Found'], 404);
         }

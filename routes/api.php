@@ -88,6 +88,7 @@ Route::group([
     Route::get('/staff/orders-board', 'OrderApiController@board');
     Route::get('/staff/orders', 'OrderApiController@index');
     Route::patch('/staff/orders/{identify}/status', 'OrderApiController@updateStatus');
+    Route::get('/staff/tables', 'TableApiController@index');
     Route::post('/staff/tables', 'TableApiController@store');
     Route::put('/staff/tables/{identify}', 'TableApiController@update');
     Route::delete('/staff/tables/{identify}', 'TableApiController@destroy');

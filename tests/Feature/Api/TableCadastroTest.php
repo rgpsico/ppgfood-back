@@ -129,7 +129,7 @@ class TableCadastroTest extends TestCase
         $this->assertDatabaseHas('tables', ['id' => $dela->id, 'identify' => 'Guarda-sol 1']);
     }
 
-    public function testAtendenteNaoCadastraNemApaga()
+    public function testAtendenteCadastraERenomeiaMasNaoApaga()
     {
         $gerente = $this->gerente();
         $ponto = $this->ponto($gerente->tenant, 'Guarda-sol 1');
@@ -137,9 +137,21 @@ class TableCadastroTest extends TestCase
         Atendente::create(['tenant_id' => $gerente->tenant_id, 'nome' => 'João', 'ativo' => true, 'user_id' => $userAtendente->id]);
         Sanctum::actingAs($userAtendente);
 
-        $this->postJson('/api/v1/staff/tables', ['tipo' => 'cadeira', 'nome' => 'Nova'])->assertStatus(403);
-        $this->putJson("/api/v1/staff/tables/{$ponto->uuid}", ['nome' => 'Outro'])->assertStatus(403);
+        $this->postJson('/api/v1/staff/tables', ['tipo' => 'cadeira', 'nome' => 'Nova'])->assertStatus(201);
+        $this->putJson("/api/v1/staff/tables/{$ponto->uuid}", ['nome' => 'Outro'])->assertStatus(200);
         $this->deleteJson("/api/v1/staff/tables/{$ponto->uuid}")->assertStatus(403);
+        $this->assertDatabaseHas('tables', ['id' => $ponto->id]);
+    }
+
+    public function testListaTodosOsPontosSoDaPropriaBarraca()
+    {
+        $gerente = $this->gerente();
+        $this->ponto($gerente->tenant, 'Guarda-sol 1');
+        $this->ponto($gerente->tenant, 'Cadeira 1', 'cadeira');
+        $this->ponto(factory(Tenant::class)->create(), 'De outra barraca');
+        Sanctum::actingAs($gerente);
+
+        $this->getJson('/api/v1/staff/tables')->assertStatus(200)->assertJsonCount(2, 'data');
     }
 
     public function testSemLoginNaoCadastra()
