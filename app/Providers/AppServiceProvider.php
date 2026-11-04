@@ -35,6 +35,7 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(TenantRepositoryInterface::class, TenantRepository::class);
+        $this->app->bind(\App\Services\Push\PushSenderInterface::class, \App\Services\Push\WebPushSender::class);
     }
 
     /**

@@ -83,6 +83,10 @@ Route::group([
     // com "pedido sem login" habilitado. Pedido usa token_company pra
     // identificar a loja, entao autenticacao e opcional por design.
 
+    Route::get('/staff/push/key', 'PushSubscriptionController@key');
+    Route::post('/staff/push/subscribe', 'PushSubscriptionController@store');
+    Route::post('/staff/push/test', 'PushSubscriptionController@test');
+    Route::delete('/staff/push/subscribe', 'PushSubscriptionController@destroy');
     Route::get('/staff/me', 'Auth\AuthStaffController@me');
     Route::post('/staff/logout', 'Auth\AuthStaffController@logout');
     Route::get('/staff/orders-board', 'OrderApiController@board');

@@ -82,6 +82,12 @@ class OrderApiController extends Controller
 
         event(new OrderCreated($order));
 
+        // Notificacao no celular (funciona com o painel fechado); sai depois que o cliente ja recebeu a resposta
+        \App\Jobs\EnviarPushPedido::dispatch(
+            $order->id,
+            $this->atendimentoService->deveNotificar($tenantDoPedido, $atendente) ? $atendente->user_id : null
+        )->afterResponse();
+
         if ($this->atendimentoService->deveNotificar($tenantDoPedido, $atendente)) {
             event(new AtendenteOrderCreated($order, $atendente->user_id));
         }

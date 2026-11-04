@@ -28,6 +28,13 @@ return [
         'folders' => env('MEDIAHUB_FOLDERS'),
     ],
 
+    // Avisos de pedido novo no celular (Web Push). Chaves geradas uma vez: ver .env (VAPID_*)
+    'vapid' => [
+        'public' => env('VAPID_PUBLIC_KEY'),
+        'private' => env('VAPID_PRIVATE_KEY'),
+        'subject' => env('VAPID_SUBJECT', 'https://painel.comunidadeppg.com.br'),
+    ],
+
     'postmark' => [
         'token' => env('POSTMARK_TOKEN'),
     ],
