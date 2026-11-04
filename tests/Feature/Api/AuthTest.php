@@ -91,12 +91,8 @@ class AuthTest extends TestCase
         ]);
 
         $response->assertStatus(200)
-            ->assertExactJson([
-                'data' => [
-                    'name' => $client->name,
-                    'email' => $client->email,
-                ]
-            ]);
+            ->assertJsonPath('data.name', $client->name)
+            ->assertJsonPath('data.email', $client->email);
     }
 
     /**

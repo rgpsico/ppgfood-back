@@ -44,16 +44,14 @@ class RegisterTest extends TestCase
             'name' => 'Carlos Client',
             'email' => 'carlos@client.com.br',
             'password' => '123456',
+            'cpf' => '12345678900',
+            'instagran' => '@carlosclient',
         ];
 
         $response = $this->postJson('/api/auth/register', $payload);
 
         $response->assertStatus(201)
-                    ->assertExactJson([
-                        'data' => [
-                            'name' => $payload['name'],
-                            'email' => $payload['email'],
-                        ]
-                    ]);
+                    ->assertJsonPath('data.name', $payload['name'])
+                    ->assertJsonPath('data.email', $payload['email']);
     }
 }

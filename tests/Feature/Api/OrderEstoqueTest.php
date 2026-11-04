@@ -67,4 +67,28 @@ class OrderEstoqueTest extends TestCase
 
         $this->assertSame(0, (int) Product::withoutGlobalScopes()->find($produto->id)->stock);
     }
+
+    public function testNaoAceitaProdutoDeOutraBarraca()
+    {
+        $tenant = factory(Tenant::class)->create();
+        $deOutra = factory(Product::class)->create(['stock' => 10]);
+
+        $this->pedir($tenant, [['identify' => $deOutra->uuid, 'qty' => 1]])
+            ->assertStatus(422)
+            ->assertJsonValidationErrors('products.0.identify');
+
+        $this->assertSame(10, (int) Product::withoutGlobalScopes()->find($deOutra->id)->stock);
+    }
+
+    public function testNaoAceitaQuantidadeZeroOuNegativa()
+    {
+        $tenant = factory(Tenant::class)->create();
+        $produto = factory(Product::class)->create(['tenant_id' => $tenant->id, 'stock' => 10]);
+
+        $this->pedir($tenant, [['identify' => $produto->uuid, 'qty' => -5]])->assertStatus(422);
+        $this->pedir($tenant, [['identify' => $produto->uuid, 'qty' => 0]])->assertStatus(422);
+
+        $this->assertSame(10, (int) Product::withoutGlobalScopes()->find($produto->id)->stock);
+        $this->assertSame(0, Order::withoutGlobalScopes()->where('tenant_id', $tenant->id)->count());
+    }
 }

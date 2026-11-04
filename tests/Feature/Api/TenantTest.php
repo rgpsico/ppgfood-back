@@ -16,7 +16,9 @@ class TenantTest extends TestCase
      */
     public function testGetAllTenants()
     {
-        factory(Tenant::class, 10)->create();
+        // a lista publica traz so barracas com assinatura ativa
+        factory(Tenant::class, 10)->create(['subscription_active' => 1]);
+        factory(Tenant::class)->create(['subscription_active' => 0]);
 
         $response = $this->getJson('/api/v1/tenants');
 

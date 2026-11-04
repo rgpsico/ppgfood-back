@@ -48,7 +48,7 @@ class OrderTest extends TestCase
             'products' => [],
         ];
 
-        $products = factory(Product::class, 10)->create();
+        $products = factory(Product::class, 10)->create(['tenant_id' => $tenant->id]);
         foreach ($products as $product) {
             array_push($payload['products'], [
                 'identify' => $product->uuid,
@@ -75,7 +75,7 @@ class OrderTest extends TestCase
             'products' => [],
         ];
 
-        $products = factory(Product::class, 2)->create();
+        $products = factory(Product::class, 2)->create(['tenant_id' => $tenant->id]);
         foreach ($products as $product) {
             array_push($payload['products'], [
                 'identify' => $product->uuid,
@@ -135,7 +135,7 @@ class OrderTest extends TestCase
             'products' => [],
         ];
 
-        $products = factory(Product::class, 2)->create();
+        $products = factory(Product::class, 2)->create(['tenant_id' => $tenant->id]);
         foreach ($products as $product) {
             array_push($payload['products'], [
                 'identify' => $product->uuid,
@@ -143,7 +143,9 @@ class OrderTest extends TestCase
             ]);
         }
 
-        $response = $this->postJson('/api/auth/v1/orders', $payload, [
+        // A rota auth/v1/orders foi removida de proposito (ver routes/api.php): pedido com ou sem login
+        // usa POST /v1/orders, e o app manda o Bearer do cliente quando ele esta logado
+        $response = $this->postJson('/api/v1/orders', $payload, [
             'Authorization' => "Bearer {$token}"
         ]);
 
@@ -166,7 +168,7 @@ class OrderTest extends TestCase
             'products' => [],
         ];
 
-        $products = factory(Product::class, 2)->create();
+        $products = factory(Product::class, 2)->create(['tenant_id' => $tenant->id]);
         foreach ($products as $product) {
             array_push($payload['products'], [
                 'identify' => $product->uuid,

@@ -39,8 +39,15 @@ class StoreOrder extends FormRequest
                 'max:1000',
             ],
             'products' => ['required'],
-            'products.*.identify' => ['required', 'exists:products,uuid'],
-            'products.*.qty' => ['required', 'integer'],
+            // So produtos da barraca do pedido (antes aceitava uuid de outra barraca) e quantidade > 0
+            // (qty negativa aumentava o estoque e zerava/negativava o total)
+            'products.*.identify' => [
+                'required',
+                \Illuminate\Validation\Rule::exists('products', 'uuid')->where(
+                    fn ($query) => $query->where('tenant_id', \App\Models\Tenant::where('uuid', $this->input('token_company'))->value('id'))
+                ),
+            ],
+            'products.*.qty' => ['required', 'integer', 'min:1'],
         ];
     }
 }

@@ -61,10 +61,18 @@ class ProductTest extends TestCase
     public function testGetProductByIdentify()
     {
         $tenant = factory(Tenant::class)->create();
-        $product = factory(Product::class)->create();
+        $product = factory(Product::class)->create(['tenant_id' => $tenant->id]);
 
         $response = $this->getJson("/api/v1/products/{$product->uuid}?token_company={$tenant->uuid}");
 
-        $response->assertStatus(200);
+        $response->assertStatus(200)->assertJsonPath('data.identify', (string) $product->uuid);
+    }
+
+    public function testProdutoDeOutraBarracaNaoEAcessivel()
+    {
+        $tenant = factory(Tenant::class)->create();
+        $deOutra = factory(Product::class)->create();
+
+        $this->getJson("/api/v1/products/{$deOutra->uuid}?token_company={$tenant->uuid}")->assertStatus(404);
     }
 }

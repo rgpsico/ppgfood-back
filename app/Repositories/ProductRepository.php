@@ -37,7 +37,8 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function getProductByUuid(string $uuid)
     {
-        return DB::table($this->table)
+        // Eloquent (nao DB::table): o ProductResource le $this->pivot e com stdClass dava erro 500
+        return \App\Models\Product::withoutGlobalScopes()
             ->where('uuid', $uuid)
             ->first();
     }

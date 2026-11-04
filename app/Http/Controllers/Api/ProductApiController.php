@@ -32,7 +32,10 @@ class ProductApiController extends Controller
 
     public function show(TenantFormRequest $request, $identify)
     {
-        if (!$product = $this->productService->getProductByUuid($identify)) {
+        // Produto so existe dentro da barraca informada: uuid de outra barraca = 404
+        $tenant = Tenant::where('uuid', $request->token_company)->first();
+
+        if (!($product = $this->productService->getProductByUuid($identify)) || $product->tenant_id !== $tenant->id) {
             return response()->json(['message' => 'Product Not Found'], 404);
         }
 

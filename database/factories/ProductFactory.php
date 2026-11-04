@@ -13,5 +13,7 @@ $factory->define(Product::class, function (Faker $faker) {
         'description' => $faker->sentence,
         'image' => 'pizza.png',
         'price' => 12.9,
+        'stock' => 100,
+        'active' => true,
     ];
 });
