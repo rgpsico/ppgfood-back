@@ -14,18 +14,37 @@ use Illuminate\Console\Command;
  */
 class LembrarPedidosPendentes extends Command
 {
-    protected $signature = 'pedidos:lembrar {--minutos=10 : por quanto tempo insistir depois do pedido}';
+    protected $signature = 'pedidos:lembrar
+        {--minutos=10 : por quanto tempo insistir depois do pedido}
+        {--rodadas=1 : quantas vezes conferir por execucao (o agendador roda 1x por minuto)}
+        {--a-cada=30 : segundos entre as rodadas}';
 
     protected $description = 'Repete o aviso no celular dos pedidos que ainda ninguem atendeu';
 
     public function handle(PushService $push, AtendimentoService $atendimento)
     {
+        $rodadas = max(1, (int) $this->option('rodadas'));
+
+        for ($i = 0; $i < $rodadas; $i++) {
+            // Cada rodada consulta o banco de novo: pedido atendido entre uma e outra para de avisar na hora
+            $this->lembrar($push, $atendimento);
+
+            if ($i < $rodadas - 1) {
+                sleep(max(0, (int) $this->option('a-cada')));
+            }
+        }
+
+        return 0;
+    }
+
+    private function lembrar(PushService $push, AtendimentoService $atendimento): void
+    {
         $limite = (int) $this->option('minutos');
 
-        // 50s: o pedido recem-chegado ja foi avisado, o primeiro lembrete sai com ~1 minuto de espera
+        // 25s: o pedido recem-chegado ja foi avisado, o primeiro lembrete sai com ~30s de espera
         $pendentes = Order::withoutGlobalScopes()
             ->where('status', 'open')
-            ->where('created_at', '<=', now()->subSeconds(50))
+            ->where('created_at', '<=', now()->subSeconds(25))
             ->where('created_at', '>=', now()->subMinutes($limite))
             ->with('table', 'products', 'attendant')
             ->get();
@@ -43,7 +62,5 @@ class LembrarPedidosPendentes extends Command
         }
 
         $this->info("Pedidos pendentes: {$pendentes->count()} · avisos enviados: {$enviados}");
-
-        return 0;
     }
 }

@@ -81,6 +81,17 @@ class LembretePedidoTest extends TestCase
         $this->assertSame($pedido->identify, $this->enviados[0]['payload']['tag']);
     }
 
+    public function testComDuasRodadasAvisaDuasVezesPorMinuto()
+    {
+        $tenant = factory(Tenant::class)->create();
+        $this->gerenteComCelular($tenant);
+        $this->pedidoHa(40, 'open', $tenant);
+
+        $this->artisan('pedidos:lembrar --rodadas=2 --a-cada=0')->assertExitCode(0);
+
+        $this->assertCount(2, $this->enviados);
+    }
+
     public function testPedidoRecemChegadoAindaNaoRecebeLembrete()
     {
         $tenant = factory(Tenant::class)->create();

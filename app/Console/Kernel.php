@@ -24,8 +24,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // Pedido sem atendimento volta a avisar no celular (ate 10 min). Precisa do cron: schedule:run a cada minuto
-        $schedule->command('pedidos:lembrar')->everyMinute()->withoutOverlapping();
+        // Pedido sem atendimento volta a avisar no celular de 30 em 30 segundos (ate 10 min): o agendador roda
+        // 1x por minuto e o comando confere 2 vezes (0s e 30s). Precisa do cron: schedule:run a cada minuto
+        $schedule->command('pedidos:lembrar --rodadas=2 --a-cada=30')->everyMinute()->withoutOverlapping();
     }
 
     /**
