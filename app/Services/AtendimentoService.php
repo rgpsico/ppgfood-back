@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Atendente;
+use App\Models\Table;
 use App\Models\Tenant;
 use Illuminate\Validation\ValidationException;
 
@@ -60,7 +61,7 @@ class AtendimentoService
      *
      * @throws ValidationException
      */
-    public function resolverParaPedido(Tenant $tenant, ?string $uuid, bool $temLocal): ?Atendente
+    public function resolverParaPedido(Tenant $tenant, ?string $uuid, bool $temLocal, ?string $tableUuid = null): ?Atendente
     {
         $opcoes = $this->opcoes($tenant->id);
 
@@ -73,6 +74,21 @@ class AtendimentoService
             throw ValidationException::withMessages([
                 'table' => ['Escaneie o QR Code do guarda-sol ou local para fazer o pedido.'],
             ]);
+        }
+
+        // Cliente nao escolheu: o guarda-sol cadastrado por um atendente ja e dele
+        if (!$uuid && $tableUuid) {
+            $dono = Table::withoutGlobalScopes()
+                ->where('tenant_id', $tenant->id)
+                ->where('uuid', $tableUuid)
+                ->first();
+            $donoAtendente = $dono && $dono->attendant_id
+                ? Atendente::withoutGlobalScopes()->where('tenant_id', $tenant->id)->where('id', $dono->attendant_id)->ativos()->first()
+                : null;
+
+            if ($donoAtendente) {
+                return $donoAtendente;
+            }
         }
 
         if (!$uuid) {

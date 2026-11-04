@@ -44,7 +44,8 @@ class OrderApiController extends Controller
         $atendente = $this->atendimentoService->resolverParaPedido(
             $tenantDoPedido,
             $request->input('attendant'),
-            (bool) $request->input('table')
+            (bool) $request->input('table'),
+            $request->input('table')
         );
 
         $order = $this->orderService->createNewOrder(
@@ -173,12 +174,12 @@ class OrderApiController extends Controller
                 ->latest();
         }])->get();
 
-        // Atendente so enxerga os guarda-sois que esta atendendo (com pedido ativo dele)
+        // Atendente so enxerga os guarda-sois que esta atendendo: com pedido ativo dele ou cadastrados por ele
         if ($attendantId) {
-            $tables = $tables->filter(fn ($table) => $table->orders->isNotEmpty())->values();
+            $tables = $tables->filter(fn ($table) => $table->orders->isNotEmpty() || $table->attendant_id == $attendantId)->values();
         }
 
-        $tablesData = $tables->map(function ($table) {
+        $tablesData = $tables->map(function ($table) use ($attendantId) {
             $order = $table->orders->first();
 
             return [
@@ -191,6 +192,8 @@ class OrderApiController extends Controller
                 'beach_row' => $table->beach_row,
                 'beach_col' => $table->beach_col,
                 'order' => $order ? new OrderResource($order) : null,
+                // ponto cadastrado pelo atendente: fica na lista dele mesmo sem pedido
+                'mine' => (bool) ($attendantId && $table->attendant_id == $attendantId),
             ];
         });
 

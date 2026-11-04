@@ -64,6 +64,9 @@ class TableApiController extends Controller
         $nome = trim($dados['nome'] ?? '');
         $quantidade = (int) ($dados['quantidade'] ?? 1);
 
+        // Atendente que cadastra ja fica como o atendente desse ponto; gerente cadastra sem dono
+        $atendenteId = $request->user()->atendente ? $request->user()->atendente->id : null;
+
         $criados = collect();
 
         if ($nome !== '' && $quantidade === 1) {
@@ -71,13 +74,13 @@ class TableApiController extends Controller
                 return response()->json(['message' => "Já existe um ponto chamado \"{$nome}\"."], 422);
             }
 
-            $criados->push($this->criar($nome, $tipo, $dados['description'] ?? null));
+            $criados->push($this->criar($nome, $tipo, $dados['description'] ?? null, $atendenteId));
         } else {
             $prefixo = $nome !== '' ? $nome : $this->rotuloDoTipo($tipo);
             $proximo = $this->proximoNumero($prefixo);
 
             for ($i = 0; $i < $quantidade; $i++) {
-                $criados->push($this->criar($prefixo . ' ' . ($proximo + $i), $tipo, $dados['description'] ?? null));
+                $criados->push($this->criar($prefixo . ' ' . ($proximo + $i), $tipo, $dados['description'] ?? null, $atendenteId));
             }
         }
 
@@ -188,12 +191,13 @@ class TableApiController extends Controller
         return $maior + 1;
     }
 
-    private function criar(string $nome, string $tipo, ?string $descricao): Table
+    private function criar(string $nome, string $tipo, ?string $descricao, ?int $atendenteId = null): Table
     {
         return Table::create([
             'identify' => $nome,
             'tipo' => $tipo,
             'description' => $descricao,
+            'attendant_id' => $atendenteId,
         ]);
     }
 

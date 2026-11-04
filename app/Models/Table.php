@@ -13,7 +13,12 @@ class Table extends Model
     const TIPO_CADEIRA = 'cadeira';
     const TIPOS = [self::TIPO_GUARDA_SOL, self::TIPO_CADEIRA];
 
-    protected $fillable = ['identify', 'tipo', 'description', 'position_x', 'position_y', 'beach_row', 'beach_col'];
+    protected $fillable = ['identify', 'tipo', 'attendant_id', 'description', 'position_x', 'position_y', 'beach_row', 'beach_col'];
+
+    public function attendant()
+    {
+        return $this->belongsTo(Atendente::class, 'attendant_id');
+    }
 
     public function orders()
     {

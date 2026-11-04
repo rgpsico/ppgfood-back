@@ -3,6 +3,9 @@
 namespace Tests\Feature\Api;
 
 use App\Models\Atendente;
+use App\Models\Configuracao;
+use App\Models\ConfiguracaoModelo;
+use App\Models\Product;
 use App\Models\Order;
 use App\Models\Table;
 use App\Models\Tenant;
@@ -152,6 +155,104 @@ class TableCadastroTest extends TestCase
         Sanctum::actingAs($gerente);
 
         $this->getJson('/api/v1/staff/tables')->assertStatus(200)->assertJsonCount(2, 'data');
+    }
+
+    private function ligarAtendimento(Tenant $tenant): void
+    {
+        $modelo = ConfiguracaoModelo::where('chave', 'atendimento_funcionario_habilitado')->firstOrFail();
+        Configuracao::updateOrCreate(
+            ['tenant_id' => $tenant->id, 'configuracoes_modelo_id' => $modelo->id],
+            ['valor' => '1']
+        );
+    }
+
+    private function atendenteComLogin(Tenant $tenant, string $nome): array
+    {
+        $user = $this->gerente($tenant);
+        $atendente = Atendente::create(['tenant_id' => $tenant->id, 'nome' => $nome, 'ativo' => true, 'user_id' => $user->id]);
+
+        return [$user, $atendente];
+    }
+
+    public function testPontoCadastradoPorAtendenteFicaComEleENaListaDele()
+    {
+        $tenant = factory(Tenant::class)->create();
+        [$joaoUser, $joao] = $this->atendenteComLogin($tenant, 'João');
+        [$mariaUser] = $this->atendenteComLogin($tenant, 'Maria');
+
+        Sanctum::actingAs($joaoUser);
+        $this->postJson('/api/v1/staff/tables', ['tipo' => 'guarda_sol', 'nome' => 'Guarda-sol do João'])->assertStatus(201);
+        $this->assertDatabaseHas('tables', ['identify' => 'Guarda-sol do João', 'attendant_id' => $joao->id]);
+
+        // sem nenhum pedido, o ponto ja aparece no quadro do dono
+        $this->getJson('/api/v1/staff/orders-board')
+            ->assertJsonCount(1, 'tables')
+            ->assertJsonPath('tables.0.name', 'Guarda-sol do João')
+            ->assertJsonPath('tables.0.mine', true);
+
+        // a Maria nao ve o ponto do Joao
+        Sanctum::actingAs($mariaUser);
+        $this->getJson('/api/v1/staff/orders-board')->assertJsonCount(0, 'tables');
+    }
+
+    public function testPontoCadastradoPeloGerenteNaoTemDono()
+    {
+        $gerente = $this->gerente();
+        Sanctum::actingAs($gerente);
+
+        $this->postJson('/api/v1/staff/tables', ['tipo' => 'cadeira'])->assertStatus(201);
+        $this->assertDatabaseHas('tables', ['identify' => 'Cadeira 1', 'attendant_id' => null]);
+    }
+
+    private function pedirNoPonto(Tenant $tenant, Table $ponto, array $extra = [])
+    {
+        $product = factory(Product::class)->create(['tenant_id' => $tenant->id, 'stock' => 100]);
+
+        return $this->postJson('/api/v1/orders', array_merge([
+            'token_company' => $tenant->uuid,
+            'table' => $ponto->uuid,
+            'products' => [['identify' => $product->uuid, 'qty' => 1]],
+        ], $extra));
+    }
+
+    public function testPedidoNoPontoDoAtendenteJaVaiParaEle()
+    {
+        $tenant = factory(Tenant::class)->create();
+        $this->ligarAtendimento($tenant);
+        [, $joao] = $this->atendenteComLogin($tenant, 'João');
+        $ponto = $this->ponto($tenant, 'Guarda-sol do João');
+        $ponto->update(['attendant_id' => $joao->id]);
+
+        // cliente nao escolheu ninguem: assume o dono do guarda-sol (so vale com o modulo ligado e o pedido aceito)
+        $this->pedirNoPonto($tenant, $ponto, ['attendant' => null])->assertStatus(201);
+
+        $this->assertDatabaseHas('orders', ['table_id' => $ponto->id, 'attendant_id' => $joao->id]);
+    }
+
+    public function testEscolhaDoClienteVenceODonoDoPonto()
+    {
+        $tenant = factory(Tenant::class)->create();
+        $this->ligarAtendimento($tenant);
+        [, $joao] = $this->atendenteComLogin($tenant, 'João');
+        [, $maria] = $this->atendenteComLogin($tenant, 'Maria');
+        $ponto = $this->ponto($tenant, 'Guarda-sol do João');
+        $ponto->update(['attendant_id' => $joao->id]);
+
+        $this->pedirNoPonto($tenant, $ponto, ['attendant' => $maria->uuid])->assertStatus(201);
+
+        $this->assertDatabaseHas('orders', ['table_id' => $ponto->id, 'attendant_id' => $maria->id]);
+    }
+
+    public function testComModuloDesligadoOPontoNaoAtribuiAtendente()
+    {
+        $tenant = factory(Tenant::class)->create();
+        [, $joao] = $this->atendenteComLogin($tenant, 'João');
+        $ponto = $this->ponto($tenant, 'Guarda-sol do João');
+        $ponto->update(['attendant_id' => $joao->id]);
+
+        $this->pedirNoPonto($tenant, $ponto)->assertStatus(201);
+
+        $this->assertDatabaseHas('orders', ['table_id' => $ponto->id, 'attendant_id' => null]);
     }
 
     public function testSemLoginNaoCadastra()
