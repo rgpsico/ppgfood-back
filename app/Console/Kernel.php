@@ -24,8 +24,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        // Pedido sem atendimento volta a avisar no celular (ate 10 min). Precisa do cron: schedule:run a cada minuto
+        $schedule->command('pedidos:lembrar')->everyMinute()->withoutOverlapping();
     }
 
     /**

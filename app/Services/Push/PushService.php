@@ -23,7 +23,7 @@ class PushService
     /**
      * @param int|null $atendenteUserId usuario do atendente do pedido (ja validado pelo AtendimentoService::deveNotificar)
      */
-    public function notificarPedido(Order $pedido, ?int $atendenteUserId = null): int
+    public function notificarPedido(Order $pedido, ?int $atendenteUserId = null, ?array $payload = null): int
     {
         $pedido->loadMissing('products', 'table', 'attendant');
 
@@ -37,7 +37,7 @@ class PushService
         }
 
         $enviados = 0;
-        $payload = $this->payloadDoPedido($pedido);
+        $payload = $payload ?: $this->payloadDoPedido($pedido);
 
         PushSubscription::whereIn('user_id', $destinatarios)->get()->each(function ($inscricao) use ($payload, &$enviados) {
             if ($this->sender->enviar($inscricao, $payload)) {
@@ -48,6 +48,19 @@ class PushService
         });
 
         return $enviados;
+    }
+
+    /** Lembrete de pedido que ninguem atendeu: mesma tag do aviso original, entao substitui e toca/vibra de novo. */
+    public function payloadDeLembrete(Order $pedido, int $minutos): array
+    {
+        $base = $this->payloadDoPedido($pedido);
+
+        return [
+            'title' => '⏰ Pedido esperando · ' . ($pedido->table ? $pedido->table->identify : 'Sem guarda-sol'),
+            'body' => ($minutos <= 0 ? 'Chegou agora' : "Há {$minutos} min sem atender") . ' · toque para atender',
+            'tag' => $base['tag'],
+            'url' => '/',
+        ];
     }
 
     /** Aviso de teste so para os celulares do proprio usuario (botao "Testar aviso" do painel). */

@@ -28,6 +28,8 @@ class OrderResource extends JsonResource
             'date' => Carbon::make($this->created_at)->format('Y-m-d'),
             'hour' => Carbon::make($this->created_at)->format('H:m:s'),
             'date_br' => Carbon::make($this->created_at)->format('d/m/Y H:i:s'),
+            // ISO com fuso: o painel usa para saber ha quanto tempo o pedido esta esperando
+            'created_at' => Carbon::make($this->created_at)->toIso8601String(),
             'price' => $this->whenPivotLoaded('order_product', function () {
                 return $this->pivot->price;
             }),

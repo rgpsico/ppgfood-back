@@ -249,7 +249,7 @@ class OrderApiController extends Controller
     public function updateStatus(Request $request, $identify)
     {
         $request->validate([
-            'status' => 'required|in:open,done',
+            'status' => 'required|in:open,working,done',
         ]);
 
         $atendente = $this->atendenteDoPainel($request);
