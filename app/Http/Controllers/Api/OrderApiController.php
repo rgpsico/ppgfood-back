@@ -48,28 +48,30 @@ class OrderApiController extends Controller
             $request->input('table')
         );
 
-        $order = $this->orderService->createNewOrder(
-            array_merge($request->all(), ['attendant_id' => $atendente ? $atendente->id : null])
-        )->load('products');
+        // Pedido e baixa de estoque na MESMA transacao: sem estoque, nada e criado (antes o pedido
+        // ficava gravado e o cliente recebia erro 500). A baixa e atomica, entao dois clientes
+        // pedindo o ultimo item ao mesmo tempo nao deixam o estoque negativo.
+        $order = DB::transaction(function () use ($request, $atendente) {
+            $order = $this->orderService->createNewOrder(
+                array_merge($request->all(), ['attendant_id' => $atendente ? $atendente->id : null])
+            )->load('products');
 
-            // Update stock in a transaction
-            DB::transaction(function () use ($order) {
-                foreach ($order->products as $product) {
-                    // Ensure the product exists and has sufficient stock
-                    if ($product && $product->stock >= $product->pivot->qty) {
-                        $product->decrement('stock', $product->pivot->qty);
-                    } else {
-                        // Log and throw an error if stock is insufficient or product is null
-                        $errorMessage = $product ? 
-                            "Insufficient stock for product ID: {$product->id}. Requested: {$product->pivot->qty}, Available: {$product->stock}" :
-                            "Product is null for order ID: {$order->id}";
-                        // \Log::error($errorMessage);
-                        throw new \Exception($errorMessage);
-                    }
+            foreach ($order->products as $product) {
+                $baixou = \App\Models\Product::withoutGlobalScopes()
+                    ->where('id', $product->id)
+                    ->where('stock', '>=', $product->pivot->qty)
+                    ->decrement('stock', $product->pivot->qty);
+
+                if (!$baixou) {
+                    throw \Illuminate\Validation\ValidationException::withMessages([
+                        'products' => ["Estoque insuficiente para \"{$product->title}\"."],
+                    ]);
                 }
-            });
+            }
 
-     
+            return $order;
+        });
+
         $getTenantByUuid = $this->tenantService->getTenantByUuid($request->token_company);
 
         $tenantId = $getTenantByUuid->id;
