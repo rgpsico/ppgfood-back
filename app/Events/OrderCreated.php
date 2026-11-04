@@ -38,7 +38,8 @@ class OrderCreated implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-            return new Channel('order-created.'.$this->order->tenant_id);
+            // Privado: so o painel logado da propria barraca escuta (autorizado em routes/channels.php)
+            return new PrivateChannel('order-created.'.$this->order->tenant_id);
     }
 
     /**
