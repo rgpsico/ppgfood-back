@@ -13,8 +13,8 @@ use App\Http\Controllers\AsaasController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/auth/register', 'Api\Auth\RegisterController@store');
-Route::post('/auth/token', 'Api\Auth\AuthClientController@auth');
+Route::post('/auth/register', 'Api\Auth\RegisterController@store')->middleware('throttle:30,1');
+Route::post('/auth/token', 'Api\Auth\AuthClientController@auth')->middleware('throttle:30,1');
 
 // Login do painel de recebimento de pedidos (staff/tenant, nao cliente)
 Route::post('/staff/login', 'Api\Auth\AuthStaffController@login');

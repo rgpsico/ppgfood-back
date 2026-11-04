@@ -23,23 +23,26 @@ class RegisterController extends Controller
 
     public function store(StoreClient $request)
     {
-        // Criar cliente no Asaas (não bloqueia o cadastro caso falhe)
+        // Cliente no Asaas so existe para pagar online (Pix/cartao, hoje desligados no app) e o Asaas exige CPF:
+        // sem CPF nao tem o que criar. Nunca bloqueia o cadastro.
         $asaasId = null;
 
-        try {
-            $criarClienteAsaas = $this->assasService->createCustomer($request);
+        if ($request->filled('cpf')) {
+            try {
+                $criarClienteAsaas = $this->assasService->createCustomer($request);
 
-            if ($criarClienteAsaas->successful()) {
-                $asaasId = $criarClienteAsaas['id'];
-            } else {
-                Log::warning('Falha ao criar cliente no Asaas, prosseguindo sem asaas_key', [
-                    'response' => $criarClienteAsaas->body(),
+                if ($criarClienteAsaas->successful()) {
+                    $asaasId = $criarClienteAsaas['id'];
+                } else {
+                    Log::warning('Falha ao criar cliente no Asaas, prosseguindo sem asaas_key', [
+                        'response' => $criarClienteAsaas->body(),
+                    ]);
+                }
+            } catch (\Throwable $e) {
+                Log::warning('Exceção ao criar cliente no Asaas, prosseguindo sem asaas_key', [
+                    'message' => $e->getMessage(),
                 ]);
             }
-        } catch (\Throwable $e) {
-            Log::warning('Exceção ao criar cliente no Asaas, prosseguindo sem asaas_key', [
-                'message' => $e->getMessage(),
-            ]);
         }
 
         $requestData = $request->all();
