@@ -84,6 +84,10 @@ Route::group([
     // identificar a loja, entao autenticacao e opcional por design.
 
     Route::get('/staff/reports', 'ReportController@show');
+    Route::middleware('super.admin')->group(function () {
+        Route::get('/staff/admin/saude', 'SuperAdminController@saude');
+        Route::get('/staff/admin/barracas', 'SuperAdminController@barracas');
+    });
     Route::get('/staff/push/key', 'PushSubscriptionController@key');
     Route::post('/staff/push/subscribe', 'PushSubscriptionController@store');
     Route::post('/staff/push/test', 'PushSubscriptionController@test');

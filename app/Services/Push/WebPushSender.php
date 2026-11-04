@@ -39,6 +39,7 @@ class WebPushSender implements PushSenderInterface
             );
         } catch (\Throwable $e) {
             Log::warning('Push: falha ao enviar', ['erro' => $e->getMessage()]);
+            \Illuminate\Support\Facades\Cache::put('push:ultima_falha', ['em' => now()->toIso8601String(), 'motivo' => mb_substr($e->getMessage(), 0, 80)], 86400);
 
             return true; // erro de rede nao e motivo para apagar o celular
         }
@@ -49,6 +50,7 @@ class WebPushSender implements PushSenderInterface
 
         if (!$resultado->isSuccess()) {
             Log::warning('Push: servico recusou', ['motivo' => $resultado->getReason()]);
+            \Illuminate\Support\Facades\Cache::put('push:ultima_falha', ['em' => now()->toIso8601String(), 'motivo' => mb_substr((string) $resultado->getReason(), 0, 80)], 86400);
         }
 
         return true;

@@ -29,6 +29,12 @@ return [
     ],
 
     // Avisos de pedido novo no celular (Web Push). Chaves geradas uma vez: ver .env (VAPID_*)
+    // Enderecos usados pela tela de super admin (saude do socket e link das lojas)
+    'health' => [
+        'echo_url' => env('HEALTH_ECHO_URL', 'http://ppgfood_echo:6001'),
+        'loja_url' => env('HEALTH_LOJA_URL', 'https://delivery.comunidadeppg.com.br'),
+    ],
+
     'vapid' => [
         'public' => env('VAPID_PUBLIC_KEY'),
         'private' => env('VAPID_PRIVATE_KEY'),
