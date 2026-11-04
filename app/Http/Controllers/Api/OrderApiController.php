@@ -265,7 +265,16 @@ class OrderApiController extends Controller
             return response()->json(['message' => 'Pedido não encontrado'], 404);
         }
 
-        return new OrderResource($order->load('products', 'client', 'table', 'attendant'));
+        $order->load('products', 'client', 'table', 'attendant');
+
+        // Avisa os outros aparelhos (alarme e relatorios). Falha de broadcast nunca desfaz a mudanca de status.
+        try {
+            event(new \App\Events\OrderStatusChanged($order));
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('Broadcast de status falhou', ['erro' => $e->getMessage()]);
+        }
+
+        return new OrderResource($order);
     }
 
     public function getUuidByCompanyUrl($url)
